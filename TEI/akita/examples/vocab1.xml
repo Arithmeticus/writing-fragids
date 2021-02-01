@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schemas/akita-vocab.rnc" type="application/relax-ng-compact-syntax"?>
+<?xml-model href="../schemas/akita.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<vocab xmlns="tag:kalvesmaki.com,2020:ns">
+   <include href="vocab2.xml"/>
+   <work xml:id="w1">
+      <iri>tag:john@example.com,2014:last-will-and-testament</iri>
+      <desc>My last will and testament, treated as a work.</desc>
+   </work>
+   <work xml:id="w2">
+      <iri>http://dbpedia.org/resource/Republic_(Plato)</iri>
+      <iri>tag:john@example.com,2014:work:plato:republic</iri>
+   </work>
+   <scriptum xml:id="s1">
+      <iri>tag:john@example.com,2014:last-will-and-testament</iri>
+      <desc>My last will and testament, treated as a material object. Only one copy exists or was
+         ever made, so it seems strange to differentiate between scriptum and work.</desc>
+   </scriptum>
+</vocab>

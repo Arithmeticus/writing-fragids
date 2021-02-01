@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="schemas/wf-examples.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<wf-examples>
+   <!-- This XML file is populated with a variety of WF URIs. The structure of the XML file is evolving, so 
+   there is no schema yet. The schematron file pointed to above does some basic checks. Most important, it is
+   used to test the function wf:parse-wf-uri() against the examples below. -->
+   
+   <!-- This document begins with two major sections, one on scriptum types and another on work types, and 
+   thinks about these categories in terms of reference system traditions. After that come the examples. -->
+
+   <scriptum-types>
+      <!-- Scriptum types below are diagnostic, not exhaustive categories. They are chosen based not
+         upon a pure taxonomy of scripta but upon the types of reference systems traditions that have 
+         developed over time. Because these are scripta, the reference systems endemic to them are
+         material. Items are ordered from most specific to least specific, with the understanding that
+         when checking for the rules for a particular scriptum, the user should work with the first
+         category that seems appropriate.
+      -->
+      <!-- WF-support takes values: excellent, good, mixed, poor, and none. The values provide a guess
+      as to what percentage of scripta of the given type can be the target of WF URIs. -->
+      <!-- Ref-system types declare the types reference systems supported by WF syntax. In a given
+         <ref-system> the <step>s are ordered. If the base URI points to a particular step,
+         then the reference system commences with the next <step> in the process.
+      -->
+      <scriptum-type xml:id="papyrus">
+         <name>papyrus</name>
+         <wf-support>mixed</wf-support>
+         <desc>A reed-based type of paper used for writing in the ancient world. It tends to survive
+            only fragmentarily. Reference systems are supported primarily through the checklist
+            supplied at http://papyrus.info. Bear in mind that the reference system begins with the
+            first step that can be converted to a digit. If part of a multivolume effort to publish
+            a collection of papyri, this will begin with a volume number, but not necessarily so.
+            Above all, remember that this scriptum type applies only when the primary scriptum in
+            question is the papyrus, not a replication of it (book, online). If the primary scriptum
+            is a replication, look further in this list for an appropriate category. </desc>
+         <base-uri-source-suggestions>
+            <base-uri-source>https://papyri.info</base-uri-source>
+            <base-uri-source>https://trismegistos.org</base-uri-source>
+         </base-uri-source-suggestions>
+         <ref-systems>
+            <desc>Papyrus collections are well curated, with unique numbers assigned to a group of
+               papyri that might be long with each other. Some papyri accumulate multiple URIs based
+               on the collections that have itemized them. The base URI is normally built to point
+               to the papyrus through a publication, its volume, and then a catalog number. Once
+               that base URI is in place, all that is left is identifying the line in question.
+               However, this applies only when one is pointing to the papyrus itsewf, and not to an
+               edition of a papyrus. If an WF URI is intended to be made about a particular edition,
+               see below, under journal or book, and examples.</desc>
+            <!-- This could use input from Mark DePauw et al. -->
+            <ref-system type="material">
+               <step>line</step>
+               <!-- How do they handle column - line interaction? -->
+            </ref-system>
+         </ref-systems>
+      </scriptum-type>
+
+      <scriptum-type xml:id="ostracon">
+         <name>ostracon</name>
+         <wf-support>mixed</wf-support>
+         <desc>Pottery, normally broken in shards, used for writing. Principles laid down for papyri
+            apply here as well.</desc>
+         <base-uri-source-suggestions>
+            <base-uri-source>https://papyri.info</base-uri-source>
+            <base-uri-source>https://trismegistos.org</base-uri-source>
+         </base-uri-source-suggestions>
+         <ref-systems>
+            <desc>Ostraca are treated much like papyri, but finding base URIs are generally harder
+               than with papyri. Remember, if the target scriptum is the ostracon itsewf, the base
+               uri should not point to a modern publication.</desc>
+            <xref target="papyrus"/>
+         </ref-systems>
+      </scriptum-type>
+
+      <scriptum-type xml:id="inscription">
+         <name>inscription</name>
+         <wf-support>mixed</wf-support>
+         <base-uri-source-suggestions>
+            <base-uri-source>https://www.eagle-network.eu/</base-uri-source>
+         </base-uri-source-suggestions>
+         <desc>An object in a hard medium where text has been carved, chiseled, engraved, or
+            embossed into the base material. Includes portable and nonportable items, e.g., coins,
+            seals, lintels, arches, walls, columns, stones, clay.</desc>
+         <ref-systems>
+            <xref target="papyrus"/>
+         </ref-systems>
+      </scriptum-type>
+      
+      <scriptum-type xml:id="journal">
+         <name>journal</name>
+         <wf-support>excellent</wf-support>
+         <desc>A scriptum that is intended to have installments be published at intervals (weekly,
+            monthly, quarterly, annually), and without plans for termination. Includes magazines,
+            newsletters. Does not include newspapers, which may need special treatment in WF.</desc>
+         <base-uri-source-suggestions>
+            <base-uri-source></base-uri-source>
+         </base-uri-source-suggestions>
+         <ref-systems>
+            <ref-system type="material">
+               <step>volume</step>
+               <step optional="true">issue</step>
+               <step>page</step>
+               <step type="implicit">line</step>
+            </ref-system>
+            <ref-system type="material">
+               <step>volume</step>
+               <step optional="true">issue</step>
+               <step>page</step>
+               <step>note</step>
+               <step type="implicit">line</step>
+            </ref-system>
+         </ref-systems>
+      </scriptum-type>
+      
+      <scriptum-type xml:id="newspaper">
+         <name>newspaper</name>
+         <wf-support>good</wf-support>
+         <desc>A periodical that is published daily or on a frequent basis, and intended to present
+            readers with reports and commentary on recent events.</desc>
+         <base-uri-source-suggestions>
+            <base-uri-source></base-uri-source>
+         </base-uri-source-suggestions>
+         <ref-systems>
+            <ref-system type="material">
+               <step optional="true">volume</step>
+               <step optional="true">issue</step>
+               <step optional="true">section</step>
+               <step>page</step>
+               <step>block</step>
+               <step>column</step>
+               <step type="implicit">line</step>
+               <comment>A section label must lend itsewf to a type of ordering system that can be
+                  converted to numerals. If a newspaper's ordered sections draw from the Latin
+                  alphabet, but there are gaps, then the sequence should be converted into
+                  consecutive integers starting with 1. For example, a newspaper issue with sections
+                  labeled A, B, C, S (for Style), Z (for classifieds) becomes 1, 2, 3, 4, 5.
+                  Sequences are issue-specific. If the next day's issue omits S, then the sequence
+                  is 1, 2, 3, 4. </comment>
+               <comment>A block number is applied to newspapers that organize different articles
+                  according to contiguous blocks on the page. Blocks are often rectangular, but they
+                  may take other shapes. Blocks are numbered according to the expected
+                  directionality of the script. If the language is written primarily left-to-right
+                  then top-to-bottom (e.g., English), blocks are numbered according to the position
+                  of the top-leftmost corner of the block relative to the page. If the newspaper
+                  does not have a primary script directionality, but a mix of them, it cannot be
+                  given an WF URI. </comment>
+            </ref-system>
+            <ref-system WF-supported="false" type="material">
+               <step>date</step>
+               <step optional="true">section</step>
+               <step>page</step>
+               <step>block</step>
+               <step>column</step>
+               <step type="implicit">line</step>
+               <comment>This system is not WF supported, because it anticipates that, instead of an
+                  integer, an ISO-compliant date be provided. That kind of approach is feasible, but
+                  requires some deliberation. At present, if a newspaper does not have volume/issue
+                  numbers, only dates, then the base scriptum URI must point specifically to the
+                  issue in question, not the newspaper as a whole. </comment>
+            </ref-system>
+         </ref-systems>
+      </scriptum-type>
+      
+      <scriptum-type xml:id="e-comm">
+         <name>electronic communication</name>
+         <wf-support>none</wf-support>
+         <desc>Includes email, text messages. Generally speaking, this type of scriptum must be
+            first rendered in another form before it is a candidate for WF URIs, because they lack
+            any kind of explicit reference system. They are better handled by other fragment
+            identification systems. </desc>
+      </scriptum-type>
+
+      <scriptum-type xml:id="database">
+         <name>database</name>
+         <wf-support>none</wf-support>
+         <desc>Databases should provide their own method for identifying fragments.</desc>
+      </scriptum-type>
+
+      <scriptum-type xml:id="web-item">
+         <name>web item</name>
+         <wf-support>poor</wf-support>
+         <desc>Covers blog posts, comments, anything that has its origin as an HTML document on the
+            World Wide Web. Generally speaking, this type of scriptum must be first rendered in
+            another form before it is a candidate for WF URIs, because they lack any kind of
+            explicit reference system. They are better handled by other fragment identification
+            systems, e.g., XPointer. An exception is made for scholarly articles in HTML that have
+            been provided paragraph numeration. </desc>
+         <base-uri-source-suggestions>
+            <!-- Not sure if the URL itsewf suffices, or more attention needs to be given to this aspect. -->
+         </base-uri-source-suggestions>
+         <ref-systems>
+            <ref-system type="logical">
+               <step>paragraph</step>
+               <comment>The paragraphs must be explicitly labeled in a system convertible to
+                  integers.</comment>
+            </ref-system>
+         </ref-systems>
+      </scriptum-type>
+      
+      <scriptum-type xml:id="manuscript">
+         <name>manuscript</name>
+         <wf-support>mixed</wf-support>
+         <desc>A hand-written document made of parchment (vellum) or paper. Although a very
+            common type of scriptum from the ancient and medieval world, items are still handwritten
+            today. The examples below presume ancient and medieval manuscripts, many of which are
+            objects of institutional preservation and cataloguing. </desc>
+         <base-uri-source-suggestions>
+            <base-uri-source></base-uri-source>
+         </base-uri-source-suggestions>
+         <ref-systems>
+            <ref-system type="material">
+               <step>folio</step>
+               <step>side</step>
+               <step optional="true">column</step>
+               <step>line</step>
+               <comment>This system relies upon the assumption that folios are uniquely numbered.
+                  Many manuscripts have two or more series of folio numbers inscribed, reflecting
+                  different numeration systems applied at different times. Those manuscripts can be
+                  the target of a scriptum URI, but not of a reference URI. An WF URI pointing to
+                  such manuscripts in the base URI must point in the reference URI to a scriptum
+                  that is either a facsimile of the manuscript with clear folio labeling, or a
+                  catalog that provides a unique reference system for the manuscript. In the case of
+                  the latter, labeling will be partial, focusing on the starts of individual works
+                  within the manuscript. Those who apply catalog numeration to a manuscript must
+                  take care to ensure they have (1) identified the correct manuscript entry in the
+                  catalog, and (2) ensured that folio numeration is consistent and complete. If
+                  either condition fails to hold, the catalog should not be used as a reference
+                  authority for that manuscript.</comment>
+            </ref-system>
+         </ref-systems>
+      </scriptum-type>
+      
+      <scriptum-type xml:id="book">
+         <name>book</name>
+         <wf-support>good</wf-support>
+         <desc>Covers a variety of scripta, but excludes any other scriptum types that are special
+            forms of books (e.g., manuscripts). In these examples, the term entails texts
+            mechanically printed on paper, joined together in a case, binding, or both. </desc>
+         <base-uri-source-suggestions>
+            <base-uri-source></base-uri-source>
+         </base-uri-source-suggestions>
+         <ref-systems>
+            <ref-system>
+               <step optional="true" repeatable="true">volume</step>
+               <step>page</step>
+               <step optional="true">note</step>
+               <step>line</step>
+            </ref-system>
+         </ref-systems>
+      </scriptum-type>
+
+   </scriptum-types>
+
+   <work-types>
+      <!-- This is not an exhaustive list of work types, only a diagnostic sample, to illustrate WF URI coverage -->
+      <work-type xml:id="prose">
+         <name>prose</name>
+         <desc>Covers a great deal of declarative and descriptive writing, both fictious and
+            non-fictious, typically printed with numbered volumes, pages. Line numbers are implied.
+            Note numbers are common in non-fiction, particularly scholarly communication. Some prose
+            that becomes a special object of editorial attention may acquire two or more sets of standard
+            reference systems reflecting the editorial and publishing tradition.</desc>
+         <scriptum-type>journal</scriptum-type>
+         <scriptum-type>newspaper</scriptum-type>
+         <scriptum-type>book</scriptum-type>
+      </work-type>
+      
+      <work-type xml:id="scripture">
+         <name>scripture</name>
+         <desc>Text authoritative in a religious tradition. Reference systems tend to begin with a
+            unit frequently smaller than a sentence. In Jewish and Christian Scriptures these are termed verses; in Islamic, ayahs.
+            These are then grouped in larger structures, as chapters or surahs. Grouping can also occur in some larger numbered units (e.g.,
+            kathismata in the Greek Psalter) before the book level is reached. If the books are commonly numbered (e.g., Qur'anic suras),
+            then they will be part of an WF reference system. Otherwise, a URI for the book/work must be supplied in the base URI.
+            At times this may pose a problem for determining a URI. For example, there is a dbpedia entry for the books of Samuel, but not one
+            for either of the two books separately.
+         </desc>
+         <scriptum-type>journal</scriptum-type>
+         <scriptum-type>newspaper</scriptum-type>
+         <scriptum-type>papyrus</scriptum-type>
+         <scriptum-type>ostracon</scriptum-type>
+         <scriptum-type>manuscript</scriptum-type>
+         <scriptum-type>book</scriptum-type>
+      </work-type>
+      <work-type xml:id="poem">
+         <name>poem</name>
+         <desc>A form of literature that uses aesthetic and often rhythmic qualities of language to evoke
+         greater meaning. Reference systems tend to build up from line number, to stanzas, odes, and many
+         other types of larger structures, which vary from work to work and cannot be predicted. </desc>
+         <scriptum-type>journal</scriptum-type>
+         <scriptum-type>newspaper</scriptum-type>
+         <scriptum-type>papyrus</scriptum-type>
+         <scriptum-type>ostracon</scriptum-type>
+         <scriptum-type>manuscript</scriptum-type>
+         <scriptum-type>book</scriptum-type>
+      </work-type>
+      <work-type xml:id="play">
+         <name>play</name>
+         <desc>A form of literature that consists of speech and actions intended to be performed by
+            one or more persons. Many plays frequently have a built in logical reference system
+            keyed to acts, scenes, lines. The expected structure differs according to era, language,
+            and work. A number of plays without such a clear logical structure can be referred to by
+            material features of the underlying scriptum.
+         </desc>
+         <scriptum-type>journal</scriptum-type>
+         <scriptum-type>newspaper</scriptum-type>
+         <scriptum-type>papyrus</scriptum-type>
+         <scriptum-type>ostracon</scriptum-type>
+         <scriptum-type>manuscript</scriptum-type>
+         <scriptum-type>book</scriptum-type>
+      </work-type>
+      <work-type xml:id="bill">
+         <name>bill</name>
+         <desc>A piece of legislation</desc>
+      </work-type>
+   </work-types>
+
+   <!-- Here are the examples. -->
+
+   
+   <wf-example xml:id="e001a">
+      <wf-uri>http://papyri.info/ddbdp/p.oxy;41;2950#$wf0:a=s;t=m;r=.;1$</wf-uri>
+      <wf-uri>https://papyri.info/ddbdp/chla;47;1414#$wf0:a=s;t=m;r=.;1$</wf-uri>
+      <wf-uri>https://www.trismegistos.org/text/16514#$wf0:a=s;t=m;r=.;1$</wf-uri>
+      <optimal>true</optimal>
+      <scriptum-type>papyrus</scriptum-type>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Points to line 1 of a dedication to Diocletian and Maximian, qua scriptum. The papyrus
+         itsewf can be the reference scriptum because the lines lend themselves to implicit
+         numbering. One doesn't need the latest modern publication of this papyrus as a reference
+         scriptum, but that wouldn't be wrong. One point of unclarity: is a name for the papyrus,
+         but what would be the name for the 1972 publication of this papyrus? It can't be
+         http://papyri.info/ddbdp/p.oxy;41;2950 otherwise you have a case of a URI naming two
+         different things which is a foundational no-no. The same is true for the ChLA reference.</desc>
+   </wf-example>
+   <wf-example xml:id="e001b">
+      <wf-uri>http://papyri.info/ddbdp/p.oxy;41;2950#$wf0:a=s;t=m;r=.;1::Val[1]$</wf-uri>
+      <wf-uri>https://papyri.info/ddbdp/chla;47;1414#$wf0:a=s;t=m;r=.;1::Val[1]$</wf-uri>
+      <wf-uri>https://www.trismegistos.org/text/16514#$wf0:a=s;t=m;r=.;1::Val[1]$</wf-uri>
+      <optimal>true</optimal>
+      <scriptum-type>papyrus</scriptum-type>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Similar to #e001a, except it points to the first token "Val". Note, the base URI points
+         to the papyrus as scriptum, and so expects tokenization to be based upon what is there, not
+         in the restored reading. For that, see #e001c. The challenge is defining a mechanism for EpiDoc
+         TEI XML that allows a processor to tokenize based only on what is seen in the scriptum, not what
+         is in the edition.
+      </desc>
+   </wf-example>
+   <wf-example xml:id="e001c">
+      <wf-uri>https://lccn.loc.gov/01005637#$wf0:a=s;t=l;r=.;41:2950:1::Val(erio)[1]$</wf-uri>
+      <wf-uri>http://id.lib.harvard.edu/alma/990001053470203941/catalog#$wf0:a=s;t=l;r=.;47:1414:1::Val(erio)[1]$</wf-uri>
+      <optimal>false</optimal>
+      <scriptum-type>book</scriptum-type>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Similar to #e001b, except it points to the first token "Val(erio)" in modern editions of
+         the papyrus. Note, the base URI points to the editions (Oxyrhynchus papyri in the first
+         option and Chartae Latinae antiquiores in the second) as scriptum, and so expects
+         tokenization to be based upon what is there, not in the original papyrus. For that, see
+         #e001b. Note that papyri.info URIs have been avoided, because they appear to be names only
+         for the original papyrus, not for any particular edition. The first option's base URI comes
+         from the Library of Congress and the second from Harvard's online catolog system. This illustrates
+         the many options available to someone who is finding scriptum URIs. Note that because each base URI
+         points to a series in its entirety, the reference system begins with volume then item number. Both are
+         logical reference systems, in that the item number might span pages, or share a page with other items.
+         Strictly speaking, the last reference, to line one, is a material unit, not logical. But because the
+         primary division type is logical the system as a whole is logical. A reference system such as this might include
+         a mix of material and logical units. That would be a problem if the lines were not explicitly numbered,
+         but they are in these editions.
+      </desc>
+   </wf-example>
+   
+   <wf-example xml:id="e002a">
+      <wf-uri>http://papyri.info/apis/columbia.apis.3099#$wf0:a=s;t=m;r=.;1$</wf-uri>
+      <optimal>true</optimal>
+      <scriptum-type>ostracon</scriptum-type>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Points to line 1 of an ostracon, O.Col.inv. 3099 (acc. MMA 14.1.199?). Note that
+      the token assumes text from the object itsewf, not a modern publication.</desc>
+   </wf-example>
+   
+   <wf-example xml:id="e003a">
+      <wf-uri>http://www.trismegistos.org/text/156749#$wf0:a=s;t=m;r=.;1::Imp[1]$</wf-uri>
+      <optimal>true</optimal>
+      <scriptum-type>inscription</scriptum-type>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Points to line 1 of an inscription on a milestone of Diocletian and Maximian, found in Britain. Note that
+      the token assumes text from the object itsewf, not a modern publication.</desc>
+   </wf-example>
+   
+   <wf-example xml:id="e004a">
+      <wf-uri>http://www.worldcat.org/oclc/860129739#$wf0:a=w;t=m;r=.;14.2$</wf-uri>
+      <optimal>true</optimal>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Points to page 14, line 2 of Burkert's Lore qua work. In other words, this URI points
+      to any version of Burkert's work.</desc>
+   </wf-example>
+   <wf-example xml:id="e004b">
+      <wf-uri>http://www.worldcat.org/oclc/860129739#$wf0:a=s;t=m;r=.;14.2$</wf-uri>
+      <optimal>true</optimal>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Points to page 14, line 2 of Burkert's Lore qua scriptum. In other words, this URI points
+      only to this edition of Burkert's work, and is not concerned with the work as such.</desc>
+   </wf-example>
+   
+   <wf-example xml:id="e005a">
+      <wf-uri>https://doi.org/10.1075/target.26.3.02zuf#$wf0:a=w;t=m;r=.;361$</wf-uri>
+      <optimal>true</optimal>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Points to the first page of Sadrine Zufferey and Bruno Cartoni, "A Multifactorial
+         Analysis of Explicitation in Translation," Target: International Journal of Translation
+         Studies 26.3 (2014): 361-384. </desc>
+   </wf-example>
+   
+   <wf-example xml:id="e006a">
+      <wf-uri>urn:issn:2325-9345#$wf0:a=s;t=m;r=.;68:387-68:404$</wf-uri>
+      <wf-uri>urn:issn:2325-9345#$wf0:a=w;t=m;r=.;68:387-68:404$</wf-uri>
+      <optimal>false</optimal>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Points to Dumbarton Oaks Papers, vol. 68, pages 145-179, corresponding to the article
+         Çağaptay, Suna. “Results of the Tophane Area GPR Surveys, Bursa, Turkey.” Dumbarton Oaks
+         Papers 68 (2014): 387–404. This URI intends to point to the entire article either as a
+         scriptum or as a work, but there is no DOI assigned to it. One could refer to the journal
+         as a work in its own right, or a scriptum, hence the two possibilities. If there existed a
+         fragid structure for works, the second item could possibly be narrowed down within the base
+         URI and its fragment.</desc>
+   </wf-example>
+   <wf-example xml:id="e006b">
+      <wf-uri>urn:issn:2325-9345#$wf0:a=s;t=m;r=.;68:387:2:17-68:387:2:20&amp;68:387:n4$</wf-uri>
+      <wf-uri>urn:issn:2325-9345#$wf0:a=w;t=m;r=.;68:387:2:17-68:387:2:20&amp;68:387:n4$</wf-uri>
+      <wf-uri>urn:issn:2325-9345#$wf0:a=s;t=m;r=.;68:387:2:17-68:387:2:20::evidence[1]&amp;68:387:n4$</wf-uri>
+      <optimal>false</optimal>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Refers to Dumbarton Oaks Papers, vol. 68, page 387, corresponding to the article
+         Çağaptay, Suna. “Results of the Tophane Area GPR Surveys, Bursa, Turkey,” specifically page
+         387, column 2, lines 17-20, as well as note 4. The third URI option specifies the actual text
+         (and therefore can be applied only to to the base URI qua scriptum, not qua work). This
+         example demonstrates how to build an WF URI that pinpoint where one scriptum quotes from
+         another (here p. 75 from a book section written by Colin Imber).</desc>
+   </wf-example>
+   
+   <wf-example xml:id="e007a">
+      <wf-uri>http://dbpedia.org/resource/Categories_(Aristotle)#$wf0:a=w;t=m;r=urn:isbn:9782251004976;1:1:21$</wf-uri>
+      <optimal>false</optimal>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Refers to Aristotle's Categories, indicating use of the so-called Bekker line number
+         system. But the reference scriptum is Bodëús's 2002 edition, which has differences, small
+         and large, with Bekker's and Minio-Paluello's editions, which most people treat as if the
+         same system. But they aren't. In WF-conformant media, one should not treat the URIs of
+         those editions as being synonymous. No creator of WF-conformant media MUST support every
+         reference system for a given text. But if someone did wish to support all three editions'
+         approach to reference systems based on "Bekker" numbers, that person would need to take
+         advantage of whatever mechanisms are allowed or advised in the target media format to
+         provide alternative reference systems. Anyone writing an WF processor may wish to build a
+         messaging system notifying users when an WF URI matchs a file in every parameter except the
+         reference scriptum. </desc>
+   </wf-example>
+   <wf-example xml:id="e007b">
+      <wf-uri>urn:isbn:9782251004976#$wf0:a=s;w=http://dbpedia.org/resource/Categories_(Aristotle);t=m;r=.;1:1:21::ἐν[1]$</wf-uri>
+      <wf-uri>http://lccn.loc.gov/50036648#$wf0:a=s;w=http://dbpedia.org/resource/Categories_(Aristotle);t=m;r=.;1:1:20::ἐν[1]$</wf-uri>
+      <wf-uri>urn:isbn:9782251004976#$wf0:a=s;w=http://dbpedia.org/resource/Categories_(Aristotle);t=m;r=http://lccn.loc.gov/50036648;1:1:20::ἐν[1]$</wf-uri>
+      <wf-uri>http://lccn.loc.gov/50036648#$wf0:a=s;w=http://dbpedia.org/resource/Categories_(Aristotle);t=m;r=urn:isbn:9782251004976;1:1:21::ἐν[1]$</wf-uri>
+      <optimal>false</optimal>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>All four URIs are constrained scriptum URIs that point to the same word, ἐν. The first
+         and third are about the edition published by Bodëús; the second and third, that published
+         by Minio-Paluello. The first and second point to the base URI scriptum itsewf as the basis
+         for the material reference system. Note, in the third and fourth examples, each URI indicates that the
+         base URI is one scriptum but the reference scriptum is the other. The lineation must correspond to
+         what is in the reference scriptum. In this case, the word ἐν appears on two different lines.</desc>
+   </wf-example>
+   
+   <wf-example xml:id="e008a">
+      <wf-uri>http://dbpedia.org/resource/Iliad#$wf0:a=w;t=l;r=http://www.worldcat.org/oclc/968653045;1:1$</wf-uri>
+      <optimal>true</optimal>
+      <work-type>poem</work-type>
+      <ref-system-type>logical</ref-system-type>
+      <desc>Points to book 1, line 1 of the Iliad, as numbered by West's edition. A large number of scripta could
+      have been used for the reference system. It would be valid but inappropriate to point to the work URI as 
+      the basis for the reference system, because it points exclusively to a concept, not a material object, and
+      cannot point to a single object.</desc>
+   </wf-example>
+   <wf-example xml:id="e008b">
+      <wf-uri>http://www.worldcat.org/oclc/968653045#$wf0:a=w;w=http://dbpedia.org/resource/Iliad;t=l;r=.;1:1$</wf-uri>
+      <optimal>true</optimal>
+      <work-type>poem</work-type>
+      <scriptum-type>book</scriptum-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Points to West's edition, constrained to Iliad, (logical) line 1.1. One could point to the material
+      reference system, but that seems unnecessarily obscure. Most target data will be built upon the logical
+      reference system.</desc>
+   </wf-example>
+   
+   <wf-example xml:id="e009a">
+      <wf-uri>http://digitalhumanities.org/dhq/vol/14/3/000484/000484.html#p5$wf0:a=s;t=l;r=.;::HSS[1]$</wf-uri>
+      <optimal>true</optimal>
+      <work-type>prose</work-type>
+      <scriptum-type>web-item</scriptum-type>
+      <ref-system-type>logical</ref-system-type>
+      <desc>The base URI points to Christine Barats, Valérie Schafer, Andreas Fickers, "Fading
+         Away... The challenge of sustainability in digital studies," Digital Humanities Quarterly
+         14.3 (2020). In this case, the base URI (with fragment) is enough for most purposes. But an WF URI can
+      be employed to point to a specific text fragment, here rendered without any reference steps.</desc>
+   </wf-example>
+   
+   <wf-example xml:id="e010a">
+      <wf-uri>http://dbpedia.org/resource/Psalms#$wf0:a=w;t=l;r=http://id.lib.harvard.edu/aleph/012287584/catalog;$</wf-uri>
+      <optimal>true</optimal>
+      <work-type>poem</work-type>
+      <ref-system-type>logical</ref-system-type>
+      <desc>Points to Psalm 30.1, English numeration system, via the Hollis URI for the Francis
+         Parris 1760 edition of the King James Version of the Bible. For alternative versification
+         systems see #e010b and #e010c.</desc>
+   </wf-example>
+   <wf-example xml:id="e010b">
+      <wf-uri>http://dbpedia.org/resource/Psalms#$wf0:a=w;t=l;r=urn:isbn:3438052199;$</wf-uri>
+      <optimal>true</optimal>
+      <work-type>poem</work-type>
+      <ref-system-type>logical</ref-system-type>
+      <desc>Points to Psalm 30.1, Hebrew numeration system, via the URN pointing to the Biblia
+         Hebraica Stuttgartensia. For alternative versification systems see #e010a and
+         #e010c.</desc>
+   </wf-example>
+   <wf-example xml:id="e010c">
+      <wf-uri>http://dbpedia.org/resource/Psalms#$wf0:a=w;t=l;r=http://www.worldcat.org/oclc/19565412;$</wf-uri>
+      <optimal>true</optimal>
+      <work-type>poem</work-type>
+      <ref-system-type>logical</ref-system-type>
+      <desc>Points to Psalm 30.1, Septuagint numeration system, via the Worldcat URI for Rahwfs's edition of the 
+         Greek Septuagint. For alternative versification
+         systems see #e010a and #e010b.</desc>
+   </wf-example>
+   
+</wf-examples>

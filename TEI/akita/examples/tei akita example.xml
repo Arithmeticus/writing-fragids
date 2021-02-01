@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file provides an example of TEI Akita. -->
+
+<!-- The customary TEI prolog -->
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+	schematypens="http://purl.oclc.org/dsdl/schematron"?>
+
+<!-- Note the added epischema -->
+<?xml-model href="../schemas/akita.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+
+<!-- You can include vocabulary through another file (recursively checked) -->
+<?akita-include vocab1.xml?>
+
+<!-- Or you can declare vocabulary right within the document. Note that the first value is an id,
+and the remainder values are space-delimited IRIs. -->
+<?akita-work 
+   art-of-war 
+   http://dbpedia.org/resource/The_Art_of_War 
+   tag:example.com,2014:work:art-of-war ?>
+<?akita-scriptum 
+   suntzu-2002 
+   http://id.lib.harvard.edu/alma/990089875700203941/catalog
+   http://www.worldcat.org/oclc/51809453
+   urn:isbn:9780710307385 ?>
+
+<!-- And then you associate particular TEI items with chosen combinations. There are two structures anticipated. -->
+<!-- Structure 1, by tree. This points to one or more elements by @xml:id. If you're used to prefacing an idref with #, 
+   that option may be exercised. The reference system that emerges is then based on @n values in descendants of
+   the target element(s). Each idref value is treated as specifying parts of a single tree, not separate ones.
+-->
+<?akita-mark-tree-by-hierarchy
+   idrefs="#d1" 
+   work="art-of-war" 
+   scriptum="suntzu-2002"
+   reference-scriptum="suntzu-2002"
+   reference-system-type="logical"
+?>
+
+<!-- Structure 2, by anchor sets. This points to anchors, e.g., <pb>, <lb>, <milestone> by @type, with
+   one type per @level-N-type, where N can be whatever positive integer one likes, but there must not be
+   any gaps. The reference system that emerges is based on all anchors and their @n values, with the 
+   text beginning with the first level-1-type and going through the end. Text before the first anchor 
+   is ignored. This approach is vulnerable to common mistakes, because the rules of well-formedness will
+   not dictate whether the levels are correctly relating to each other.
+-->
+<?akita-mark-tree-by-anchors 
+   level-1-type="refschemeApages"
+   level-2-type="refschemeAlines"
+   work="art-of-war" 
+   scriptum="suntzu-2002"
+   reference-scriptum="suntzu-2002"
+   reference-system-type="material"
+?>
+
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:akita="tag:kalvesmaki.com,2020:ns">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Title</title>
+         </titleStmt>
+         <publicationStmt>
+            <p>Publication Information</p>
+         </publicationStmt>
+         <sourceDesc>
+            <p>Information about the source</p>
+         </sourceDesc>
+      </fileDesc>
+   </teiHeader>
+   <text>
+      <body>
+         
+         <div n="12" xml:id="d1">
+            <pb n="1" type="refschemeApages"/>
+            <p n="1">Some <lb n="1" type="refschemeAlines">   </lb> text <milestone unit="line" n="2"
+                  type="refschemeAlines"/> here.</p>
+            <p n="2">Some text here.</p>
+            <p n="3">Some text here.</p>
+            <p n="4 ht">Some text here.</p>
+         </div>
+      </body>
+   </text>
+   
+</TEI>

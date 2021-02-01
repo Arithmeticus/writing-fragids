@@ -1,0 +1,31 @@
+default namespace = "tag:kalvesmaki.com,2020:ns"
+
+start = element-vocab
+attr-id = attribute xml:id { xsd:NCName }
+pattern-vocab = element-iri* & element-desc*
+element-vocab =
+   
+   ## Root element of an Akita vocabulary file.
+   element vocab { element-include* & element-scriptum* & element-work* }
+element-include =
+   
+   ## Specifies another Akita vocabulary to include. It will include all second-level elements from the target file.
+   element include {
+      attribute href { text }
+   }
+element-scriptum =
+   
+   ## Points to a text-bearing object: a book, article, manuscript, newspaper, document, or digital file. To be contrasted with work.
+   element scriptum { attr-id, pattern-vocab }
+element-work =
+   
+   ## Points to any writing in the abstract, independent of any specific printed editions or versions. To be contrasted with scriptum. 
+   element work { attr-id, pattern-vocab }
+element-iri =
+   
+   ## Wraps any International Resource Identifier (a superset of URIs). All iris within the same scriptum or work are treated as synonymous. 
+   element iri { xsd:anyURI }
+element-desc =
+   
+   ## Provides a description of a scriptum or work.
+   element desc { text }

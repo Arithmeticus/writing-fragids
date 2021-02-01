@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://docbook.org/xml/5.1/rng/docbook.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://docbook.org/xml/5.1/sch/docbook.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<article xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink" version="5.1">
+    <info>
+        <title>TAN and Writing Fragment Identifiers</title>
+        <legalnotice>
+            <info>
+                <copyright>
+                    <year>2021</year>
+                    <year/>
+                    <holder>Joel Kalvesmaki</holder>
+                </copyright>
+                <author>
+                    <personname><firstname>Joel</firstname>
+                        <surname>Kalvesmaki</surname></personname>
+                </author>
+            </info>
+            <remark>This document is released under a Creative Commons Attribution 4.0 International
+                License: <link xlink:href="http://creativecommons.org/licenses/by/4.0/"
+                    >http://creativecommons.org/licenses/by/4.0/</link>
+            </remark>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2021-01-28</date>
+                <revdescription>
+                    <para>Prepublication draft, version 0.01</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <warning>
+        <para>This material is incomplete.</para>
+    </warning>
+    <section>
+        <title>Introduction</title>
+        <para>Writing Fragment Identifiers (Writing Fragids, or WFs) are fragments added to URIs to
+            point to specific parts of writings. WFs are defined in a set specifications (version
+            0.01) that detail conformance requirements  for WF-conformant media types. Class 1 Text
+            Alignment Network files (TAN-T, TAN-TEI) meet the requirements for WF conformance. This
+            document provides details of that conformance, particularly for developers who wish to
+            create WF processors that extract content from TAN files based on a WF URI.</para>
+        <para>Class 2 TAN files (TAN-A, TAN-A-lm, TAN-A-mor) are not candidates for WF conformance,
+            because they are not content targets for WF URIs. But because they annotate class-1
+            files, class-2 files are a generative source of WF URIs and RDF statements that involve
+            WF URIs. Therefore this document provides comments on class-2 generation of </para>
+        <para>Some concepts and terms below are defined only in the official TAN guidelines and
+            schemas, which should be treated as companions to this document.</para>
+    </section>
+    <section>
+        <title>Applying Writing Fragid URIs to Class-1 Files</title>
+        <para>Applying a WF URI to extract content from a class-1 TAN file can be described in terms
+            of two successive procedures, one for matching content and another for associating
+            metadata with the content. </para>
+        <para>The first procedure takes as input a syntactically valid WF URI and a valid class 1
+            file. The file is evaluated first against the WF parameters and if a match is found, the
+            references are evaluated, reducing the file only to matching content elements. If at any
+            point matching content is reduced to zero elements, the process halts. If the input WF
+            URI points only to references, not text fragments, the output results in a sequence of
+            TAN or TEI <code>&lt;div></code>s. If the input WF URI points to text fragments, the
+            output consists of TAN or TEI <code>&lt;div></code>s restricted only to matching text
+            content, and any wrapping elements.</para>
+        <para>The second procedure takes as input the matching content elements and the resolved
+            class 1 file. The output is a set of metadata relevant to the extracted content.</para>
+        <para>As noted in the WF specifications, not all reference systems are supported. TAN class
+            1 files support a larger range of reference systems, so some or all of the content of a
+            given class 1 file may not be accessible to WF URIs.</para>
+        <para>The output from either process will result in zero or more items. Whether a WF URI is
+            built to point to a single item or a sequence of items, it is up to WF processors to
+            render the output as expected. A single string item can always be rendered by
+            string-joining the entire content. A sequence of items can be rendered by string-joining
+            each of the top-level elements in the content.</para>
+        <para>Returned content will reflect TAN space and Unicode normalization rules.</para>
+        <section>
+            <title>Identifying Matching Content</title>
+            <para>The subsections below detail the steps that are to be taken when processing one WF
+                URI against one class 1 TAN file.</para>
+            <section>
+                <title>Resolution and Preparation</title>
+                <para>No WF URI may assessed against a class 1 file before it is resolved, defined
+                    as the output of <code>tan:resolve-doc()</code> (under any of the permitted
+                    parameters). Any class-1 file that returns a fatal error during resolution
+                    should be discarded. It does not match the WF URI.</para>
+                <para>If <code>/*/tan:head/tan:reference-system</code> or any of its attributes
+                        <code>@type</code>, <code>@scriptum</code>, <code>@is-key</code> are
+                    missing, they must be inserted with calculated default values.</para>
+                <para>If <code>/*/tan:head/tan:reference-system/@type</code> is explicitly present,
+                    it must be checked against the topmost <code>&lt;div></code>s in the
+                        <code>&lt;body></code>. If those <code>&lt;div></code>s are of a majority
+                    type defined by official TAN vocabulary as not belonging to the class declared
+                    in <code>@type</code>, an error must be returned and the process end with no
+                    content returned.</para>
+                <para>If <code>/*/tan:head/tan:reference-system/@scriptum</code> is explicitly
+                    present, its values must evaluated against the file's vocabulary for scripta. If
+                    the attribute points to no scripta vocabulary items, an error must be returned
+                    and the process end with no content returned.</para>
+                <para>If <code>/*/tan:head/tan:reference-system/@is-key</code> evaluates to
+                        <code>false</code> then the process must end with no content returned. The
+                    file is based on a reference system that does not meet WF requirements.</para>
+                <note>
+                    <para>A value of <code>true</code> at
+                            <code>/*/tan:head/tan:reference-system/@is-key</code> does not
+                        necessarily mean that the WF requirement for a single key material or
+                        logical reference system has been satisfied.</para>
+                </note>
+            </section>
+            <section>
+                <title>Evaluation of WF Parameters</title>
+                <para>Every URI component in a WF URI <emphasis>must</emphasis> be evaluated against
+                    the relevant vocabulary item for all other IRIs that have been declared by the
+                    class 1 file to be synonymous. A match <emphasis>must</emphasis> be considered
+                    made when a URI component is identical to any of the IRI values declared in the
+                    vocabulary for the relevant item.</para>
+                <para>TAN is built with extensive support for IRI (URI) synonymity. A match of a WF
+                    URI component that is itself a URI against any <code>&lt;IRI></code> of a
+                    vocabulary item is to be treated as a match against the vocabulary item
+                        itself.<table frame="all">
+                        <title>WF parameters</title>
+                        <tgroup cols="2">
+                            <colspec colname="c1" colnum="1" colwidth="1*"/>
+                            <colspec colname="c2" colnum="2" colwidth="1*"/>
+                            <thead>
+                                <row>
+                                    <entry>WF parameter or component</entry>
+                                    <entry>To be evaluated against vocabulary for</entry>
+                                </row>
+                            </thead>
+                            <tbody>
+                                <row>
+                                    <entry>Base URI (work WF)</entry>
+                                    <entry><code>/*/tan:head/tan:work</code> or any
+                                            <code>/*//*:body//*:div/@n</code> that points to work
+                                        vocabulary.</entry>
+                                </row>
+                                <row>
+                                    <entry>Base URI (scriptum WF or constrained scriptum WF)</entry>
+                                    <entry><code>/*/tan:head/tan:source</code></entry>
+                                </row>
+                                <row>
+                                    <entry>Constraining Work URI (constrained scriptum WF)</entry>
+                                    <entry><code>/*/tan:head/tan:work</code> or any
+                                            <code>/*//*:body//*:div/@n</code> that points to work
+                                        vocabulary.</entry>
+                                </row>
+                                <row>
+                                    <entry>Reference System Type</entry>
+                                    <entry><code>/*/tan:head/tan:reference-system/@type</code></entry>
+                                </row>
+                                <row>
+                                    <entry>Reference Scriptum</entry>
+                                    <entry><code>/*/tan:head/tan:reference-system/@scriptum</code></entry>
+                                </row>
+                            </tbody>
+                        </tgroup>
+                    </table></para>
+                <para>Processing a URI specifying a work is checked first against all IRI values of
+                        <code>&lt;work></code>. If there is a match, the entire
+                        <code>&lt;body></code> is retained as the current content item. If there is
+                    no match, then the <code>&lt;body></code> is checked for any
+                        <code>&lt;div></code> that has a value of <code>@n</code> that points to a
+                    work vocabulary item. If the <code>@n</code> vocabulary item has an
+                        <code>&lt;IRI></code> that matches the WF work URI, then the corresponding
+                        <code>&lt;div></code> is retained as a content object. </para>
+                <para>If any WF parameter or component lacks a match with the class 1 file, then the
+                    process ends with no content returned. Otherwise the process continues, with the
+                    current content item being the <code>&lt;div></code>s selected from evaluating
+                    the parameters.</para>
+            </section>
+            <section>
+                <title>Reduction to a Uniquely Ordered Reference System</title>
+                <para>Next, the current content item is reduced to only those children
+                        <code>&lt;div></code>s and their descendants that are members of the
+                    calculated uniquely ordered reference system, as defined in the WF
+                    specifications. </para>
+                <para>Values of <code>@n</code> that are part of uniquely ordered reference
+                    sequences (see WF definitions), must be reduced to an integer representation.<warning>
+                        <para>Currently TAN allows for multiple consecutive ordered reference
+                            sequences in a given reference unit sequence. This needs to be studied
+                            further, and the TAN resolution routine might need to be
+                            adjusted.</para>
+                    </warning></para>
+                <para>Any <code>@n</code> that includes a sequence of values or a range of values
+                    that can be reduced to integers should be specially marked.</para>
+                <para>Evaluation must be made of each <code>@type</code> of <code>&lt;div></code>.
+                    If one of the values points to a vocabulary item matching the official TAN
+                    vocabulary IRIs for endnote, note, or footnote, and the <code>&lt;div></code>'s
+                        <code>@n</code> is part of a uniquely ordered reference sequence (see WF
+                    definitions), then [RULE PENDING]<warning>
+                        <para>One of the problems here is that TAN-T files are assumed to be a
+                            single trunk text, without branching texts (notes). TEI files allow for
+                            intermingling of trunk and branch texts, but admit a wide variety of
+                            strategies, and a TAN-flavored TEI should dispense with the notes.
+                            Currently, three approaches to notes are advised in the TAN guidelines.
+                            (1) Create one separate <code>&lt;div></code> per note, placing them as
+                            following siblings to the <code>&lt;div></code> they branch from. (2)
+                            Create a separate class-1 file for the note, perhaps aligning it with
+                            the other class 1 file through a TAN-A file. (3) Convert the notes
+                            wholly into a TAN-A file. This approach might need to be reconsidered in
+                            light of the trunk-and-branch model adopted by WF URIs.</para>
+                    </warning></para>
+                <para>If after such a process there do not exist any <code>&lt;div></code>s, the
+                    process should end with no content returned.</para>
+            </section>
+            <section>
+                <title>Evaluation of References</title>
+                <para>Each reference is evaluated, and output is marked with a corresponding
+                        <code>&lt;ref></code>. A fully matching <code>&lt;div></code> is associated
+                    with only the first corresponding LF URI reference. It is not repeated if there
+                    are subsequent matches to other references in the LF URI.</para>
+                <para>If the reference has no text fragment, only reference units or ranges, then
+                    there is returned one or more <code>&lt;div></code>s matching the
+                    references.</para>
+                <para>If the reference is a text fragment only (no reference steps), then all
+                    matching content is space-tokenized, and a search is made for the token
+                    fragment. If the instance filter is set to all (<code>[*]</code>), there is
+                    returned one <code>&lt;div></code> per matching token. That
+                        <code>&lt;div></code> contains the attributes of the corresponding leaf div
+                    for the matching token, and also includes <code>@ref</code>, with any
+                    LF-conformant references for the division. If the instance filter contains one
+                    or more integers, there is returned one <code>&lt;div></code> per integer,
+                    populated as just described. If a particular instance is not found, that item in
+                    the sequence becomes simply an empty <code>&lt;div></code>, with no
+                    attributes.</para>
+                <para>Each simple reference is processed against the current content items. If the
+                    reference steps permit a match with a &lt;div>, it is retained.</para>
+            </section>
+        </section>
+    </section>
+    <section>
+        <title>Scrap</title>
+        <para>scrap</para>
+        <para>An WF construction may be applied only to either a viable scriptum, or a viable
+            scriptum work. <termdef>A <firstterm>viable scriptum</firstterm> is defined as a
+                scriptum that has no more than one primary sequential material reference system or
+                no more than one primary sequential logical reference system, or both.</termdef>
+            <termdef>A <firstterm>viable scriptum work</firstterm> is a single work in a single
+                scriptum that has no more than one primary sequential material reference system or
+                no more than one primary sequential logical reference system, or both.</termdef> No
+            viable scriptum or scriptum work has more than a total of two primary reference systems:
+            one logical, one material, or one of each.</para>
+        <para>The WF guidelines stipulate that <emphasis>every reference system must be declared,
+                and every reference system must be rooted in some scriptum.</emphasis> How this is
+            done, and how it is interpreted, is explained below. Only scripta, not works, can be
+            reliably used for adopting, applying, or verifying a textual unit tree or a reference
+            system because of the requirement that all WFs be unambiguous. A work, being a
+            conceptual item, cannot have its contents, or the division of its contents, verified
+            independently, so no processor could ever be written to determine whether a given URI
+            WF, reliant upon a work-based reference system, matches a given WF-compliant media
+            file.</para>
+    </section>
+</article>

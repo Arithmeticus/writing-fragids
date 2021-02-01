@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../schemas/akita-vocab.rnc" type="application/relax-ng-compact-syntax"?>
+<?xml-model href="../schemas/akita.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<vocab xmlns="tag:kalvesmaki.com,2020:ns">
+   <scriptum xml:id="s3">
+      <iri>http://www.worldcat.org/oclc/860129739</iri>
+      <desc>Burkert's Lore. This work has been through revisions and reprints, so anything 
+      pointing to a library catalog is referring to the scriptum, not the work. One might be
+      hard-pressed to come up with a clear work IRI.</desc>
+   </scriptum>
+   <scriptum xml:id="s4">
+      <iri>http://id.lib.harvard.edu/alma/ 990117628460203941/catalog</iri>
+      <desc>Luckey, Mary. Membrane Structural Biology : With Biochemical and Biophysical
+         Foundations. Cambridge ; New York: Cambridge University Press, 2008.</desc>
+   </scriptum>
+   <scriptum xml:id="s5">
+      <iri>http://lccn.loc.gov/87042504</iri>
+      <desc>Gloria T. Delamar, Mother Goose: From Nursery to Literature. Jefferson, NC: McFarland,
+         1987.</desc>
+   </scriptum>
+</vocab>
