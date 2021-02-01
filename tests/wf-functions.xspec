@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   xmlns:wf="tag:kalvesmaki.com,2020:ns"
+   xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../wf-functions.xsl">
+   
+   <x:variable name="work-uri-1" as="xs:string"
+      select="'http://dbpedia.org/resource/Ring_a_Ring_o%27_Roses'"/>
+   
+   <!-- Delamar, Mother Goose, 1987 -->
+   <x:variable name="scriptum-uri-1" as="xs:string"
+      select="'http://lccn.loc.gov/87042504'"/>
+   <!-- Opie, The Oxford dictionary of nursery rhymes, 1951 -->
+   <x:variable name="scriptum-uri-2" as="xs:string"
+      select="'http://lccn.loc.gov/51014126'"/>
+   <!-- Burkert, Lore and Science, 2003 -->
+   <x:variable name="scriptum-uri-3" as="xs:string"
+      select="'http://www.worldcat.org/oclc/860129739'"/>
+   
+   
+   <!-- Line one of Ring-a-ring-a-rosie -->
+   <x:variable name="wf-work-uri-1a" as="xs:string"
+      select="$work-uri-1 || '#$wf0:a=w;t=l;r=' || $scriptum-uri-1 || ';1$'"/>
+   
+   <x:variable name="wf-work-uri-1a-parsed-map" as="map(*)"
+      select="map{
+         'base-uri' : $work-uri-1,
+         'fragment-start' : '',
+         'wf-fragment' : '$wf0:a=w;t=l;r=' || $scriptum-uri-1 || ';1$',
+         'fragment-end' : '',
+         'wf-fragment-count' : 1,
+         
+         'wf-version' : '0',
+         'wf-uri-type' : 'work',
+         'wf-work-constraint-uri' : '',
+         'wf-ref-system-type' : 'l',
+         'wf-ref-scriptum-uri' : $scriptum-uri-1,
+         
+         'wf-references' : map{
+            1 : map{
+               'is-range' : false(),
+               1 : map{
+                  'steps' : '1'
+               }
+            }
+         },
+         
+         'errors' : ()
+      }"
+   />
+   
+   <!-- The following wf URI is syntactically valid but disallowed, because the scriptum in question has multiple versions of Ring-a-roses.
+      The proper approach would be to use a URI that specifies exactly which version of Ring-a-roses is meant. But even then, the URI below
+      is suboptimal, because it is tethered to the page-line numbers of a particular edition and that numbering system is nowhere else common,
+      so the URI will not match very few if any . In fact, this is a poem, where the logical line numbers are the key unit. But 
+   we construct a suboptimal URI here for testing and documentation. -->
+   <x:variable name="wf-work-uri-1b" as="xs:string" 
+      select="$work-uri-1 || '#$wf0:a=w;t=m;r=' || $scriptum-uri-1 || ';38:28$'"/>
+   <x:variable name="wf-work-uri-1b-parsed-map" as="map(*)"
+      select="map{
+         'base-uri' : $work-uri-1,
+         'fragment-start' : '',
+         'wf-fragment' : '$wf0:a=w;t=m;r=' || $scriptum-uri-1 || ';38:28$',
+         'fragment-end' : '',
+         'wf-fragment-count' : 1,
+         
+         'wf-version' : '0',
+         'wf-uri-type' : 'work',
+         'wf-work-constraint-uri' : '',
+         'wf-ref-system-type' : 'm',
+         'wf-ref-scriptum-uri' : $scriptum-uri-1,
+         
+         'wf-references' : map{
+            1 : map{
+               'is-range' : false(),
+               1 : map{
+                  'steps' : ('38', '28')
+               }
+            }
+         },
+         
+         'errors' : ()
+      }"
+   />
+   
+   
+   <!-- The following points to page 38, line 28 of the scriptum, without specifying a particular work. This wf URI could be used
+   to create claims about the contents of the book at specific places. -->
+   <x:variable name="wf-scriptum-uri-1a" as="xs:string"
+      select="$scriptum-uri-1 || '#$wf0:a=s;t=m;r=.;38:28$'"/>
+   
+   <x:variable name="wf-scriptum-uri-1a-parsed-map" as="map(*)"
+      select="map{
+         'base-uri' : $scriptum-uri-1,
+         'fragment-start' : '',
+         'wf-fragment' : '$wf0:a=s;t=m;r=.;38:28$',
+         'fragment-end' : '',
+         'wf-fragment-count' : 1,
+         
+         'wf-version' : '0',
+         'wf-uri-type' : 'scriptum',
+         'wf-work-constraint-uri' : '',
+         'wf-ref-system-type' : 'm',
+         'wf-ref-scriptum-uri' : $scriptum-uri-1,
+         
+         'wf-references' : map{
+            1 : map{
+               'is-range' : false(),
+               1 : map{
+                  'steps' : ('38', '28')
+               }
+            }
+         },
+         
+         'errors' : ()
+      }"
+   />
+   
+   
+   <!-- The following wf URI is valid but disallowed, because the scriptum has more than one version of the work in question. The
+   appropriate fix would be to supply a new work URI that specifies exactly which version of the work is intended. -->
+   <x:variable name="wf-scriptum-uri-1b" as="xs:string"
+      select="$scriptum-uri-1 || '#$wf0:a=s;w=' || $work-uri-1 || ';t=m;r=.;38:28$'"/>
+   
+   <x:variable name="wf-scriptum-uri-1b-parsed-map" as="map(*)"
+      select="map{
+         'base-uri' : $scriptum-uri-1,
+         'fragment-start' : '',
+         'wf-fragment' : '$wf0:a=s;w=' || $work-uri-1 || ';t=m;r=.;38:28$',
+         'fragment-end' : '',
+         'wf-fragment-count' : 1,
+         
+         'wf-version' : '0',
+         'wf-uri-type' : 'constrained scriptum',
+         'wf-work-constraint-uri' : $work-uri-1,
+         'wf-ref-system-type' : 'm',
+         'wf-ref-scriptum-uri' : $scriptum-uri-1,
+         
+         'wf-references' : map{
+            1 : map{
+               'is-range' : false(),
+               1 : map{
+                  'steps' : ('38', '28')
+               }
+            }
+         },
+         
+         'errors' : ()
+      }"
+   />
+   
+   
+   <!--<x:variable name="bad-wf-uri-1" select="''"></x:variable>-->
+   
+   
+   
+   <x:scenario>
+      <x:label>Writing Fragids</x:label>
+      
+      <x:scenario>
+         <x:label>wf:parse-wf-uri</x:label>
+         <x:call function="wf:parse-wf-uri">
+            <x:param name="wf-uri" select="$wf-work-uri-1a"/>
+         </x:call>
+         <x:expect label="Work wf URI 1a" select="$wf-work-uri-1a-parsed-map"/>
+      </x:scenario>
+      <x:scenario>
+         <x:label>wf:parse-wf-uri</x:label>
+         <x:call function="wf:parse-wf-uri">
+            <x:param name="wf-uri" select="$wf-work-uri-1b"/>
+         </x:call>
+         <x:expect label="Work wf URI 1b" select="$wf-work-uri-1b-parsed-map"/>
+      </x:scenario>
+      <x:scenario>
+         <x:label>wf:parse-wf-uri</x:label>
+         <x:call function="wf:parse-wf-uri">
+            <x:param name="wf-uri" select="$wf-scriptum-uri-1a"/>
+         </x:call>
+         <x:expect label="Scriptum wf URI 1a" select="$wf-scriptum-uri-1a-parsed-map"/>
+      </x:scenario>
+      <x:scenario>
+         <x:label>wf:parse-wf-uri</x:label>
+         <x:call function="wf:parse-wf-uri">
+            <x:param name="wf-uri" select="$wf-scriptum-uri-1b"/>
+         </x:call>
+         <x:expect label="Scriptum wf URI 1b" select="$wf-scriptum-uri-1b-parsed-map"/>
+      </x:scenario>
+      
+      <x:pending>
+         <x:scenario>
+            <x:label>wf:is-valid-wf-uri()</x:label>
+            <x:call function="wf:is-valid-wf-uri">
+               <x:param name="wf-uri" select="''"/>
+            </x:call>
+            <x:expect label="zero-length string is not an wf URI" select="false()"/>
+         </x:scenario>
+         <x:scenario>
+            <x:label>wf:is-valid-wf-uri()</x:label>
+            <x:call function="wf:is-valid-wf-uri">
+               <x:param name="wf-uri" select="$work-uri-1"/>
+            </x:call>
+            <x:expect label="A URI without a fragment part is not an wf URI" select="false()"/>
+         </x:scenario>
+      </x:pending>
+      
+   </x:scenario>
+   
+   <x:pending>
+      <x:scenario>
+         <x:label>Class 1 files and Writing Fragid URIs</x:label>
+
+         <x:scenario>
+            <x:label>wf:get-class-1-fragment()</x:label>
+            <x:call function="wf:get-class-1-fragment">
+               <x:param name="wf-uri"
+                  select="$wf-work-uri-1a"/>
+               <x:param name="resolved-class-1-file" select="wf:resolve-doc($class-1-sample)"/>
+            </x:call>
+            <x:expect>
+               <x:label>Ring a Ring a roses line 1</x:label>
+               <wf:div type="l" n="1" q="d21e115">Ring-a-round the rosie, </wf:div>
+            </x:expect>
+         </x:scenario>
+      </x:scenario>
+   </x:pending>
+</x:description>
