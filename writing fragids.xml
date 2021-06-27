@@ -24,18 +24,21 @@
         </legalnotice>
         <revhistory>
             <revision>
-                <date>2021-01-23</date>
+                <date>2021-06-27</date>
                 <revdescription>
-                    <para>Prepublication draft, version 0.01</para>
+                    <para>Prepublication draft, version 0.02</para>
                 </revdescription>
             </revision>
         </revhistory>
     </info>
     <warning>
         <para>This prepublication draft document is subject to major revisions. Requests for changes
-            should be directed to the editor, either by email (kalvesmaki@gmail.com) or by a ticket
-            in GitHub. </para>
-        <para>Known items to do:<itemizedlist>
+            should be directed to the editor, either by email (kalvesmaki@gmail.com) or by GitHub
+            ticket. </para>
+        <para>Things to do:<itemizedlist>
+                <listitem>
+                    <para>Enlist specialists to critique this document.</para>
+                </listitem>
                 <listitem>
                     <para>Discuss questions raised throughout.</para>
                 </listitem>
@@ -53,52 +56,50 @@
             editor wants to leave for discussion, deliberation.</para>
     </warning>
     <warning>
-        <para>For about eight years I've been thinking about reference systems and pointers. Much of
-            my ideals have shaped the design of <link xlink:href="http://textalign.net">Text
-                Alignment Network</link> (TAN) XML. But I think I've adopted a different perspective
-            in writing these specifications, because my primary design concern has been not a data
-            format but an unambiguous, clear URI fragid. </para>
-        <para>In fact, lest anyone think this is just an excuse to push TAN on other people, I am
-            not certain, having finished the first draft, whether TAN is completely WF-conformant.
-            In the course writing the specs I discovered places where TAN most certainly wasn't, and
-            I began (separately) to work on adjustments. I turned to TEI and I found it easier to
-            develop a path toward WF conformance.</para>
+        <para>For about eight years I've been thinking about reference systems and pointers. That
+            thinking has shaped the design of <link xlink:href="http://textalign.net">Text Alignment
+                Network</link> (TAN) XML, but I have adopted a somewhat different perspective in
+            writing these specifications, because my primary design concern has been not a data
+            format but an unambiguous, clear URI fragid. That is, the problem I've set out to solve
+            is rather different, so I've taken a different approach. In fact, having finished the
+            first draft, I have realized that TAN is not completely WF-conformant. In fact, it is
+            somewhat easier to define a customization of TEI for WF conformance.</para>
     </warning>
         <section>
         <title>Abstract</title>
-        <para>This document defines a method for applying a fragment identifier ("fragid") to URIs
-            that designate a piece of writing. Such <emphasis>Writing Fragids</emphasis> (WFs)
-            enhance the specificity of the URI, by pointing to a specific part or section of the
-            publication or document, independent of any particular digital file, and applicable to
-            any data format—structured text, audio, or video—that supports such fragids. <warning>
-                <para>In a previous version the system was called Literature Fragids, which has too
-                    many overtones not suitable for documentary texts. I have moved to the more
-                    generic "Writing Fragid," but I'm still not completely happy. One problem is
-                    that in an adjectival construction the first word could be read as a participle,
-                    and a hyphen doesn't help much, e.g., "Writing Fragid Parameters." I also don't
-                    like saying the acronym WF by letters, and want to say something like "wuff,"
-                    "woof," or "wiff" instead.</para>
-            </warning></para>
+        <para>This document defines the syntax for a fragment identifier ("fragid") to any URI that
+            designates a piece of writing. Such <emphasis>Writing Fragids</emphasis> (WFs) enhance
+            the URI, by allowing anyone to cite a particular part of a work, and providing a method
+            for organizing, retrieving, and disseminating digital content in a variety of media and
+            formats. </para>
         <para>These specifications for WFs define a semantic fragid structure, and not a method for
             negotiating a single media type. They explain how to construct WF URIs, and establish
             conformance requirements, both for media formats and for applications that extract
             content. </para>
         <para>To construct a fragid syntax that restricts a reference unambiguously to a specific
-            part of a piece of writing has numerous challenges, not least because the reference
-            tradition such a syntax models has developed in complex ways over centuries. The core
-            essentials of that tradition are modeled through various terms and definitions that
-            specify a process to identify reference systems that can be relied upon to build a WF
-            that is just as persistent and unique as the URI it modifies.</para>
+            part of a piece of writing has numerous challenges. Writing fragids were designed to
+            model habits of citation, which have developed in complex ways over centuries. WF
+            specifications isolate a subset of citation practices and correlate it with a syntax
+            that enables the creation of a fragid that is just as persistent and unique as the URI
+            it modifies.</para>
     </section>
     <section>
         <title>Introduction</title>
-        <para>This document defines rules for the construction of fragment identifiers ("fragids")
-            for Universal Resource Identifiers (URIs) that designate items of written text,
-            aggregately termed <emphasis>writing</emphasis>. The term <emphasis>writing</emphasis>is
-            very broad, pointing to inscriptions, manuscripts, books, articles, and publications,
-            primarily nondigital artefacts. Writing Fragids (WFs) are designed to be applied to any
-            URI that designates either an abstract written work or an object that has words on it
-            (e.g., books, articles, newspapers, manuscripts, inscriptions, papyri, ostraca).<warning>
+        <para>Numerous Universal Resource Identifiers (URIs) designate pieces of writing. Some point
+            to a writing in the abstract without reference to a particular version or edition (e.g.,
+                <link xlink:href="http://dbpedia.org/resource/Iliad"/> for the
+                <emphasis>Iliad</emphasis>), whereas others point to a particular written artefact,
+            without reference to what kind of writing it is (e.g.,
+            urn:uuid:61c31a6d-c45a-4093-b25f-5a9c94566172 for the receipt in my pocket). In either
+            case, someone may wish to use the URI not merely to name the writing, but to designate a
+            specific range, place, or portion of the writing. One practical way to do so would be to
+            add a fragment identifier ("fragids") to the URI.</para>
+        <para>This document defines the rules for <emphasis>Writing Fragids</emphasis> (WFs),
+            designed to be applied to any URI that designates either an abstract written work or an
+            object that has writing on it. Although WFs may be applied to any type of writing, it
+            has been designed primarily for those that are objects of citation, and survive in
+            non-digital media (e.g., books, articles, newspapers, manuscripts, inscriptions, papyri,
+            ostraca). <warning>
                 <para>Currently, the WF specifications are written claiming to support all types of
                     scripta and works, later making exceptions (opt-out). While writing the
                     examples, I thought about an alternative approach, namely, to predefine a few of
@@ -109,34 +110,55 @@
                             <para>Opt-out: a general set of rules applicable all the time for every
                                 type of text, regardless, with some exceptions excluded. If there
                                 are inconcinnities, then the hell with it. Anyone who encodes a WF
-                                URI / WF-compliant text that relies upon an edge understanding of a
-                                scriptum or work, well, that's on them, and such material will just
-                                be ignored because it's not been approached the same way everyone
-                                else is.</para>
+                                URI / WF-compliant text that relies upon an idiosyncratic
+                                understanding of a scriptum or work, well, that's on them, and WFs
+                                will be ignored because they are not approaching the material the
+                                same way everyone else is. This approach, adopted for in this
+                                version of the specs, would keep the number of rules to a
+                                minimum.</para>
                         </listitem>
                         <listitem>
                             <para>Opt-in: rules require that anyone who encodes a WF URI /
                                 WF-compliant text declare such-and-such a predefined WF reference
-                                system type, and the hell with anyone who is working with a text
-                                that doesn't conform. As the WF specifications develop, with new
-                                versions of the WF specs, important reference systems can be
-                                added.</para>
+                                system type, and don't worry about unsupported texts. As the WF
+                                specifications develop, with new versions of the WF specs, important
+                                reference systems can be added to increase the types of supported
+                                writings. This approach would require a lot more rules declared at
+                                the outset.</para>
                         </listitem>
                     </orderedlist>I do not have a clear sense on which way the needle should
                     point.</para>
             </warning></para>
-        <para>The fragid structure enables the creation of assertions about specific parts of
-            written works and text-bearing objects, independent of any particular digital surrogate,
-            if it even exists. WFs enable data format design that allows users to structure
-            literature content in a variety of media.</para>
+        <para>URIs with WFs enable two kinds of activity that are otherwise difficult or
+            impossible:</para>
+        <para>
+            <orderedlist>
+                <listitem>
+                    <para><emphasis role="bold">Shared URI-based citations to specific parts of a
+                            work</emphasis>. Rather than pointing to an entire work, one can specify
+                        a particular part. This in turn allows one to build computer-actionable
+                        statements that are more precise. One can build such WF-URIs without
+                        depending upon a particular digital surrogate. In fact, one can coin and use
+                        WF URIs for writings that have not yet been digitized.</para>
+                </listitem>
+                <listitem>
+                    <para><emphasis role="bold">A URI-based protocol for requesting and delivering
+                            digital resources</emphasis>. A WF-URI is media independent, and may
+                        correspond to text, image, audio, video, or other types of resources. The WF
+                        specifications permit designers of data formats to allow users to expose
+                        their data to WF URIs, and developers of applications to retrieve and
+                        deliver requests that include WFs.</para>
+                </listitem>
+            </orderedlist>
+        </para>
         <para>These guidelines adhere to the <link
                 xlink:href="https://www.w3.org/TR/fragid-best-practices/">Best Practices for
                 Fragment Identifiers and Media Type Definitions</link>, specifically the section
             addressing <link xlink:href="https://www.w3.org/TR/fragid-best-practices/#structures"
                 >fragid structures</link>. A semantic fragid structure such as WF declares a set of
-            meaning-based syntactic rules that can be followed by designers of individual media
-            types, perhaps to be registered with the <link xlink:href="https://www.iana.org/"
-                >Internet Assigned Numbers Authority (IANA)</link>. </para>
+            meaningful syntactic rules that can be followed by designers of individual media types,
+            perhaps to be registered with the <link xlink:href="https://www.iana.org/">Internet
+                Assigned Numbers Authority (IANA)</link>. </para>
         <para>Fragids in general allow processors to extract specific content from digital
             resources. Writing Fragids are also intended for those purposes, but on an abstract
             level, without specifying exactly which digital resources, if any, will match the WF.
@@ -144,18 +166,19 @@
             retrieve a matching document. Further, many WFs will be attached to URIs that identify
             nondigital textual entities that may not have any corresponding digital resource for
             years to come, if ever. Such resource-agnostic URIs are valuable, because they allow one
-            to make RDF assertions about nondigital texts without having to rely upon any particular
+            to make assertions about nondigital texts without having to rely upon any particular
             digital surrogate.</para>
         <para>Designers of WF-conformant media types must write their own guidelines defining
             exactly how the individual components of a WF URI must be interpreted and resolved
             against instances of the format. Developers creating parsers or applications handling a
             specific WF-conformant data format must take into consideration both these guidelines
             and the ones stipulated by any WF-conformant data format.</para>
-        <para>These guidelines treat two areas of expertise: writing technology and computer
-            science. Some readers knowledgeable in one realm but not the other may find that reading
-            sequentially through these guidelines is frustrating and confusing. The following order
-            is recommended for new readers: <xref linkend="motivation"/>, <xref linkend="challenges"
-            />, <xref linkend="examples"/>, then other sections as interest leads.</para>
+        <para>These specifications engage with technical material from two different areas: writing
+            technology and computer science. Some readers knowledgeable in one but not the other may
+            find reading sequentially through this document to be frustrating and confusing. The
+            following order is recommended for new readers: <xref linkend="motivation"/>, <xref
+                linkend="challenges"/>, <xref linkend="examples"/>, then other sections as interest
+            leads.</para>
     </section>
     <section>
         <title>Conformance</title>
@@ -178,8 +201,8 @@
         </warning>
         <section>
             <title>Media Formats</title>
-            <para><termdef><firstterm>WF-conformant media formats</firstterm> are those media
-                    formats designed to allow files in the format to be parsed against WF URIs for
+            <para><termdef><firstterm>WF-conformant media formats</firstterm> are media formats that
+                    have been designed to allow files in the format to be parsed against WF URIs for
                     content.</termdef> In defining conformance of a media type to the Writing Fragid
                 specifications, designers must provide a narrative describing how to match the
                 component parts of a WF URI against a file, and how the file should be parsed to
@@ -190,25 +213,25 @@
                 guidelines which version of WF is supported. </para>
             <para>WF was designed to support textual scholarship, which regards provenance as being
                 highly important. In many cases, when content is extracted from a WF-conformant
-                file, the recipient of the data will want to know who claims that the output
-                corresponds to the WF URI. Therefore every WF-conformant media format
-                    <emphasis>must</emphasis> define a mechanism that supports provenance
-                information. Whether such information must always be included is left to designers
-                of the media format.</para>
-            <para>The WF syntax does not support every type of textual reference. Some of the
-                content in a file may be accessible to WF URIs, and some may not. It is not required
-                that all the content in a matching WF-conformant file be accessible by a WF URI.
-                Guidelines for WF-conformant media formats must explain how to distinguish
-                WF-qualifying content from non-WF-qualifying content.</para>
-            <para>Some generic formats (e.g., TEI XML) may permit multiple ways to produce
-                WF-conformant media format. A designer of WF-conformant media applied to a generic
-                format <emphasis>should</emphasis> provide a unique name for the media format
-                customization, and <emphasis>should</emphasis> develop mechanisms that avoid
-                conflict with any other existing WF-conformant definitions for the same generic
+                file, the recipient of the data will expect metadata that stipulates responsibility.
+                Therefore, every WF-conformant media format <emphasis>must</emphasis> define a
+                mechanism that supports provenance information. Whether such information must always
+                be included, or how it is validated, is left to designers of the media
                 format.</para>
+            <para>The WF syntax is not universally comprehensive. Some of the content in a
+                WF-conformant file may not be accessible to a WF URI. It is not required that all
+                the content in a matching WF-conformant file be accessible by a WF URI. Guidelines
+                for WF-conformant media formats must explain how to distinguish WF-qualifying
+                content from non-WF-qualifying content.</para>
+            <para>Some generic media formats (e.g., TEI XML, HTML) may be conducive to
+                WF-conformance, but may also permit multiple ways of being customized. Anyone
+                customizing a generic media format to be WF-conformant <emphasis>should</emphasis>
+                provide a unique name for the customization, and <emphasis>should</emphasis> develop
+                mechanisms that avoid conflict with any other existing WF-conformant definitions for
+                the same generic format.</para>
             <para>Some media media formats might be designed not to expose content for extraction
                 via WF URIs, but to be a generative source of WF URIs (e.g., a file format designed
-                to create RDF triples that include WF URIs, or data structures that can be converted
+                for RDF triples that include WF URIs, or for data structures that can be converted
                 to WF URIs). No conformance requirements are stipulated of such WF-engaged formats
                 beyond the WF syntactic requirements defined below. </para>
             <para>Other conformance requirements for media formats appear throughout these
@@ -220,36 +243,39 @@
                     takes as input one or more WF URIs and one or more files or file fragments from
                     WF-conformant media formats, and returns as output the media content that
                     matches the WF URIs, perhaps along with associated metadata.</termdef> A WF
-                processor may be written in any programming language. </para>
+                processor may be written in a variety of programming languages. </para>
+            <para>WF processors may feature, depend upon, or actually be, an application programming
+                interface (API) or some other type of interface. The WF specifications put no
+                strictures on such interfaces, aside from its processing requirements.</para>
             <para>If a WF is added to a URI that begins with the regular expression
                     <code>https?://</code>, the URI is to be interpreted not as a URL per se (a
                 place where a particular digital resource is to be found) but as the identifying
                 name of a piece of literature. A WF processor <emphasis>may</emphasis> treat such a
-                URI as a location, but these specifications place no strictures on the mediating web
-                protocol or interface, or what type of resource might be returned by a referenced
-                server, or how to interpret the content that is returned.</para>
+                URI as a location and attempt to retrieve data from it, but these specifications
+                place no strictures on the mediating web protocol or interface, or what type of
+                resource might be returned by a referenced server, or how to interpret the content
+                that is returned.</para>
             <para>WF URIs were created to support provenanced claims about texts. It is
                     <emphasis>recommended</emphasis> that WF processors provide in any output
                 metadata that identifies the processor and its version and any provenance metadata
                 associated with extracted content. </para>
-            <para>A WF processor <emphasis>must</emphasis> base its output on the content format
-                defined by the target WF-conformant media. That processor <emphasis>may</emphasis>
-                apply further adjustments. The format and serialization of finalized output WF data
-                is implementation-dependent, but the representation of the content of WF media
-                format content <emphasis>should</emphasis> be lossless. Those who design WF
-                processors will likely need to constrain the output to a particular format (XML,
-                JSON, tiff, mp4, svg, etc.). <warning>
+            <para>A WF processor <emphasis>must</emphasis> expect input that conforms to the content
+                format defined by the target WF-conformant media. That processor
+                    <emphasis>may</emphasis> apply further adjustments before it renders output. The
+                format and serialization of finalized output WF data is implementation-dependent,
+                but the representation of the content of WF media format content
+                    <emphasis>should</emphasis> be lossless. Those who design WF processors will
+                likely need to constrain the output to a particular format (XML, JSON, tiff, mp4,
+                svg, etc.). <warning>
                     <para>Does this paragraph get too invasive? Those who write processors will do
                         whatever they want, in the end.</para>
                 </warning></para>
             <para>A WF processor <emphasis>must</emphasis> define the types of WF conformant-media
                 it processes. A WF processor need not support all media types, but it
                     <emphasis>must</emphasis> support all syntactically valid WF URIs.</para>
-            <para>The way error messages are handled is implementation-dependent, unless otherwise
-                specified. </para>
-            <para>WF processors may feature, or depend upon, an application programming interface
-                (API) or some other type of interface. The WF specifications put no strictures on
-                such interfaces.</para>
+            <para>If a WF URI constructs reference nodes in a specific sequence, the corresponding
+                output <emphasis>must</emphasis> respect the same sequence.</para>
+            <para>Error reporting is implementation-dependent, unless otherwise specified. </para>
             <para>A non-normative companion XSLT test suite accompanies these specifications. It can
                 be used to parse and validate WF URIs, or to build analogous processes in other
                 programming languages.<warning>
@@ -269,10 +295,10 @@
         <para>The need for Writing Fragids has grown with the influence of the Semantic Web, an
             ecosystem of sharing data interoperably, based on the model defined by the <link
                 xlink:href="https://www.w3.org/RDF/">Resource Description Framework</link> (RDF).
-            RDF defines a relatively simple graph model for its basic datum, called a triple, which
-            consists of exactly a node, an edge, and a node, named the subject, predicate, and
-            object. As the names suggest, a RDF triple offers a way to express a declarative
-            assertion. </para>
+            RDF defines a relatively simple graph model for its basic datum, called a triple, a
+            graph component that consists of two nodes and one edge, named the subject (node),
+            predicate (edge), and object (node). As the names suggest, a RDF triple models an
+            everyday claim. </para>
         <para>In the case of written texts, one might wish to say, "Plato's
                 <emphasis>Republic</emphasis> quotes from Homer's <emphasis>Iliad</emphasis>."
             Converting such an assertion into RDF is at present relatively trivial (adopting Turtle
@@ -300,89 +326,87 @@ wc:860129739 cito:includesQuotationFrom db:Laws_(dialogue)</programlisting>
 
 doi:10.1075/target.26.3.02zuf cito:cites doi:10.1556/Acr.6.2005.1.2</programlisting></para>
         <para>RDF triples that refer to complete works are rather straightforward. But such
-            assertions, even if true, are too general for many purposes. The citations and
-            quotations by Plato, Burkert, and Zufferey + Cartoni are made <emphasis>at</emphasis>
-            specific pages, <emphasis>of</emphasis> specific passages. Those who require greater
-            precision would find more helpful sets of RDF triples that specify exactly where one
-            item quotes the other, i.e., at page A line B book X quotes from section C subsection D
-            of work Y. </para>
+            assertions, even if true, are too general to be useful. The citations and quotations by
+            Plato, Burkert, and Zufferey + Cartoni are made <emphasis>at</emphasis> specific pages,
+                <emphasis>of</emphasis> specific passages. Those who desire greater precision would
+            find more helpful sets of RDF triples that specify exactly where one item quotes the
+            other, i.e., at page A line B book X quotes from section C subsection D of work Y. </para>
         <para>In making a triple more precise, the subject and object would remain the same, but
             narrowed in scope to specific parts. The endeavor is analogous to current conventions
             that allow one to point to a specific section of an individual image, video, audio file,
             web page, XML file, and so forth. Many of these file-specific conventions depend upon
             URI fragment identifiers that reference content within the resource. The present
             specification for Writing Fragids proposes an analogous construction, for URIs that
-            point not to digital resources but to documents, publications, literature, and other
-            types of writing that lend themselves to referencing in general.</para>
-        <para>A URI with a Writing Fragid enables RDF triples with precise references to written
-            literature in any language, from any period of time. WF syntax does not depend upon any
-            particular digital service or digital file, so WF URIs can be made and used, regardless
-            of how many corresponding files exist, if any. The WF syntax allows a person or
-            algorithm to make a claim that points unambiguously to a particular location in a work
-            or item. That assertion, whose meaning remains independent of any digital resource, can
+            point, not to digital resources, but to documents, publications, literature, and other
+            types of writing that lend themselves to referencing in general. Just as a URI can point
+            to a non-digital entity, so to can a WF.</para>
+        <para>A URI with a Writing Fragid enables RDF triples that point with greater precision to
+            written literature in any language, from any period of time. WF syntax does not depend
+            upon any particular digital service or digital file, so WF URIs can be made and used,
+            regardless of how many corresponding files exist, if any. The WF syntax allows a person
+            or algorithm to make a claim that points unambiguously to a particular location in a
+            work or item. That assertion, whose meaning is independent of any digital resource, can
             then be used to extract relevant sections from any matching WF-conformant files, and
             perhaps to make other inferences not envisioned by the creator of the original WF URI or
             RDF triple. </para>
-        <para>Although the preceding use cases have focused on quotation, a WF URI may be used in a
-            variety of RDF triples, for example, to make assertions about textual variation, dates,
-            authorship, or even grammatical properties. Consider the statement, "In Shakespeare's
-                <emphasis>Henry VI</emphasis>, part 2, 1.4.32, 'Henry' is the grammatical object."
-            (The statement is reductive and not obviously true; the context is, "The duke yet lives
-            that Henry shall depose," a cunning amphiboly with two very different intepretations
-            based upon how the grammar is interpreted.) A WF-based RDF triple encoding this
-            assertion might be built as
-            follows:<programlisting>@prefix db: &lt;http://dbpedia.org/resource/> .
+        <para>Although the preceding use cases have focused on quotation, a WF URI may be used in
+            RDF triples for a variety of reasons, for example, to make assertions about textual
+            variation, dates, authorship, or even grammatical properties. Consider the statement,
+            "In Shakespeare's <emphasis>Henry VI</emphasis>, part 2, 1.4.32, 'Henry' is the
+            grammatical object."<note>
+                <para>The statement is reductive and not obviously true; the context is, "The duke
+                    yet lives that Henry shall depose," a cunning amphiboly with two very different
+                    intepretations based upon whether one interprets "Henry" as the grammatical
+                    subject or object of "depose".</para>
+            </note> A WF-based RDF triple encoding this assertion might be built as follows (with a
+            placeholder for the Writing Fragid
+            component):<programlisting>@prefix db: &lt;http://dbpedia.org/resource/> .
 @prefix la: &lt;http://example.org/linguistic-annotation> .
 @prefix olia: &lt;http://purl.org/olia/olia.owl#> .
 
 db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlisting></para>
         <para>These guidelines stipulate syntactic rules for constructing a WF such that the
             modified URI remains persistent and unique, and therefore unambiguous. </para>
-        <para>Requirements for persistence and uniqueness are foundational to the general definition
-            of URIs. Something may be assigned many URIs, perhaps by even the same person or
-            organization, but no person should wittingly assign a URI to two different resources or
-            classes of resources, or to create a URI that could be interpreted in mutually exclusive
-            ways. The same should hold for URI fragids. </para>
+        <para>Persistence and uniqueness are foundational requirements for any URI. Something may be
+            assigned many URIs, perhaps by even the same person or organization, but no person
+            should wittingly assign one URI to two or more different resources (or classes of
+            resources), or to create a URI that could be interpreted in mutually exclusive ways. The
+            same should hold for URI fragids. </para>
         <para>The WF syntax has been designed to avoid ambiguity, at the expense of some brevity and
             legibility. Anyone who learns the syntax can write and read a WF URI, but its full
             meaning may not be apparent <emphasis>prima facie</emphasis>.</para>
-        <para>Ambiguity is common in ordinary reference systems (discussed below). Writers
-            frequently refer to other writings in a terse syntax, taking for granted that the reader
-            comes with a shared context to understand and resolve a citation. In human-to-human
-            communication, such tacit knowledge has been reliable. But URIs require such that
-            conventions be converted explicitly and unambiguously. Because WF URIs are to be
-            persistent and unique, those traditional references that not currently not convertible
-            are excluded from this version of the WF specifications. </para>
-        <para>An equally important priority is interoperability. URIs, including their fragments,
-            are opaque constructions. The URIs <code>http://example.com#F1,2</code> might be defined
-            as being semantically identical with <code>http://example.com#F2,1</code>, but the
-            variation is a roadblock to Semantic Web applications, which normally rely on simple
-            string comparisons when matching URIs. WF URIs have been designed to limit permutations
-            in a given URI construction. But there are many cases where synonymous variations are
-            impossible to avoid, and WF processors and WF-conformant media types must step in. The
-            WF specifications allow WF-conformant media type to build reconciliation mechanisms to
-            assist WF processors matching a WF URI to a file.</para>
+        <para>Writing Fragids have been designed to model citation practices, which have challenging
+            features (discussed below). Writers frequently refer to other writings in a terse syntax
+            that permits multiple interpretations. They take for granted that the reader comes with
+            a shared context to understand and resolve a citation. Such tacit knowledge has been
+            reliable in writing for human understanding. But URIs, which are required for computer
+            "understanding", must be based upon explicit and unambiguous conventions. Because WF
+            URIs are to be persistent and unique, traditional citation practices that are at present
+            not easily convertible are excluded from this version of the WF specifications. </para>
     </section>
     <section xml:id="challenges">
         <title>Challenges</title>
         <important>
             <para>This section is descriptive.</para>
         </important>
-        <para>A WF is a digital reference that models traditional reference practices. Reference
-            systems are essential and ubiquitous, but poorly studied and understood. An overarching
-            theory or framework is elusive. As of this writing, there does not even exist a relevant
+        <para>A Writing Fragid is sequence of characters (letters, numbers, punctuation) that models
+            the core features of traditional references. Reference systems are essential and
+            ubiquitous, but poorly studied and understood. An overarching theory or framework of
+            citation practices is elusive. As of this writing, there does not even exist a relevant
             Wikipedia entry on the subject. Many reference systems feature a number of
             irregularities that challenges any effort to create a WF URI that is persistent, unique,
             and interoperable.</para>
-        <para>Many texts have more than one reference system. For example, you are asked to look up
-            Aristotle, <emphasis>Categories</emphasis> 4, do you go to chapter four, or to Bekker
+        <para>Many texts have more than one reference system. For example, if you are asked to look
+            up Aristotle, <emphasis>Categories</emphasis> 4, do you go to chapter four, or to Bekker
             page number 4? It is impossible to tell, since that particular text has two major
             reference systems, and the reference is valid in both systems. If you encounter a
-            reference to the Bible verse Joshua 9:2a, does the "a" point to part 1 of 2, to part 1
-            of 3, or to an extra verse between Joshua 9:2 and 9:3? All three options are possible,
-            because Joshua 9:2 can be divided however one likes, and in the best critical editions
-            of the Septuagint version of the Old Testament, extra verses appear between Joshua 9:2
-            and 9:3 and given subletters (Joshua 9:2a, 9:2b, etc.). </para>
+            reference to the Bible verse Joshua 9:2a, it is clear that one means to point to chapter
+            nine, verse two, but does the "a" point to the first part of verse two (and how many
+            parts are there?), or does it mean verse 9a, i.e., an extra verse between Joshua 9:2 and
+            9:3? All three options are possible, because Joshua 9:2 can be divided however one
+            likes, and in the best critical editions of the Septuagint version of the Old Testament,
+            extra verses appear between Joshua 9:2 and 9:3 and are given by their editors subletters
+            (Joshua 9:2a, 9:2b, etc.). </para>
         <para>Most human readers familiar with the conventions for a given work can quickly and
             easily interpret terse, vague, and ambiguous syntax, but computers cannot. Any algorithm
             that currently negotiates such differences has been extensively programmed, usually on
@@ -391,15 +415,15 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
             literature.</para>
         <para>One may argue that one should adopt the reference system most people agree upon for a
             given work. Although this proposal, based on the notion of a so-called canonical
-            reference system, is well motivated, it fails to accommodate common examples. As noted
-            above with Aristotle's <emphasis>Categories</emphasis>, many written works have two or
-            more independent reference systems (e.g., in a book, chapter/section numbers versus
-            page/line numbers, e.g., Plato's corpus). Texts with an unambiguous canonical reference
-            systems are not common. It is lacking exactly where one expects it most, within the very
-            text collection that gave us the notion of "canon", the Bible. For example, the
-            reference Psalm 30.1 points to three different passages, depending upon whether the
-            reference is interpreted as being reliant on English, Hebrew, or Greek Septuagint
-            versification:</para>
+            reference system, is well motivated, it is inadequate, even for very common examples. As
+            noted above with Aristotle's <emphasis>Categories</emphasis>, many written works have
+            two or more independent reference systems (e.g., in a book, chapter/section numbers
+            versus page/line numbers, e.g., Plato's corpus). Texts with an unambiguous canonical
+            reference systems are rare. Even within the very text collection that gave us the notion
+            of "canon", the Bible, there are standard reference systems that conflict with each
+            other. For example, the reference Psalm 30.1 points to three different passages,
+            depending upon whether the reference is interpreted as being reliant on English, Hebrew,
+            or Greek Septuagint versification:</para>
         <para>
             <table frame="all">
                 <title>Psalm 30.1</title>
@@ -426,13 +450,15 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
             </table>
         </para>
         <para>In this case, Psalm 30.1 English = Psalm 30.2 Hebrew = Psalm 29.2 Septuagint. Roughly
-            10% of the verses in the Tanakh/Old Testament are subject to reference variants
-            according to the three versification schemes most used today. </para>
+            10% of the verses in the Tanakh/Old Testament are subject to such reference variants in
+            the three major versification schemes used today. </para>
         <para>There are many, many other works with comparable discordant, ambiguous, or vague
-            reference systems. For example, Aristotle's and Plato's works are assigned specific
-            references according to the page, column, and line numbers of important 19th-century
-            editions. But without exception, every 20th- and 21st-century edition and translation of
-            those texts that adopts these specific systems adjusts and changes the systems.</para>
+            reference systems. For example, many classical works are assigned specific references
+            corresponding to the page, column, and line numbers of the first critical edition (e.g.,
+            Bekker numbers for Aristotle, Stephanus numbers for Plato). But without exception, every
+            20th- and 21st-century edition and translation of texts that adopts these
+            edition-specific systems must adapt and adjust those systems. A particular word might
+            fall before, after, or across, a particular line number.</para>
         <para>Another type of challenge pertains to the labels used in reference systems. Many
             reference systems rely on numerals, or ordered letters that enumerate textual units. But
             many other labels are not enumerated, and reference conventions differ widely. To draw
@@ -446,11 +472,10 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
         <para>Many generic textual units normally do not admit number labels but are referred to by
             their type. For example, one may reference a title through "title", "ti", "t" or the
             like, presenting choices that could lead to confusion. Does "ep" refer to an epilogue or
-            an epistle; does "no" mean note or number? In an FAQ, each question-answer pair might be
-            numbered, but there are several possible ways to label and therefore reference the
-            parts: "q", "quest", "question", and so forth. As a result, labels for, and references
-            to, special types of textual divisions are created ad hoc, according to custom, but not
-            any controlled vocabulary.</para>
+            an epistle; does "no" mean note or number? Some text components are difficult to name
+            and cite (e.g., parts of a liturgical text). As a result, labels for, and references to,
+            special types of textual divisions are created ad hoc, according to custom, but not any
+            controlled vocabulary.</para>
         <para>Even enumerated sequences are not straightforward. As noted above, with Joshua 9:2a,
             some references depend upon compound numbers. Different types of numeration systems
             exist, e.g., Roman numerals and letter labels. Although these can invariably be
@@ -461,8 +486,8 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
             beyond the twenty-six items of the English form of the Latin alphabet).</para>
         <para>In short, reference systems present numerous problems. A variety of conventions have
             developed independently over centuries, across languages and disciplines. We divide,
-            label, and refer to each others writings in a bewildering variety of ways. Many humans
-            have a difficult time negotiating such differences; computers do not fare better.</para>
+            label, and refer to each others writings in a bewildering variety of ways. We often have
+            a difficult time negotiating such differences; computers do not fare better.</para>
     </section>
     <section>
         <title>Concepts and Definitions</title>
@@ -470,135 +495,170 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
             <para>This section is normative.</para>
         </important>
         <para>The definitions below are normative only within the scope of WF URIs. One should not
-            infer from the terms or their definitions that they stipulate the best way to look at
-            written texts.<warning>
-                <para>This section is overly long, and I admit it includes steps that could be
-                    dropped. I've erred on the side of excess for this first draft, because previous
-                    attempts to deal with this task have been, in my opinion, poorly theorized. I
-                    think the downfall of FRBR and OHCO is that their definitions were not been
-                    approached incrementally, from the simplest ideas. </para>
-                <para>Much of the discussion is technical and difficult to follow. I would
-                    personally prefer to keep the rigor for the technical specifications and provide
-                    a second "Gentle Guide to Making a WF URI" in a casual tone suited to
-                    teaching.</para>
+            infer from the terms or their definitions that they stipulate the best way to think
+            about written texts.<warning>
+                <para>This section is overly long, and I admit steps should be dropped. I've erred
+                    on the side of excess for this first draft, because previous attempts to deal
+                    with this task have been, in my opinion, poorly theorized. I think the downfall
+                    of FRBR and OHCO is that their definitions assumed of the reader too much. They
+                    were not been approached incrementally, from the simplest ideas. Hence my
+                    excessive approach.</para>
+                <para>Much of the discussion is technical and difficult to follow. Because this is
+                    ultimately a technical document, and needs to be rigorous, I would personally
+                    prefer to keep the rigor and provide a second "Gentle Guide to Making a WF URI"
+                    in a casual tone suited to teaching.</para>
                 <para>As I re-read my draft, I blame myself for overthinking the matter. But I
                     haven't deleted a lot, so as to leave at least a record of some early thoughts,
-                    and to catalyze a wide-ranging discussion among those who can do better where I
-                    have failed.</para>
+                    and to catalyze a wide-ranging discussion among those who can do better.</para>
             </warning></para>
         <section>
-            <title>Writing, Works, and Scripta</title>
-            <para><termdef><firstterm>Writing</firstterm> is defined the body of things written,
-                    i.e., characters and symbols created, normally to communicate ideas and
-                    meaning.</termdef></para>
-            <para><termdef>An <firstterm>item of writing</firstterm> is an instance of
-                    writing.</termdef> Every item of writing must be referred to
-                    <emphasis>qua</emphasis> conceptual/immaterial entity, or
-                    <emphasis>qua</emphasis> instantiated/material entity. For example, one can talk
-                about the item of writing called the <emphasis>Iliad</emphasis> without reference to
-                any particular edition, or one can talk about a specific printed edition of the
-                Homeric poems. Items of writing discussed in the first mode are termed
-                    <emphasis>works</emphasis>; in the second, <emphasis>scripta</emphasis>
-                (singular: <emphasis>scriptum</emphasis>). The distinction is to be made even when
-                it is not so evident (see below).</para>
-            <para><termdef>A term may be modified by <firstterm>shared</firstterm>, which refers to
-                    a consensus held by a community of practice.</termdef>
-                <termdef>A <firstterm>shared work limit</firstterm> is a consensus by a community of
-                    practice on what the limits are to a particular work.</termdef>
-                <termdef>A <firstterm>shared scriptum limit</firstterm> is a consensus on the limits
-                    for a particular scriptum.</termdef> In many cases these distinctions are not
-                significant, because most such limits, especially in the case of scripta, are shared
-                not simply by a community of practice, but universally. But in other cases, such as
-                culturally influential works or writings in special fields or linguistic traditions,
-                one community's shared limits will differ from those of another (e.g., the limits to
-                the meaning of "Bible").</para>
-            <para><termdef>A <firstterm>work</firstterm> is a conceptual, nonmaterial item of
-                    writing. Every work is a notional entity with shared limits, whose content
-                    admits division (perhaps into other works), and whose content cannot be equated
-                    or conflated with any individual material entity.</termdef> Homer's
-                    <emphasis>Iliad</emphasis> and Shakespeare's <emphasis>Henry VI</emphasis> are
-                examples of conceptual works: they are items of literature that can be meaningfully
-                discussed independent of any of the many individual books or manuscripts that carry
-                editions, translations, or other versions of these works. </para>
-            <para>Works frequently encompass other works (e.g., the Catalog of Ships or Gloucester's
-                Soliloquy), or they may be constituent parts of larger works or collections, which
-                may also be treated as works (e.g., the Homeric Cycle, Shakespeare's minor
-                tetralogy). Work-to-work relationships may exhibit multiple levels of nesting,
-                repetition, or interconnection. For example, the work <emphasis>The New
-                    Testament</emphasis> encompasses the work <emphasis>The Gospel of
-                    Matthew</emphasis>, which includes the work <emphasis>The Sermon on the
-                    Mount</emphasis>, which includes the work <emphasis>The Lord's
-                Prayer</emphasis>, a work that is itself a constituent part of many other works,
-                sometimes repeatedly so (e.g., a Christian liturgical service). </para>
-            <para>Any single work may have derivative versions (e.g., translations, paraphrases,
-                parodies). Such work-versions are to be treated as works in their own right.
-                    <termdef>To every work-version may be attached one or more <firstterm>version
-                        paths</firstterm>, defined as the chronological chain of work-versions upon
-                    which a particular work-version depends.</termdef> A version path may be
-                unclear, or disputed, e.g., texts preserved in medieval manuscripts hundreds of
-                years removed from any putative original. Recent version paths might be quite clear.
-                For example, a modern critical edition collectively extends the length of the
-                version paths of its manuscripts by one, and a translation of that critical
-                edition's work-version into a modern language has a version path yet one step
-                longer.</para>
-            <para>If a work-version is the subject of a version path, the name of that work-version
-                may be applied not merely to the original work-version, but to all work-versions
-                along each of its resultant version paths. The name "Lao Tzu's <emphasis>Art of
-                    War</emphasis>" applies to all its versions. Hence, the name of a work-version
-                should be treated as labeling not a single item but a class of items. That class may
-                be restricted to subclasses. Any such restriction may be made on the basis of a
-                version path or not. "Lionel Giles' 1910 translation of Lao Tzu's <emphasis>Art of
-                    War</emphasis>" uses the a version path to restrict the original class.
-                "Twentieth-century versions of Lao Tzu's <emphasis>Art of War</emphasis> published
-                in the United States" uses criteria not reflecting any particular version path. </para>
-            <para>The name of a work-version is inheritable by its versions (a transitive,
-                asymmetric relation). West's critical edition of the Greek text of the
-                    <emphasis>Iliad</emphasis> is a particular version, but it can also be more
-                broadly named: (1) West's edition of the <emphasis>Iliad</emphasis> in Greek; (2)
-                the Greek version of the <emphasis>Iliad</emphasis>; or simply (3) the
-                    <emphasis>Iliad</emphasis>. The last of these names can also be applied to an
-                English translation of West's Greek edition, which could also be properly term (4)
-                West's version of the <emphasis>Iliad</emphasis> (the language is not specified);
-                (5) an English translation of the <emphasis>Iliad</emphasis>, or (6) an English
-                translation of West's edition of the <emphasis>Iliad</emphasis> in Greek. Other
-                names, following certain permutations, could be used. Although the examples above
-                illustrate the point with human-readable names, it applies as well to
-                machine-readable ones, such URIs. <warning>
-                    <para>The previous two paragraphs might exhibit overthinking, but they also
-                        reflect a real problem I discuss elsewhere, about how to point to a
-                        work-version in particular, a requisite for scripta with multiple versions
-                        of the same work. We have some good URI vocabulary for famous works, and we
-                        have some good URI vocabulary for items of literature where the
-                        work-scriptum divide is not so strong (modern scholarly articles). But how
-                        do we do vocabularies of work-versions that aren't famous and are clearly
-                        down the version path? What about work-versions that are based on arbitrary
-                        categories? The previous two paragraphs note that work-versions can be built
-                        in various combinations, either through the genetic relationships that make
-                        up stemmatology or seemingly arbitrary properties.</para>
-                </warning></para>
-            <para><termdef>A <firstterm>scriptum</firstterm> is a physical item of writing. It is a
-                    text-bearing material object, or a set of (largely) indistinguishable copies of
-                    text-bearing objects. Every scriptum is a physical entity with shared limits,
-                    whose content admits division (perhaps into other scripta), and whose content
-                    cannot be equated or conflated with any single work.</termdef> For the purposes
-                of WF URIs, digital files are to be regarded as material objects, and therefore
-                scripta. Manuscript Venetus A, Caroline Alexander's translation of the
-                    <emphasis>Iliad</emphasis> (ISBN 9780062046277), the 1594 first quarto edition
-                of <emphasis>Henry VI Part 2</emphasis>, the Bate and Rasmussen edition of
-                    <emphasis>Henry VI</emphasis> (ISBN 9780812969405), and a pdf scan of that
-                edition, are four examples of scripta. </para>
-            <para>A digital scan or digital photograph of a material object <emphasis>must
-                    not</emphasis> be treated as the same scriptum as what it represents. It is a
-                digital surrogate, and constitutes a new scriptum.</para>
-            <para>A scriptum may be a constituent part of another scriptum (e.g., a volume in a
-                multivolume publication) or it may comprise multiple scripta (e.g., a volume that
-                consists of multiple fascicles). Sometimes a single scriptum may be legitimately
-                treated as overlapping or intersecting another (e.g., a manuscript that was broken
-                apart long ago, the parts joined to other manuscripts). It may be possible for a
-                single artefact to be treated wholly as two different scripta. For example, a
-                hand-annotated print copy of a book may be considered an individual manuscript (a
-                scriptum with set membership of one) or as part of a print run (a scriptum with set
-                membersip of more than one).</para>
+            <title>Writing, Works, Scripta, and Shared Limits</title>
+            <section>
+                <title>Writing</title>
+                <para><termdef><firstterm>Writing</firstterm> is defined as anything a human creates
+                        through visible marks, i.e., characters and symbols, to communicate ideas
+                        and meaning to later readers.</termdef></para>
+                <para><termdef>An <firstterm>item of writing</firstterm> is an instance of
+                        writing.</termdef> Every item of writing must be referred to
+                        <emphasis>qua</emphasis> conceptual/immaterial entity, or
+                        <emphasis>qua</emphasis> instantiated/material entity. For example, one can
+                    talk about the item of writing called the <emphasis>Iliad</emphasis> without
+                    reference to any particular edition, or one can talk about a specific printed
+                    edition of the Homeric poems. Items of writing discussed in the first mode are
+                    termed <emphasis>works</emphasis>; in the second, <emphasis>scripta</emphasis>
+                    (singular: <emphasis>scriptum</emphasis>). The distinction is to be made even
+                    when it is not so evident (see below).</para>
+            </section>
+            <section>
+                <title>Works</title>
+                <para><termdef>A <firstterm>work</firstterm> is a conceptual, nonmaterial item of
+                        writing. Every work is a notional entity with shared limits, whose content
+                        admits division (perhaps into other works), and whose content cannot be
+                        equated or conflated with any individual material entity.</termdef> Homer's
+                        <emphasis>Iliad</emphasis> and Shakespeare's <emphasis>Henry VI</emphasis>
+                    are examples of conceptual works: they are items of literature that can be
+                    meaningfully discussed independent of any of the many individual books or
+                    manuscripts that carry editions, translations, or other versions of these works. </para>
+                <para>Works frequently encompass other works (e.g., the Catalog of Ships or
+                    Gloucester's Soliloquy), or they may be constituent parts of larger works or
+                    collections, which are also treated here as works (e.g., the Homeric Cycle,
+                    Shakespeare's minor tetralogy). Work-to-work relationships may exhibit multiple
+                    levels of nesting, repetition, or interconnection. For example, the work
+                        <emphasis>The New Testament</emphasis> encompasses the work <emphasis>The
+                        Gospel of Matthew</emphasis>, which includes the work <emphasis>The Sermon
+                        on the Mount</emphasis>, which includes the work <emphasis>The Lord's
+                        Prayer</emphasis>, a work that is itself a constituent part of many other
+                    works, sometimes repeatedly so (e.g., a Christian liturgical service). </para>
+                <para>Any single work may have derivative versions (e.g., translations, paraphrases,
+                    parodies). Such work-versions are to be treated as works in their own right.
+                        <termdef>To every work-version may be attached one or more
+                            <firstterm>version paths</firstterm>, defined as the chronologically
+                        ordered sequence of work-versions upon which a particular work-version
+                        depends.</termdef> A version path may be unclear, or disputed, e.g., texts
+                    preserved in medieval manuscripts hundreds of years removed from any putative
+                    original, with perhaps questions of contamination. Version paths of more recent
+                    works might be quite clear. For example, a modern critical edition (a
+                    work-version in its own right) collectively extends the length of the version
+                    paths of its manuscripts by one, and a translation of that critical edition's
+                    work-version into a modern language has a version path yet one step
+                    longer.</para>
+                <para>If a work-version is the subject of a version path, the name of that
+                    work-version may be applied not merely to the original work-version, but to all
+                    work-versions along each of its resultant version paths. The name "Lao Tzu's
+                        <emphasis>Art of War</emphasis>" applies to all its versions. Hence, the
+                    name of a work-version should be treated as labeling not a single item but a
+                    class of items. That class may be restricted to subclasses. Any such restriction
+                    may be made on the basis of a version path or not. "Lionel Giles' 1910
+                    translation of Lao Tzu's <emphasis>Art of War</emphasis>" uses the a version
+                    path to restrict the original class. "Twentieth-century versions of Lao Tzu's
+                        <emphasis>Art of War</emphasis> published in the United States" uses
+                    criteria not reflecting any particular version path. </para>
+                <para>The name of a work-version is inheritable by its versions (a transitive,
+                    asymmetric relation). West's critical edition of the Greek text of the
+                        <emphasis>Iliad</emphasis> is a particular version, but it can be
+                    legitimatly given other more general names: (1) West's edition of the
+                        <emphasis>Iliad</emphasis> in Greek; (2) the Greek version of the
+                        <emphasis>Iliad</emphasis>; or simply (3) the <emphasis>Iliad</emphasis>.
+                    The last of these names can also be applied to an English translation of West's
+                    Greek edition, which could also be properly termed (4) West's version of the
+                        <emphasis>Iliad</emphasis> (the language is not specified); (5) an English
+                    translation of the <emphasis>Iliad</emphasis>, or (6) an English translation of
+                    West's edition of the <emphasis>Iliad</emphasis> in Greek. Other names,
+                    following certain permutations, could be used. Although the examples above
+                    illustrate the point with human-readable names, it applies as well to
+                    machine-readable ones, such URIs. <warning>
+                        <para>The previous two paragraphs exhibit some overthinking on my part, but
+                            they also reflect a real problem I discuss elsewhere, about how to point
+                            to a work-version in particular, a requisite for scripta with multiple
+                            versions of the same work. We have some good URI vocabulary for famous
+                            works, and we have some good URI vocabulary for items of literature
+                            where the work-scriptum divide is not so strong (modern scholarly
+                            articles). But how do we find vocabularies of work-versions that aren't
+                            famous and are clearly down the version path? What about work-versions
+                            that are based on arbitrary categories? The previous two paragraphs note
+                            that work-versions can be built in various combinations, either through
+                            the genetic relationships that make up stemmatology or seemingly
+                            arbitrary properties.</para>
+                        <para>The problem is somewhat philosophical. A work is ultimately a class of
+                            abstract, conceptual objects. Any restriction of that class, into a
+                            work-version, requires the stipulation of acceptable values for one or
+                            more properties. Such properties can come in a bewildering variety of
+                            types. The point seems abstract now, but it has real importance when it
+                            comes to qualifying a particular work-based URI. When pointing to
+                            particular version of a work in a book (say, facing text and
+                            translation) how does on restrict the scope of a work URI to that
+                            particular version?</para>
+                    </warning></para>
+            </section>
+            <section>
+                <title>Scripta</title>
+                <para><termdef>A <firstterm>scriptum</firstterm> is a physical item of writing. It
+                        is a text-bearing material object, or a set of (largely) indistinguishable
+                        copies of text-bearing objects. Every scriptum is a physical entity with
+                        shared limits, whose content admits division (perhaps into other scripta),
+                        and whose content cannot be equated or conflated with any single
+                        work.</termdef> For the purposes of WF URIs, digital files are to be
+                    regarded as material objects, and therefore scripta. Manuscript Venetus A,
+                    Caroline Alexander's translation of the <emphasis>Iliad</emphasis> (ISBN
+                    9780062046277), the 1594 first quarto edition of <emphasis>Henry VI Part
+                        2</emphasis>, the Bate and Rasmussen edition of <emphasis>Henry
+                        VI</emphasis> (ISBN 9780812969405), and a pdf scan of that edition, are all
+                    examples of scripta. </para>
+                <para>A digital scan or digital photograph of a material object <emphasis>must
+                        not</emphasis> be treated as the same scriptum as what it represents. It is
+                    a digital surrogate, and constitutes a distinct scriptum.</para>
+                <para>A scriptum may be a constituent part of another scriptum (e.g., a volume in a
+                    multivolume publication) or it may comprise multiple scripta (e.g., a volume
+                    that consists of multiple fascicles). Sometimes a single scriptum may be
+                    legitimately treated as overlapping or intersecting another (e.g., a manuscript
+                    that was broken apart long ago, the parts joined to other manuscripts). It may
+                    be possible for a single artefact to be treated wholly as two different scripta.
+                    For example, a hand-annotated print copy of a book may be considered an
+                    individual manuscript (a scriptum with set membership of one) or as part of a
+                    print run (a scriptum with set membersip of more than one).</para>
+            </section>
+            <section>
+                <title>Shared Limits</title>
+                <para><termdef>The the term <firstterm>shared limits</firstterm>, used of works and
+                        scripta, refers to a consensus held by a community of practice.</termdef>
+                    <termdef>A <firstterm>shared work limit</firstterm> is a consensus by a
+                        community of practice on what the limits are to a particular work.</termdef>
+                    <termdef>A <firstterm>shared scriptum limit</firstterm> is a consensus on the
+                        limits for a particular scriptum.</termdef> In many cases these distinctions
+                    are not significant, because most such limits are shared not simply by a
+                    community of practice, but by everyone. </para>
+                <para>In the case of the shared limits of scripta, WF does not define
+                    "indistinguishable," the criterion used to determine whether any two material
+                    objects are the same scriptum. If the limits of a scriptum are unclear, it
+                    should be avoided as the basis of a WF URI.</para>
+                <para>In the case of some works, especially culturally influential works, one
+                    community's shared limits will differ from those of another (e.g., the limits to
+                    the meaning of "Bible"). The question of resolving ambiguous or contested shared
+                    limits is discussed below.</para>
+            </section>
+        </section>
+        <section>
+            <title>The Relationship between Works and Scripta</title>
             <para>The description of works and scripta above resembles the account of Type 1
                 Entities defined by the <link
                     xlink:href="https://en.wikipedia.org/wiki/Functional_Requirements_for_Bibliographic_Records"
@@ -618,7 +678,7 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                 material items.</para>
             <para>Any single work may be realized in one or more scripta. A work may be represented
                 in a scriptum completely, partially, or repeatedly. Likewise, any given scriptum
-                contains one or more works. Each work is represented completely, partially, or
+                will contain at least one works. Each work is represented completely, partially, or
                 repeatedly. Many types of scripta have multiple works (e.g., an anthology; a
                 compilation; or a bilingual edition, which has two independent work-versions). The
                 work or works on a scriptum may not be identifiable (e.g., a papyrus fragment with
@@ -628,18 +688,16 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                     War</emphasis>). </para>
             <para>In many cases, particularly in ancient and medieval literature, the distinction
                 between works and scripta will be readily apparent. In other cases, the distinction
-                is not always evident to most readers. For example, many scholarly articles are
-                assigned a Digital Object Identifier (DOI) URI, which may be assigned by the
-                publisher to the item <emphasis>qua</emphasis> work, <emphasis>qua</emphasis>
-                scriptum, or both. Others may use that same DOI URI to refer to the article as a
-                work, as a scriptum, or as both. Anyone who creates a WF URI must specify whether a
-                base URI refers to a piece of literature <emphasis>qua</emphasis> work or
-                    <emphasis>qua</emphasis> scriptum.</para>
-            <para>WF does not define "indistinguishable," the criterion used to determine whether
-                any two material objects are the same scriptum. Nor does WF define the shared limits
-                of a work. Determining precisely what a URI points to, or what it means, is a
-                significant problem that presents a challenge to RDF, URIs, and the Semantic Web in
-                general. Its resolution is beyond the scope of these guidelines.</para>
+                is not always evident. For example, many scholarly articles are assigned a Digital
+                Object Identifier (DOI) URI, which may be assigned by the publisher to the item
+                    <emphasis>qua</emphasis> work, <emphasis>qua</emphasis> scriptum, or both.
+                Others may use that same DOI URI to refer to the article as a work, as a scriptum,
+                or as both. Anyone who creates a WF URI must therefore specify whether a given URI
+                refers to a writing <emphasis>qua</emphasis> work or <emphasis>qua</emphasis>
+                scriptum.</para>
+        </section>
+        <section>
+            <title>Scripta: Readers, Regions, and Text Structures</title>
             <para>Given the framework adopted above, several more key concepts follow, centered
                 around those who use scripta. WF URIs have been designed under the assumption that
                 anyone who independently approaches a scriptum endeavors to understand the shared
@@ -654,8 +712,8 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                     facility.</termdef> A scriptum reader can read at least one of the written
                 languages in the scriptum, and has the requisite background to understand what the
                 scriptum is about, and to discern the scriptum's most significant shared features.<warning>
-                    <para>From this point argument stresses the competence of what is termed the
-                            <emphasis>scriptum reader</emphasis>. It pivots away from defining
+                    <para>From this point, the argument stresses the competence of what is termed
+                        the <emphasis>scriptum reader</emphasis>. It pivots away from defining
                         textual objects <emphasis>an sich</emphasis> to defining the perceiver of
                         the textual object. Is this a legitimate approach? If so, what are the
                         implications (epistemological esp.)? If not, what are the alternatives? It
@@ -665,8 +723,8 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                 </warning></para>
             <para><termdef>A <firstterm>work-version region</firstterm> is defined as a set of one
                     or more places on a scriptum that collectively delimit all the text that is part
-                    of a single version of a single work-version.</termdef> For example, a bilingual
-                novel lends itself to several different work-version regions: the original text, the
+                    of a single version of a single work.</termdef> For example, a bilingual novel
+                lends itself to several different work-version regions: the original text, the
                 facing translation, the prefatory introduction, an excursus in the appendix, etc. A
                 work-version region need not be contiguous. For example, a scriptum may feature
                 scattered quotes from another text. Work-version regions, like work-versions
@@ -681,79 +739,77 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                         <firstterm>trunk text</firstterm>, a text that runs from start to finish
                     (logical, perhaps also physical),</termdef> and zero or more
                         <termdef><firstterm>branch texts</firstterm>, texts that are anchored to a
-                    specific location in the trunk text, and directing the reader away from the
-                    trunk text with material relating to the context of the particular point in the
-                    trunk text</termdef>. Examples of branch texts include footnotes, endnotes,
-                glosses, and marginalia.</para>
+                    point or range in the trunk text, and that relate to the trunk text at or near
+                    the anchored region</termdef>. Examples of branch texts include footnotes,
+                endnotes, glosses, and marginalia.</para>
             <para>Paratext includes not only visible components that can be isolated from the main
                 text, such as symbols and spaces (margins, indentations, leading, etc.), but also
-                recognizable attributes of the main text (color, font, size, weight, etc.) that
-                serve to organize the main text. It may the case that paratext is interspersed
-                within the main text (e.g., vertical bars to signify line breaks, inline numerals to
-                mark the transition from one textual unit to another). If there are visible features
-                associated with the work and unclear in function, they are to be treated as
-                paratext. </para>
+                recognizable attributes of the main text (color, font, size, weight, etc.) that a
+                scriptum reader would recognize as organizing the main text. It may the case that
+                paratext is interspersed within the main text (e.g., vertical bars to signify line
+                breaks, inline numerals to mark the beginning of a textual unit). Any visible
+                features associated with the work that are unclear in function (e.g., marginal
+                doodles) are to be treated as paratext. </para>
             <para><termdef>A <firstterm>viable work-version region</firstterm> is a work-version
-                    region whose main text, paratext, trunk text, and branch texts are clearly
-                    identifiable by scriptum readers.</termdef></para>
+                    region whose main text, paratext, trunk text, and branch texts are clear to
+                    scriptum readers.</termdef></para>
             <para>Viable work-version regions can be named, whether by traditional nomenclature or
                 URI. For example, in the bilingual edition example above, the viable work-version
                 region for the version in the original language can be named with URIs reserved for
                 the main work. It can also be given URIs specific to the particular work-version
                 (i.e., X's edition of the original text). The same can be said of the facing
                 translation: it can be named after the general work itself, and after the specific work-version.<warning>
-                    <para>I see different ways to approach the task of building a URI for a
-                        work-version that is a ways along the work-version path, and needs to be
-                        identified specifically.<orderedlist>
+                    <para>Note the discussion above about the difficulty of restricting a work to a
+                        work-version. I see different ways to approach the task of building a URI
+                        for a work-version:<orderedlist>
                             <listitem>
                                 <para><emphasis role="bold">Absolute base URI</emphasis>. Each
                                     work-version must take only absolute URIs. The relationship
                                     between work-versions should not be built into the URI
                                     architecture itself. If anyone wishes to state the relationship
                                     held by any two work-versions, that would need to happen
-                                    separately, in RDF triples. (An interesting side-note: the TAN
-                                    vocabularies include a set devoted to bitext relations, which
-                                    attempts to provide URIs that declare with some specificity how
-                                    a work-version region of one scriptum relates to that of
-                                    another.)</para>
+                                    separately, in RDF triples.</para>
                                 <para>Advantages: everything is rooted in URIs, without a second
                                     level of fragids to memorize. </para>
                                 <para>Disadvantages: there hardly exist any such absolute, specific
                                     work-version URIs. No one is entitled to change a URI in a
-                                    namespace they don't own (absent fragments), so they would have
-                                    to be coined by individual users in their own namespaces.
-                                    Wouldn't this result in numerous obscure vocabularies? (You'll
-                                    see I've included an admonition to creators of work URIs to
-                                    provide a mechanism whereby they mint sub URIs for specific
+                                    namespace they don't own (absent URI fragments), so they would
+                                    have to be coined by individual users in their own namespaces.
+                                    Wouldn't this result in numerous obscure vocabularies?
+                                    (Elsewhere I've admonished creators of work URIs to provide a
+                                    mechanism whereby they can mint sub URIs for specific
                                     work-versions, with the hope that maybe Wikipedia could find a
                                     way, perhaps with #-identifiable stubs. Would these be okay?)
                                 </para>
                             </listitem>
                             <listitem>
                                 <para><emphasis role="bold">Work fragids</emphasis>. The idea here
-                                    is to define, separately, a second fragid structure exclusively
+                                    is to define, separately, another fragid structure exclusively
                                     for work URIs. One can then insert parameters that restrict the
                                     class along any number of criteria. For example,
                                             <code>&lt;http://dbpedia.org/resource/Iliad#<emphasis
                                             role="bold">$wf0:lang=grc$</emphasis>></code> would
                                     declare restriction in scope to only works of the Iliad in the
                                     Greek language.</para>
-                                <para>Advantages: it's modular, and can allow for a variety of class
-                                    building. It allows for a common set of work URIs that don't
-                                    need to be guessed at.</para>
+                                <para>Advantages: it's modular, and can allow for a variety of
+                                    properties to restrict classes. It allows for a common set of
+                                    work URIs that don't need to be guessed at.</para>
                                 <para>Disadvantages: permutations would abound. ISO 639-3 language
                                     codes are easy, but what about defining authorship or date or
                                     place of creation? One would expect, given a new fragid
                                     structure, that the parameters would need to refer to URIs and
                                     controlled vocabulary, not nicknames. It could get c-r-a-z-y in
-                                    length and legibility.</para>
+                                    length and legibility. WFs would have to specify what classes
+                                    are permitted. But then how does one know whether a particular
+                                    media file that matches the base work URI also matches the
+                                    subclass?</para>
                             </listitem>
                             <listitem>
                                 <para><emphasis role="bold">Adapted URIs</emphasis>. This would be
                                     an attempt to thread the needle between the previous two
-                                    options. A user would embed the best known Ur-work URI within
-                                    the user's own tag URI, then add in specific WF-defined steps to
-                                    restrict membership, e.g.,
+                                    options. A user would embed the best known Ur-work URI within a
+                                    tag URI in the user's namespace, then add in specific WF-defined
+                                    steps to restrict membership, e.g.,
                                             <code>&lt;tag:example.com,2014:http://dbpedia.org/resource/Iliad/<emphasis
                                             role="bold">2002/grc/west</emphasis>></code> would
                                     identify West's specific version, but
@@ -778,7 +834,7 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                         </orderedlist>Perhaps there's another way forward? We need some sort of
                         convenient way to say something like "West's version of the Iliad"
                         (regardless if it's the original Greek or a modern translation) or "all
-                        versions of the Iliad published in the 1950s." It doesn't mea WF needs to
+                        versions of the Iliad published in the 1950s." It doesn't mean WF needs to
                         support all possible permutations, but it should have some kind of
                         controlled template that would permit growth.</para>
                 </warning></para>
@@ -788,31 +844,34 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                 work-version regions to a scriptum. Remove any that are not viable. Apply to each
                 remaining region all possible URIs that identify its work-version or any inherited
                 work-versions (see above on work-version inheritance). Find all regions with
-                duplicate URIs. If one region is attached to a work-version with clearly the
-                shortest version path, let it uniquely retain that URI, and discard all other
-                instances of the duplicate URI. Discard any regions that do not have any
-                URIs.</para>
+                duplicate URIs. If one region contains a work-version clearly older than the rest
+                (it has the shortest version path to a putative original), let it uniquely retain
+                that URI, and discard all other instances of the duplicate URI. Discard any regions
+                that do not have any URIs.</para>
             <para>For example, a bilingual French-Greek edition of Aristotle's
                     <emphasis>Categories</emphasis> will admit at least two work-version regions.
                 Because the French is a translation of the facing Greek, and depends on it, only the
-                Greek version retains the URI for the work in general, as well as a URI for that
+                Greek version retains the URI for the work in general, as well as the URI for that
                 particular version. The French version retains only the URI for the French
                 version.</para>
             <para>The work-scriptum map and its work-version regions are important, because they
                 allow one to unambiguously identify select parts of a scriptum based on works, and
                 assign priority to multiple versions of the same work. If a particular work-version
-                features two or more times in a scriptum, and one of them does not clearly have the
-                shortest version path, the general work URI will <emphasis>never</emphasis> be used,
-                only the URIs that are distinct to unique work-versions.</para>
+                features two or more times in a scriptum, and one of them does not clearly have
+                priority (the shortest version path), the general work URI will
+                    <emphasis>never</emphasis> be used, only the URIs that are distinct to unique
+                work-versions.</para>
         </section>
         <section>
-            <title>Textual Divisions, Units, Sequences, and Trees</title>
-            <para>In this section "the text," when not specified, refers to the main text of a
-                work-version region in a work scriptum map. It excludes the paratext. </para>
+            <title>The Trunk Text: Divisions, Units, Sequences, and Trees</title>
+            <para>In this section "the text," when not specified, refers to the main, trunk text of
+                a work-version region in a work scriptum map. It excludes the paratext (e.g., page
+                numbers) or branch texts (e.g., notes). </para>
             <para>Definitions pertaining to divisions and units focus on scripta and exclude
-                work-versions per se, because two people can discuss divisions and units only on the
-                basis of scripta, not works (which may be conceptualized differently; one person's
-                work divisions cannot be consulted by another).</para>
+                work-versions per se, because two people can discuss a text's divisions and units
+                only on the basis of real-world examples. Works are abstract entities that may be
+                conceptualized differently (one person's mental work divisions cannot be consulted
+                by another), so cannot define text divisions and units. One needs scripta.</para>
             <para><termdef>A <firstterm>textual division</firstterm> marks a break in the
                     text.</termdef> Examples of textual divisions in scripta include spaces
                 (indentations, margins, word spaces), labels, hairlines, and changes in text
@@ -820,18 +879,13 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                 anchors within a stream of text, and always intervening between text items
                 (characters).</para>
             <para><termdef>A <firstterm>textual division group</firstterm> is a series of textual
-                    divisions that scriptum readers agree together divide a text, or a designated
-                    portion of a text.</termdef> Because textual divisions have zero width, division
-                by group is economical: no text is lost, nor is any text duplicated.</para>
+                    divisions that divide a text, or a designated portion of a text, by the same
+                    units with a thematically related set of labels.</termdef></para>
             <para><termdef>Applying one textual division group to a text, or to a designated portion
-                    of a text, results in one or more <firstterm>textual
-                    units</firstterm>.</termdef> Units are normally named in terms of division
-                typology. Examples of textual units include books, pages, columns, lines, books,
-                chapters, parts, stanzas, periods, indentations, and word spaces. </para>
-            <para><termdef>The textual units created by a textual division group form a
-                        <firstterm>textual unit sequence</firstterm>.</termdef> All text in a
-                textual unit sequence is preserved, and no textual unit overlaps with another in the
-                same sequence. </para>
+                    of a text, results in a sequence of one or more <firstterm>textual
+                        units</firstterm>.</termdef> Textual units are normally named in terms of
+                division typology. Examples of textual units include books, pages, columns, lines,
+                books, chapters, parts, stanzas, periods, indentations, and word spaces. </para>
             <para>Any textual unit might itself be subject to division by another textual division
                 group and result in a subordinate textual unit sequence. A page, for example, might
                 be divided into lines. A textual unit sequence might be composed of textual units of
@@ -844,23 +898,28 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                 clouds). Regardless of how a text is ordered or directed, its textual unit sequence
                 will inherit that order and direction.</para>
             <para>Although rooted in scripta, a given textual division or textual unit might be
-                defined by an ideal, not a material entity, and therefore be grounded only in works,
-                not scripta. All textual divisions are based either on the <emphasis>physical,
-                    material features of a scriptum</emphasis>, or upon <emphasis>logical,
-                    conceptual contours of a work</emphasis>. Examples of material textual units
-                include pages, lines, columns, subcolumns, codexes, fascicles, and folios. Examples
-                of logical textual units include abstracts, acts, appendixes, chapters, suras,
-                paragraphs, couplets, stanzas, sentences, notes, quotations, verses, phrases, words,
-                and letters. Logical unit types significantly outnumber material unit types, and
-                they are generally not as well defined. Some textual unit names can be interpreted
-                as being either material or logical, e.g., books, volumes, parts. Context determines
-                whether such a term refers to a material or a logical textual unit, oftentimes
-                indicated by the next unambiguous subdivision unit type.</para>
-                <para><termdef>A <firstterm>textual unit tree</firstterm> is a text divided into one
-                    textual unit sequence (its primary sequence), any unit of which may itself be
-                    divided into a sequence of textual units, and so forth.</termdef> The tree
-                metaphor is used by textual units either yield sequences of smaller ones (a branch)
-                or terminate (a leaf). </para>
+                defined by an ideal, not a material entity, and therefore be grounded notionally in
+                works, not scripta. All textual divisions are based either on the
+                    <emphasis>physical, material features of a scriptum</emphasis>, or upon
+                    <emphasis>logical, conceptual contours of a work</emphasis>. Examples of
+                material textual units include pages, lines, columns, subcolumns, codexes,
+                fascicles, and folios. Examples of logical textual units include abstracts, acts,
+                appendixes, chapters, suras, paragraphs, couplets, stanzas, sentences, notes,
+                quotations, verses, phrases, words, and letters. </para>
+            <para>The number of logical unit types are significantly greater than material unit
+                types. They are also generally not as well defined, because they label conceptual
+                entities, not material ones. </para>
+            <para>Some textual unit names can be interpreted as being either material or logical,
+                e.g., books, volumes, parts. Context determines whether such a term refers to a
+                material or a logical textual unit, oftentimes indicated by the next unambiguous
+                subdivision unit type. If a book is divided into chapters, the book unit is logical;
+                if it is divided into pages, it is material.</para>
+                <para><termdef>A <firstterm>textual unit tree</firstterm> is a text divided into a
+                    single sequence of textual units (its primary sequence), any unit of which may
+                    itself be divided into a subsequence of textual units, and so forth.</termdef>
+                The tree metaphor has further application. Any given textual unit either yields
+                sequences of smaller ones, and therefore can be called a branch, or it terminates,
+                and is so called a leaf. </para>
                 <para>Every viable work-version region in a scriptum can be organized into zero or
                 more textual unit trees. For example, a book (the entire scriptum being taken as the
                 viable work-version region) might have a textual unit tree based on pages, columns,
@@ -869,11 +928,19 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                 unit trees (e.g., a second level of pagination, corresponding to a previous
                 edition). In any given textual unit tree, no textual unit is to be divided into more
                 than one sequence. If a textual unit permits an alternative, second sequence, it
-                must be expressed in a separate tree, with permutations against oher alternatively
-                divisible units, if needed.</para>
+                must be expressed in a separate tree.</para>
                 <para>A textual unit tree can be of any depth. No tree is required to have a depth
-                greater than one. Consequently, every textual unit sequence is also a textual unit
-                tree.</para>
+                greater than one. Consequently, every textual unit sequence is also a textual unit tree.<note>
+                    <para>The WF model differs from the common ideal of a text as an ordered
+                        hierarchy of content objects (OHCO), coined by Renear et al. 1990. The WF
+                        model does not insist that text is ordered (the O in OHCO), but this version
+                        of the WF syntax supports only ordered, directed text. (Unordered,
+                        undirected text may be supported in a future version of WF.) Hierarchy (the
+                        H in OHCO) is reframed in terms of textual unit sequences, which can nest
+                        (but are not required to do so) to produce hierarchies. The terms "content"
+                        and "objects" (the CO in OHCO) are regarded as redundant. An ordered textual
+                        hierarchy cannot have non-content or non-objects.</para>
+                </note></para>
                 <para>Every textual unit sequence is classified as being either
                     <emphasis>material</emphasis> or <emphasis>logical</emphasis> depending upon the
                 criteria for the division group. A textual unit tree may therefore also be termed
@@ -886,22 +953,13 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                 <termdef>An <firstterm>adopted textual unit tree</firstterm> is one that has been
                     applied to a scriptum from a previous one.</termdef>
             </para>
-                <para>Some viable work-version regions may have many concurrent textual unit trees,
+                <para>Some viable work-version regions may allow many concurrent textual unit trees,
                 both material and logical, native and adopted. For example, a modern translation of
                 Aristotle's <emphasis>Categories</emphasis> may have (1) a unique sequence of
                 paragraphs (a tree of native logical textual units); (2) page and line breaks
                 (native material units); (3) sectioning found in many other editions and
                 translations (adopted logical units); and (4) line numbers drawn from Bekker's
                 19th-century edition (adopted material units).</para>
-            <para>The discussion above provides an alternative approach to scholarly discussions
-                about the nature of text. Renear et al. proposed in 1990 that a text is an ordered
-                hierarchy of content objects (OHCO), a proposition that has been often contested.
-                The WF model does not insist that all text is ordered (the O in OHCO), but this
-                version of the WF syntax supports only ordered, directed text. Hierarchy (the H) is
-                reframed in terms of textual unit sequences, which may or may not nest to produce
-                hierarchies. The terms "content" and "objects" (the CO in OHCO) are regarded as
-                redundant. (What ordered textual hierarchy consists of non-content, or of
-                non-objects?)</para>
             
         </section>
         <section>
@@ -929,15 +987,15 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                 non-unique. <termdef>Any label attached to only one textual unit in the sequence is
                     a <firstterm>unique label</firstterm>. Any label attached to two or more textual
                     units (i.e., two or more units with the same label) must be treated as unique if
-                    the label by shared convention marks the textual units as component parts of a
-                    single range of text.</termdef>
+                    the label, according to shared convention, marks the textual units as component
+                    parts of a single range of text.</termdef>
                 <termdef>All others are <firstterm>non-unique labels</firstterm>.</termdef> For
-                example, in the label sequence 1, 2a, 5, 2b, note, 3, [unlabeled], 4, note, 6, 7...
-                the label "note" is non-unique, and all others are unique. Scriptum readers can
-                discern from the pattern that the labels "2a" and "2b" form a pair that designate
-                the first and second half of a single range of text, so are treated as jointly
-                forming the unique label "2." <termdef>Any textual units joined by a single label,
-                    whether the units are contiguous or not in the sequence, are called
+                example, in the label sequence 1, 2a, 5, 2b, rubric, 3, [unlabeled], 4, rubric, 6,
+                7... the label "rubric" is non-unique, and all others are unique. Scriptum readers
+                can discern from the pattern that the labels "2a" and "2b" form a pair that
+                designate the first and second half of a single range of text, so are treated as
+                jointly forming the unique label "2." <termdef>Any textual units joined by a single
+                    label, whether the units are contiguous or not in the sequence, are called
                         <firstterm>reference units</firstterm>.</termdef> Thus, the two textual
                 units marked by 2a and 2b in the previous example are the two parts of a single
                 reference unit.</para>
@@ -947,21 +1005,19 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                     from a shared ordered system rooted outside the particular work or
                     scriptum.</termdef> An example of an ordered label system would be "A, B, C, D."
                 But "Matthew, Mark, Luke, John" would not be an ordered label system, because the
-                syntax and order are unique to the New Testament. </para>
-            <para>Any ordered label system can be converted to a sequence of integers, or
-                integer-modified integers. A series of unique Roman numerals, for example, would
-                constitute an ordered label system. The same would apply to groups of Indic
-                numerals, letter labels, enumerated dot clusters, and so forth, within the same
-                textual unit sequence. <termdef><firstterm>Integer-modified integers</firstterm> are
-                    defined as integers that are given subintegers to specify a
-                    subsequence.</termdef> Modified integers are allowed, to accommodate
-                supplemental reference units. For example, 1, 2, 2a, 2b, 3 would be converted to the
-                following sequence of integers and integer-modified integers: 1, 2-0, 2-1, 2-2, 3. </para>
-            <para>The logical sequence of an ordered label system may differ from the visible order
-                of the labels in the scriptum. This commonly happens in editions of versions that
-                have an unusual sequence. Oftentimes the editor places the traditional labels
-                intentionally out of order, to align disordered text parts with customary reference
-                systems.</para>
+                syntax and order are unique to a single work, the New Testament (and that order is
+                not universally shared). </para>
+            <para>Any ordered label system (e.g., Roman numerals, Indic numerals, letter labels,
+                enumerated dot clusters) can be converted to a sequence of integers, or
+                integer-modified integers. <termdef><firstterm>Integer-modified integers</firstterm>
+                    are integers with subintegers to specify a subsequence.</termdef>
+                Integer-modified integers accommodate supplemental reference units. For example, 1,
+                2, 2a, 2b, 3 would be converted to the following sequence of integers and
+                integer-modified integers: 1, 2-0, 2-1, 2-2, 3. </para>
+            <para>The logical sequence of an ordered label system may differ from the label order in
+                the scriptum. This commonly happens in editions of versions of texts that depart
+                from the normal sequence. Oftentimes the editor places the traditional reference
+                labels by text order, to align it with the customary reference system.</para>
             <para><termdef>A <firstterm>uniquely ordered reference unit sequence</firstterm> is one
                     that has only one ordered label system.</termdef> Such a sequence may include
                 interleaved textual units that are unlabeled, or labeled but unordered. For example,
@@ -974,18 +1030,12 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                     where the textual units, although not explicitly labeled, can be unambiguously
                     enumerated by scriptum readers,</termdef>
                 <termdef>and supplied <firstterm>implicit labels</firstterm>.</termdef> For example,
-                most books published today do not label line numbers. Anyone, however, can
-                unambiguously enumerate the lines and create an implicit unique ordered reference
-                system and use it, e.g., page 2, line 3. Similar consideration may be extended to
-                cases where a textual unit sequence has sporadic labels evoking an ordered label
-                system that can be consistently filled in. For example, a page with line numeration
-                only on every fifth line may be reliably assigned implicit labels for every line.<warning>
-                    <para>This needs better definition. There are pages where one is not clear
-                        exactly whether a given line should be included or excluded from an implicit
-                        line count. I think the distinction between main text and paratext needs to
-                        play here, but I can see arguments that it should not be the main text but
-                        the trunk text.</para>
-                </warning></para>
+                most books published today do not label line numbers. But lines of main text may be
+                unambiguously enumerated by anyone to create and use an implicit unique ordered
+                reference system, e.g., page 2, line 3. Similar consideration may be extended to
+                cases where a textual unit sequence has periodic labels that infer an ordered label
+                system. For example, a page with line numeration only on every fifth line may be
+                reliably assigned implicit labels for every line.</para>
             <para>WF URIs can rely upon implicit unique ordered reference systems, but only on the
                 basis of consistent unit type classes. No logical unit may be subdivided into
                 implicit material units, or vice versa. This principle avoids the possibility of
@@ -993,41 +1043,43 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                 example, a sequence of pages (material textual units) may not be subdivided into
                 paragraphs (logical units), even if no paragraph in the scriptum in question is
                 broken by pages. On a similar principle, lines (material units) be not be subdivided
-                into words (logical).</para>
-            <para>A special exception is made for endnotes or footnotes (logical units), which are
-                traditionally referred to in concert with the page number (material) on which the
-                note starts. In such cases, a note (a branch text) is considered a subdivision of a
-                page, mutually exclusive to line numeration of non-note text (i.e., main text) on
-                the page.</para>
+                into words (logical units).</para>
+            <para>A special exception is made for enumerated branch texts such as endnotes or
+                footnotes (logical units), which are traditionally referred to in concert with the
+                page number (material) on which the note starts. In such cases, a note (a branch
+                text) is considered a subdivision of a page.</para>
             <para>In WF URIs, <emphasis>no implicit ordered reference system may be applied to
-                    textual units that do not admit clear shared limits</emphasis>. Most often this
+                    textual units that do not have clearly shared limits</emphasis>. Most often this
                 happens with logical textual units. Paragraphs, sentences, and words are frequently
-                difficult to enumerate because they do not have clear shared limits, evident in some
-                constructions that would result in multiple implicit ordered label systems. For
-                example, a paragraph may be broken by a block quote that itself contains multiple
-                paragraphs. Some readers may consider the resumption of the original paragraph after
-                the block quote to be a new paragraph in its own right. Some readers may wish to
-                include the block quote's paragraphs as part of the implicit enumeration. A similar
-                problem occurs with sentences, which easily nest, e.g., "I said, 'Stop. Wait.
-                Listen,' before the clock chimed." There is no shared universal definition of the
-                term "word." These exceptions apply only to unlabeled textual units. If paragraphs,
-                sentences, or words are given ordered explicit labels, they may be so used.</para>
+                difficult to enumerate because many of them do not have clear shared limits. For
+                example, a paragraph may be interrupted by a block quote that itself contains
+                multiple paragraphs. Some readers may consider the resumption of the original
+                paragraph after the block quote to be a new paragraph in its own right. Some readers
+                may wish to include the block quote's paragraphs as part of the implicit
+                enumeration. A similar problem occurs with sentences, which easily nest, e.g., "I
+                said, 'Stop. Wait. Listen,' before the clock chimed." This proviso applies only to
+                unlabeled textual units. If paragraphs, sentences, or words are given ordered
+                explicit labels, they may be used.</para>
             <para><termdef>A <firstterm>reference system</firstterm> consists of the explicit and
                     implicit labels of a textual unit tree, preserved in their treelike
-                    structure.</termdef> Reference systems include both ordered and unordered
+                    structure.</termdef> A reference system may include both ordered and unordered
                 labels.</para>
             <para><termdef>A reference system is navigated through coordinates called
                         <firstterm>references</firstterm>.</termdef> References may be simple or
                 compound. <termdef>A <firstterm>simple reference</firstterm> consists of a sequence
-                    of labels that points step by step to one reference unit in the tree. The
-                    sequence allows one to traverse from the root of a textual unit tree toward its
-                    leaves.</termdef> For example, a reference system structured (1 (a, b), 2) would
-                accommodate the following simple references (delimited by semicolons, with
-                individual steps delimited by commas): 1; 1, a; 1, b; 2. <termdef>A
-                        <firstterm>compound reference</firstterm> is an ordered sequence of one or
-                    more simple references.</termdef> A compound reference is independently ordered.
-                It need not follow either the order of the reference system, or the order of the
-                reference units.</para>
+                    of labels that points step by step to one reference unit in the tree, to provide
+                    instructions on traversal from the root of a textual unit tree toward its
+                    leaves.</termdef> For example, the following four simple references (1), (1, a),
+                (1, b), and (2) would point to the four leaf textual units in the following
+                reference tree: (1 (a, b), 2).<note>
+                    <para>In this and subsequent examples, different numeration systems (Arabic,
+                        Roman, alphabetic) are used to clearly indicate levels within the reference
+                        tree.</para>
+                </note>
+                <termdef>A <firstterm>compound reference</firstterm> is an ordered sequence of one
+                    or more simple references.</termdef> For example, (1-2) or (1-3, (6, a), 9). A
+                compound reference is independently ordered. It need not follow either the order of
+                the reference system, or the order of the reference units.</para>
             <para>A reference system may include a variety of ordered and unordered label systems,
                 and it may include non-unique labels. A reference system will correspond one-to-one
                 with every node in a textual unit tree except for those textual units that are
@@ -1060,11 +1112,11 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                             do not restart numeration with each new part. In such a case, the
                             numbered parts are otiose: the chapter numbers are the deepest first
                             unique ordered reference unit sequence for the entire book. Another
-                            example: some Greek versions of the book of Psalms are first divided
-                            into twenty <emphasis>kathismata</emphasis> ("sittings") and then into
-                            one hundred fifty sequentially numbered Psalms. The numerals 1-150 are
-                            the deepest reference unit sequence, and the otiose kathisma numbers
-                            should be ignored. </para>
+                            example: some Greek Bibles divide the Psalms into twenty
+                                <emphasis>kathismata</emphasis> ("sittings") and then into one
+                            hundred fifty sequentially numbered Psalms. The numerals 1-150 are the
+                            deepest reference unit sequence, and the otiose
+                                <emphasis>kathisma</emphasis> numbers should be ignored. </para>
                         <para>Such otiose sequences may appear not merely on the top level, but
                             internally, which is why the definition is expressed in terms of a
                             textual unit. For example, the reference system tree (1 (A (i, ii), B
@@ -1079,10 +1131,10 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
             <para>A reference system may be classified as material or logical, based upon the type
                 of textual unit of the primary textual sequence. For example, a reference system
                 built on page then line numbers would be classified as a material reference system
-                because pages are material units. One built on book-chapter-sections (much ancient
-                literature is so organized) would be a logical reference system because "book" here
-                is a logical unit (signaled by the logical nature of the next subdivision, chapter),
-                not a physical one.</para>
+                because pages are material units. One built on book-chapter-sections (many modern
+                editions of ancient literature are so organized) would be a logical reference system
+                because "book" here is a logical unit (signaled by the logical nature of the next
+                subdivision, chapter), not a physical one.</para>
             <para><termdef>A scriptum has a <firstterm>key material reference system</firstterm> if
                     and only if it has only <emphasis>one unique, ordered material reference system,
                         native to the scriptum</emphasis>.</termdef> Many printed articles have only
@@ -1101,7 +1153,7 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                 enumerable parts, chapters, and sections. Such books have a key logical reference
                 system. Many legal codes, regulations, or other texts organized as an enumerated
                 hierarchy have a key logical reference system. Editions of the Bible and Qur'an that
-                rely upon a single division of chapters and verses or suras and ayahs each also have
+                rely upon a unique division of chapters and verses or suras and ayahs each also have
                 a key logical reference system. But this is not the case for a scriptum that applies
                 multiple overlapping logical reference systems, even if one is given greater
                 prominence than the others.</para>
@@ -1110,15 +1162,15 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
                 definitions are slightly relaxed for a scriptum restricted in scope to a particular
                 viable work-version region, <termdef>termed a <firstterm>work-version-constrained
                         scriptum</firstterm>, or simply a <emphasis>constrained
-                    scriptum</emphasis>.</termdef> For example, a book of fairy tales may be
-                constrained to one single version of one fairy tale, before testing for a key
-                logical reference system. </para>
+                    scriptum</emphasis>.</termdef> For example, a book of fairy tales contains
+                numerous works. One may constrain the scope of the scriptum to one single version of
+                one fairy tale before testing for a key logical reference system. </para>
             <para>In a constrained scriptum, the material reference system may be either native or
                 adopted. For example, if an article reproduces significant portions of Aristotle's,
                     <emphasis>Categories</emphasis>, and those portions are labeled with line
                 numeration based upon a previous edition, and there are no other material reference
-                systems (e.g., references to folios and lines in manuscripts), then the adopted
-                material reference tree is the key material reference system.</para>
+                systems (e.g., references to folio and line numbers from manuscripts), then the
+                adopted material reference tree is the key material reference system.</para>
             <para>Similarly, in a constrained scriptum, the key logical reference system is assessed
                 in light of both native and adopted reference trees. If a constrained scriptum, in
                 the form of a poem, is given stanza and (logical) line numbers based on prior
@@ -1138,69 +1190,63 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
             <para>This section is normative.</para>
         </important>
         <para>From the challenges, concepts, and definitions detailed in the previous sections, some
-            general strictures on Writing Fragids follow. The syntactic details are reserved for the
-            next section.</para>
+            general strictures on Writing Fragids follow. Syntactic requirements are reserved for
+            the next section.</para>
         <para>Every WF must declare whether the base URI points to a work or to a scriptum. If the
-            latter is the case, the base URI may be adjusted to a constrained scriptum by supplying
-            a work-version URI as a parameter. There are, then, a total of three possible types of
-            WFs, termed <emphasis>work WF</emphasis>, <emphasis>scriptum WF</emphasis>, and
-                <emphasis>constrained scriptum WF</emphasis>.</para>
+            latter is the case, the base URI may be converted to a constrained scriptum by supplying
+            a second URI that specifies the work-version constraint. There are, then, a total of
+            three possible types of WFs, termed <emphasis>work WF</emphasis>, <emphasis>scriptum
+                WF</emphasis>, and <emphasis>constrained scriptum WF</emphasis>.</para>
         <warning>
             <para>To reduce the amount of permutations, I have not supported <emphasis>*constrained
                     work WF</emphasis>, that is, one that begins with a work-version URI at the
                 base, then qualifies it with a scriptum. My thought is that the difference between a
                 constrained work WF and a constrained scriptum WF are negligible. But I have doubts. </para>
         </warning>
-        <para>Every WF must point to <termdef>a WF-viable scriptum that serves as the basis for the
-                reference system, termed the <firstterm>reference scriptum</firstterm></termdef>.
-            Every WF must declare whether it is reliant upon that reference scriptum's key material
-            or logical reference system. </para>
-        <para>Any WF may point to any node within a declared key reference system, whether a branch
-            or a leaf, via a compound reference.</para>
+        <para>Every WF must include a URI that points to <termdef>a <firstterm>reference
+                    scriptum</firstterm>, a WF-viable scriptum that serves as the basis for the
+                reference system</termdef>. Every WF must declare whether it is reliant upon that
+            reference scriptum's key material or logical reference system. </para>
+        <para>Any WF may point to any node within the declared key reference system, whether a
+            branch or a leaf, via a simple or compound reference.</para>
         <para>Any scriptum WF or constrained scriptum WF may add to a simple reference a further
-            pointer to a text fragment in a reference unit. But this does not apply to a work WF. A
-            work WF points to every version of a work, so has scope over potentially numerous
-            languages and scripts. Because no reference unit corresponds to a single text, a text
-            fragment may not be added to a simple reference. <warning>
+            pointer to a text fragment in a reference unit (phrases, words, characters). But this
+            does not apply to a work WF. A work WF points to every version of a work, so has scope
+            over potentially numerous languages and scripts. Because no reference unit corresponds
+            to a single text, a text fragment may not be added to a simple reference. <warning>
                 <para>If the approach to work-version URI construction changes, this stricture might
                     need to be reconsidered.</para>
             </warning></para>
         <para>The WF model does not support non-enumerated references, e.g., Gen. 1:1 for the first
             verse of Genesis, because the label "Gen." is not ordered. In this case, Genesis is a
-            work in its own right. The base URI should point to Genesis, and the WF portion to
-            1:1.</para>
+            work in its own right. The base URI should point to Genesis <emphasis>qua</emphasis>
+            work, and the WF portion to 1:1.</para>
         <para>The WF model does not support references that rely upon vague implicit subdivision,
             e.g., 1:1b, when the scriptum that forms the basis for the reference system does not
             clearly subdivide 1:1 with labels, and an implicit unique ordered reference sequence is
-            not evident.</para>
-        <para>A single WF URI may be given more than one reference. In such cases, the URI has been
-            modified to stipulate an ordered sequence. That is, a WF URI pointing to references 1,
-            5, and 2 entails reference 1 then 5 then 2, treated as a single entity.</para>
+            not evident. Subdivisions may be used only when the subdivisions are explicitly
+            labeled.</para>
+        <para>A single WF URI may be given more than one reference. In such cases, the URI
+            stipulates an ordered sequence. That is, a WF URI pointing to references 1, 5, and 2
+            entails reference 1 then 5 then 2, treated as a single entity.</para>
         <para>Any WF URI reference that points to only one text (i.e., a scriptum WF or a
             constrained scriptum WF) may be restricted further in scope, to a particular range of
             text (whether a single character, several characters, a token, a phrase, or a longer
             span of text).</para>
         <para>The previous two stipulations anticipate cases where the writer of a WF URI wishes to
             point to ordered passages and phrases, perhaps to declare where one text quotes another,
-            and to do so with respect to precision and order. </para>
+            and to do so respecting the order in which the source quotes the target. </para>
         <para>There is another anticipated use case, where the writer of the WF URI wishes to point
-            to individual linguistic units, i.e., tokens or token fragments. In this case, one might
-            wish to build a WF URI that points to multiple instances of a token, treating those
-            instances not as an ordered sequence that should be taken as a single entity but as an
-            unordered sequence of individual items. Such a device would be quite convenient,
-            because, in essence, it allows one to write a single URI in place of perhaps hundreds of
-            them. Early tests however showed that such a device unnecessarily introduced confusion
-            into the model, both regarding syntax and expected output, and compromised the principle
-            that WF URIs should enhance interoperability by reducing the number of options available
-            in creating a WF URI. Therefore one who wishes to point to individual tokens must create
-            one WF URI per token.<warning>
+            to individual linguistic units, i.e., tokens or token fragments. To point to individual
+            tokens must create one WF URI per token. A future version of the WF specifications may
+            support URIs that point to multiple instances of a token in a target text.<warning>
                 <para>I have adopted this position only after first trying a more flexible syntax.
                     But I got confused quite a lot when I started to think about what the URI is
                     supposed to designate, particularly when a single WF URI pointed to a mixture of
                     token-based text fragments and phrase-based ones. Further, the instance selector
                     had to be opened up to multiple integers. A requirement that integers appear in
                     ascending sequence could not be defined in the syntax specs. In the end, I felt
-                    that a URI should be designed to point to a single entity.  </para>
+                    that a URI should be designed to point to a single entity. </para>
             </warning></para>
         <para>Restrictions above apply to this version of the WF guidelines. Stipulations may be
             added, changed, or removed in future versions.</para>
@@ -1218,17 +1264,26 @@ db:Henry_VI,_Part_2#[WRITING_FRAGID] la:hasFeature olia:DirectObject</programlis
         <section>
             <title>Base URI</title>
             <para>Every WF URI consists of a URI whose fragment section includes a WF. A WF may be
-                combined with other fragment items. The base URI must conform to <link
+                combined with other fragment sections. The base URI must conform to <link
                     xlink:href="https://www.ietf.org/rfc/rfc3986.txt">the syntax for URIs defined by
-                    RFC 3986</link>, whose requirements are not repeated here. </para>
-            <para>RFC 3986's definition of <code>fragment</code> at 3.5, Fragment is extended, to
-                explain WF syntax more precisely (expressed with slight adjustments in
-                syntax):</para>
+                    RFC 3986</link>, whose requirements are not repeated here, except for relevant
+                fragments.</para>
+            <para>The URI is defined as follows (<emphasis>3. Syntax Components</emphasis>):</para>
+            <para>
+                <programlisting>URI ::= scheme ":" hier-part [ "?" query ] [ "#" fragment ]</programlisting>
+            </para>
+            <warning>
+                <para>Are there any possible conflicts between a query constructor and a WF
+                    fragment? Do LOD practitioners discourage queries?</para>
+            </warning>
+            <para>RFC 3986's definition of <code>fragment</code> at <emphasis>3.5.
+                    Fragment</emphasis> is extended, to explain WF syntax more precisely (expressed
+                with slight adjustments in syntax):</para>
             <para>
                 <programlisting>fragment ::= stdFragment* LitFrag stdFragment*</programlisting>
             </para>
-            <para>RFC 3986's definition of <code>stdFragment</code> is as follows (reproduced only
-                for contextual reference):</para>
+            <para>RFC 3986's definition of <code>stdFragment</code> is as follows (reproduced
+                unchanged for contextual reference):</para>
             <para>
                 <programlisting>stdFragment ::= ( pchar | "/" | "?" )*
 pchar ::= unreserved | pct-encoded | sub-delims | ":" | "@"
@@ -1257,22 +1312,24 @@ LitFragEnd ::= "$"</programlisting>
             <para>Many linked open data vocabularies make use of <code>https?://</code> style URIs
                 with a fragment section that points to a value of <code>@id</code> in the target web
                 resource to name something. In those cases, the first string in the fragment should
-                be treated as an inseparable component with the base URI.</para>
-            <para>The syntax formally defined here does not forbid more than one WF in a single URI.
-                It is nevertheless disallowed. A URI should be treated as invalid if it has more
-                than one WF.</para>
+                be treated as an inseparable component of the base URI. The fragment is an essential
+                part of the URI that names the resource.</para>
+            <para>The syntax formally defined here does not preclude multiple WFs in a single URI.
+                It is nevertheless disallowed. A URI should be treated as invalid if it is modified
+                by more than one WF.</para>
             <para>The body of a WF consists of two parts: parameters and references.</para>
         </section>
         <section>
             <title>Parameters</title>
             <section>
                 <title>Narrative</title>
-                <para>A number of parameters must be declared in a WF to declare the nature of the
-                    URI and the reference system that has been used.</para>
+                <para>Several parameters are required in a WF, to declare the nature of the URI and
+                    the reference system that has been used. Parameters come in the form of
+                    key-value pairs, joined by an equals sign and delimited by semicolons.</para>
                 <para>There are three types of WF URIs: work WFs, scriptum WFs, and constrained
-                    scriptum WFs. The first is distinguished by the first parameter
-                        <code>a=w;</code> (syntax adopted from RDF conventions, where <code>a</code>
-                    typically means "is a"). The second and third types take <code>a=s;</code>. </para>
+                    scriptum WFs. The first is designated by the first parameter <code>a=w;</code>
+                    (syntax adopted from RDF conventions, where <code>a</code> typically means "is
+                    a"). The second and third types take <code>a=s;</code>. </para>
                 <para>In a constrained scriptum WF there follows the parameter <code>w=</code>
                     followed by a URI pointing to a work. Any special characters must be escaped; it
                     terminates in an unescaped <code>;</code>. </para>
@@ -1280,12 +1337,12 @@ LitFragEnd ::= "$"</programlisting>
                         <code>t=m;</code> (for "type: material") or <code>t=l;</code> ("type:
                     logical").</para>
                 <para>There then follows a parameter declaring the reference scriptum URI, which
-                    begins <code>r=</code> followed by a URI that points to a scritpum. All special
+                    begins <code>r=</code> followed by a URI that points to a scriptum. All special
                     characters must be escaped; it terminates in an unescaped <code>;</code>. The
-                    reference scriptum is the basis of the WF URI's reference system. A work WF
+                    reference scriptum is the basis of the WF URI's key reference system. A work WF
                         <emphasis>must</emphasis> supply a reference scriptum URI in full, unless
                     the base URI in a work WF can be interpreted doubly as a scriptum and a work, in
-                    which case <code>r=.;</code> specifies that the base URI should be used for the
+                    which case <code>r=.;</code> specifies that the base URI is identical to the
                     reference URI, interpreted <emphasis>qua</emphasis> scriptum. A scriptum WF or a
                     constrained scriptum WF may simply state <code>r=.;</code> if the base URI
                     scriptum is also the reference scriptum, otherwise the reference scriptum URI
@@ -1305,9 +1362,9 @@ LitFragEnd ::= "$"</programlisting>
 WorkLitFrag ::= "a=w;" RefSystemType RefSystemBasis ReferencesOnly
 ScriptumLitFrag ::= "a=s;" RefSystemType RefSystemBasis ReferencesWithText
 ConstrainedScriptumLitFrag ::= "a=s;" WorkConstraint RefSystemType RefSystemBasis ReferencesWithText
-WorkConstraint ::= "w=" LitFragUri ";"
+WorkConstraint ::= "w=" URI ";"
 RefSystemType ::= "t=" ( "m" | "l" ) ";"
-RefSystemBasis ::= "r=" ( "." | LitFragUri ) ";"</programlisting>
+RefSystemBasis ::= "r=" ( "." | URI ) ";"</programlisting>
                 </para>
             </section>
             <section>
@@ -1332,15 +1389,16 @@ RefSystemBasis ::= "r=" ( "." | LitFragUri ) ";"</programlisting>
                             <para>One or more URIs identifying the underlying scriptum;</para>
                         </listitem>
                         <listitem>
-                            <para>Assignment of textual unit labels to a reference system tree.
-                            </para>
+                            <para>Assignment of textual unit labels corresponding to a reference
+                                system tree. </para>
                         </listitem>
                         <listitem>
                             <para>For each reference system used:</para>
                             <para>
                                 <orderedlist>
                                     <listitem>
-                                        <para>The reference system type: material or logical;</para>
+                                        <para>A value specifying the reference system type: material
+                                            or logical;</para>
                                     </listitem>
                                     <listitem>
                                         <para>One or more URIs identifying the WF-viable reference
@@ -1349,10 +1407,13 @@ RefSystemBasis ::= "r=" ( "." | LitFragUri ) ";"</programlisting>
                                 </orderedlist>
                             </para>
                         </listitem>
-                    </orderedlist>Every WF-conformant media format <emphasis>may</emphasis> allow
-                    multiple reference systems in the same file, but <emphasis>must</emphasis>
-                    define a mechanism that allows a processor to extract from the content a tree
-                    consisting exclusively of the target key reference system. </para>
+                    </orderedlist></para>
+                <para>The above components not governed by rules for URIs <emphasis>may
+                        not</emphasis> be case-sensitive. Every WF-conformant media format
+                        <emphasis>may</emphasis> allow multiple reference systems in the same file,
+                    but <emphasis>must</emphasis> define a mechanism that allows a processor to
+                    extract from the content a tree consisting exclusively of the target key
+                    reference system.</para>
                 <para>A processor <emphasis>must not</emphasis> process a WF URI that does not
                     conform to the syntax defined above.</para>
                 <para>Processors of WF-conformant data <emphasis>must not</emphasis> match a WF URI
@@ -1370,8 +1431,9 @@ RefSystemBasis ::= "r=" ( "." | LitFragUri ) ";"</programlisting>
                     dependent.</para>
                 <para>Parts of WF parameters not governed by rules for URIs are case-insensitive.
                     Case rules for URI components follow the rules specified in RFC 3986. A
-                    WF-processor <emphasis>may</emphasis> normalize any case-insensitive WF
-                    components to lowercase before parsing a WF URI.</para>
+                    WF-processor <emphasis>must</emphasis> normalize any case-insensitive WF
+                    components to upper- or lowercase before parsing a WF URI and comparing it to
+                    counterpart values in WF-conformant media.</para>
             </section>
         </section>
         <section>
@@ -1379,15 +1441,14 @@ RefSystemBasis ::= "r=" ( "." | LitFragUri ) ";"</programlisting>
             <section>
                 <title>Narrative</title>
                 <para>The last half of the WF body consists of a sequence of references, joined by
-                        <code>&amp;</code>. The URI points to the ordered sequence of reference
-                    units, treated as a single entity. All references are ordered. If two WF URIs
-                    are the same except that one has references A then B and the other has B then A,
-                    then they are not identical.</para>
-                <para>A reference consists either of a reference unit or of a reference range. A
-                    reference range is a stretch of text delimited by two reference units. Although
-                    the first reference unit in a reference range will normally precede the second,
-                    this is not required. The reference units in a reference range are joined by a
-                    hyphen. </para>
+                        <code>&amp;</code>, and treated as a single entity. All references are
+                    ordered. If two WF URIs are the same except that one has references A then B and
+                    the other has B then A, then they are not identical.</para>
+                <para>A reference (a member in a sequence of references) consists either of a
+                    reference unit or of a reference range. A reference range is a stretch of text
+                    delimited by two reference units. Although the first reference unit in a
+                    reference range will normally precede the second, this is not required. The
+                    reference units in a reference range are joined by a hyphen. </para>
                 <para>A reference unit consists of a sequence of reference steps, delimited by
                     colons. Each reference step consists of either an integer or two integers joined
                     by a period. If a footnote or endnote is intended, the first integer must be
@@ -1402,11 +1463,8 @@ RefSystemBasis ::= "r=" ( "." | LitFragUri ) ";"</programlisting>
                             other material unit types I can think of, but they are either edge
                             cases, e.g., quire/gathering/signature, or lend themselves to inclusion
                             with the other categories, e.g., fascicle, codex, volumen.)</para>
-                        <para>Logical units, on the other hand, are in great abundance. Official TAN
-                            vocabulary supports about 160 logical div types, and I'm sure that with
-                            some extra work that number could go up to 1000+, with people
-                            disagreeing regularly on what type to use for a given div not explicitly
-                            labeled (is it a preface or a prologue?).</para>
+                        <para>Logical units, on the other hand, are in great abundance, and cannot
+                            be succinctly typed with a prefixed letter.</para>
                         <para>A case for type material reference steps emerges from recently reading
                             a section drawn from Migne's Patrology, which has subcolumn numbers.
                             When someone refers to a particular line number, they are inclined to
@@ -1419,8 +1477,8 @@ RefSystemBasis ::= "r=" ( "." | LitFragUri ) ";"</programlisting>
                 <para>A work WF consists only of a sequence of references (a unit or a range),
                     without a text fragment. </para>
                 <para>Any reference in a scriptum WF and a constrained scriptum WF may be modified
-                    further through a <termdef><firstterm>text fragment</firstterm>, which
-                        constrains the scope of a reference unit to a specific contiguous
+                    further through a <termdef><firstterm>text fragment</firstterm>, applied to a
+                        reference unit to constrains the scope to a specific contiguous
                         string</termdef>. A text fragment is built primarily <termdef>through
                             <firstterm>tokens</firstterm>, with a token being defined as contiguous
                         non-space characters.</termdef> (<termdef><firstterm>Space
@@ -1434,7 +1492,7 @@ RefSystemBasis ::= "r=" ( "." | LitFragUri ) ";"</programlisting>
                 <para>Every text fragment begins with two colons, followed by the token itself.
                     Matches on tokens are case-sensitive, and do not involve any kind of Unicode
                     normalization. If the token includes characters that are reserved (e.g.,
-                        <code>$</code>), they must be specially escaped.</para>
+                        <code>$</code>), they must be escaped.</para>
                 <note>
                     <para>Unfortunately, the requirement to match based on space-tokenized values
                         poses a problem for constructing WF URIs for writings in languages that use
@@ -1443,21 +1501,20 @@ RefSystemBasis ::= "r=" ( "." | LitFragUri ) ";"</programlisting>
                         on white space. At present, the entire string must be treated as a single
                         token.</para>
                 </note>
-                <para>All text fragments must be filtered by one, perhaps two, filters. A filter </para>
-                <para>The first filter expression identifies the intended ordinal position of the
-                    token within the reference unit. It is marked by square brackets surrounding an
-                    integer, e.g., <code>[1]</code>, <code>[36]</code>.</para>
-                <para>If one intends to restrict the text even further, to the character level, a
-                    second filter expression follows. It is marked by square brackets surrounding an
-                    integer, followed perhaps by a hyphen and another integer, e.g.,
-                        <code>[1]</code>, <code>[3-6]</code>.</para>
+                <para>The instance filter, identifying the ordinal position of the token within the
+                    reference unit, is marked by square brackets surrounding an integer, e.g.,
+                        <code>[1]</code>, <code>[36]</code>.</para>
+                <para>The character filter is marked by square brackets surrounding an integer,
+                    followed perhaps by a hyphen and another integer, e.g., <code>[1]</code>,
+                        <code>[3-6]</code>.</para>
                 <para>A text fragment may be applied to any level within a reference tree. It does
                     not need to be applied only to leaf references.</para>
             </section>
             <section>
                 <title>Defined Syntax</title>
                 <para>
-                    <programlisting>ReferenceStep ::= "n"? INTEGER ( "." INTEGER )?
+                    <programlisting>divTypePrefix ::= "n"
+ReferenceStep ::= divTypePrefix? INTEGER ( "." INTEGER )?
 
 ReferencesOnly ::= ReferenceOnly ( "&amp;" ReferenceOnly )*
 ReferenceOnly ::= ReferenceOnlyUnit | ReferenceOnlyRange
@@ -1481,15 +1538,18 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
                 <title>Conformance</title>
                 <para><emphasis role="bold">Conformance</emphasis></para>
                 <para>The manner in which fragments are retrieved is implementation dependent.
-                    Results in the output, however, must reflect the order of the WF URI. </para>
+                    Results in the output, however, <emphasis>must</emphasis> respect the order in
+                    which they appear in the WF. </para>
                 <para>It is a dynamic error if only one of two references in a range are found. The
                     level of severity and the method of response is implementation-dependent.</para>
-                <para>In a given reference in a WF URI, the depth of steps may not synchronize with
-                    a particular WF-conformant media type. If all the matching reference steps are
-                    exhausted, and there are still subdivisions in the media fragment, the whole
-                    fragment must be returned. On the other hand, if the matching media fragment
-                    steps are exhausted, and there are still subdivisions in the media fragment, the
-                    empty set <emphasis>must</emphasis> be returned for the entire WF URI.<warning>
+                <para>In a given WF reference and a given WF-conformant media type item, the depth
+                    of steps may not synchronize exactly. If reference steps used to traverse the
+                    tree terminates in a media branch node, with remaining subdivisions in the media
+                    fragment, the whole fragment must be returned. On the other hand, the media
+                    fragment reaches a leaf node (a datum without subdivisions) but there remain
+                    reference steps to consume, the empty set <emphasis>must</emphasis> be returned
+                    for the entire WF URI. A processor <emphasis>may</emphasis> provide associated
+                    diagnostic information.<warning>
                         <para>Should there be leniency, when only one simple reference in a complex
                             reference fails?</para>
                     </warning></para>
@@ -1497,9 +1557,9 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
                     instance number or a character, the empty set <emphasis>must</emphasis> be
                     returned for the entire WF URI.</para>
                 <para>A designer of WF-conformant media <emphasis>may</emphasis> create a mechanism
-                    to permit a data creator to make, or to point to, a map that permits one
-                    reference system to be converted into another. Whether that mechanism is used is
-                    implementation-dependent.</para>
+                    to permit a data creator to make, or to point to, a map or other device that
+                    permits one reference system to be converted into another. Whether that
+                    mechanism is used is implementation-dependent.</para>
                 <para>In a constrained scriptum WF, when there is a match on a text fragment, a
                     processor <emphasis>may</emphasis> infer that the pointer
                         <emphasis>might</emphasis> have relevance for other versions of the same
@@ -1507,9 +1567,11 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
                     constrained scripta. Such an inferential process is the responsibility of the
                     processor, and any resultant data <emphasis>must</emphasis> be attributed to the
                     processor. The format of the attribution is processor-dependent, but the
-                    attribution must include the URI that uniquely identifies the processor.</para>
-                <para>All parts of WF References are case-sensitive. A WF-processor <emphasis>must
-                        not</emphasis> case-normalize any WF references.</para>
+                    attribution must include the URI that uniquely identifies the processor that
+                    made the inference.</para>
+                <para>Every token value in a WF reference is case-sensitive. A WF-processor
+                        <emphasis>must not</emphasis> case-normalize any WF reference token
+                    values.</para>
             </section>
         </section>
     </section>
@@ -1519,11 +1581,11 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
             <para>This section is descriptive.</para>
         </important>
         <para>Anyone who writes a WF URI is attempting to point to a portion of text in such a way
-            that it will have the successfully match the greatest number of WF-conformant files.
-            Anyone who creates and edits a WF-conformant file intends the content to be matched
-            against the maximum number of corresponding WF URIs. Both parties have it in their best
-            interests to adopt common strategies. Creators of WF-conformant media should note those
-            strategies, to assist match-making.</para>
+            that it will match the greatest number of WF-conformant files, including those that have
+            not yet been created. Anyone who creates and edits a WF-conformant file intends the
+            content to be matched against the maximum number of corresponding WF URIs. Both parties
+            have it in their best interests to adopt common strategies. Creators of WF-conformant
+            media should note those strategies, to assist match-making.</para>
         <para>Every WF URI has one or two URI components that point to a scriptum, and perhaps one
             URI component that points to a work. Picking an appropriate URI has challenges.</para>
         <para>URI vocabularies for scripta are in abundance. As the accompanying examples show, a
@@ -1553,9 +1615,9 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
                 </listitem>
                 <listitem>
                     <para>The creator of a WF processor <emphasis>may</emphasis> introduce methods
-                        to attempt creative reconciliation of URI synonyms, if the declared
-                        mechanisms in the format fail to produce a match. Whether such methods are
-                        used should be controllable by the user.</para>
+                        to attempt creative reconciliation of URI synonyms, as a fallback when
+                        synonimity mechanisms in the format fail to produce a match. Whether such
+                        methods are used should be controllable by the user.</para>
                 </listitem>
             </itemizedlist>On the other hand, URI vocabularies for works are meager. Most of the
             examples of work URIs are drawn from dbpedia, a shadow URI vocabulary based on
@@ -1564,7 +1626,7 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
             modern articles, a DOI as a work URI might be useful, but one can never know if that DOI
             specifies a work, a scriptum, or both. Many times, a general work URI is available, but
             what is really needed is a URI not for a work in general but for a specific version. The
-            chief problem here is a <emphasis role="bold">dearth of URIs</emphasis>. The ideal
+            chief problem here is a <emphasis role="bold">shortage of URIs</emphasis>. The ideal
             strategies are as follows:<itemizedlist>
                 <listitem>
                     <para>The writer of a WF URI should draw from the most common URI vocabulary.
@@ -1579,19 +1641,21 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
                             <listitem>
                                 <para>Embed the work version URI as a <link
                                         xlink:href="https://en.wikipedia.org/wiki/Tag_URI_scheme"
-                                        >tag URN</link>, e.g.,
-                                    <code>tag:example.com,2014:...</code>. </para>
+                                        >tag URN</link>, with a namespace identifying the person or
+                                    organization coining the URN, e.g.,
+                                        <code>tag:example.com,2014:</code>. </para>
                             </listitem>
                             <listitem>
-                                <para>After the date and colon, the next work should be
-                                        <code>work:</code>. </para>
+                                <para>The very next component should be <code>$wf0:work:</code>.
+                                    This declares that what follows should be taken as designating a
+                                    work.</para>
                             </listitem>
                             <listitem>
                                 <para>If the work-version is a version ultimately of another primary
                                     work, and that work has a common URI name, let the next portion
                                     be that URI, otherwise, build a name for the work from steps
                                     that seem appropriate, via a set of <code>/</code>-delimited
-                                    steps that identify the specific work-version. </para>
+                                    steps that identify the work-version. </para>
                             </listitem>
                         </itemizedlist></para>
                     <warning>
@@ -1603,7 +1667,9 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
                         work URI <emphasis>may</emphasis> be modified if embedded as the component
                         of another URI, as advised above. The tag URN is ideal, because unlike
                             <code>http:</code>-style URIs it includes provenance of the writer of
-                        the URI.</para>
+                        the URI. If you are presented with a WF-style tag URN that you wish to
+                        modify, replace the namespace component with your own, then modify the
+                        portion after <code>$wf0:work:</code> as you see fit.</para>
                 </listitem>
                 <listitem>
                     <para>The creator of WF-conformant data, tethering their data to one or more
@@ -1622,8 +1688,8 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
                 <listitem>
                     <para>Those who mint and publish collections of work-version URIs
                             <emphasis>should</emphasis> develop a system that allows a work URI to
-                        be modified in scope to point to a specific version. Such URIs can be coined
-                        only by the owner of the URI scheme. Alternatively, such a service
+                        be modified to restrict the scope to specific versions. Such URIs can be
+                        coined only by the owner of the URI scheme. Alternatively, such a service
                             <emphasis>may</emphasis> define a syntax that allows third parties to
                         extend the URIs when enjambed in another URI, as suggested above regarding
                         tag URNs.<warning>
@@ -1642,12 +1708,12 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
             conventions for a particular work or scriptum. If shared customs rely primarily upon
             logical references (e.g., poetry), those should be used; if material references (e.g.,
             modern articles and books), those should be used; if both types are used (e.g., much
-            ancient prose), adopt the system that permits the level of precision required. There is
-            no point in creating a WF URI, or in encoding textual data, through a rarely used
-            reference system.</para>
-        <para>Writing a WF URI is done most often in the process of building an RDF triple, that is,
-            in making some kind of assertion about the target text. Constructing the WF URI in
-            service to an RDF statement can be enhanced by asking several questions:<orderedlist>
+            ancient prose), adopt the system that maximizes precision and familiarity. There is no
+            point in creating a WF URI, or in encoding textual data, through a rarely used reference
+            system.</para>
+        <para>Writing a WF URI is done most often when building an RDF triple, that is, in making
+            some kind of assertion about the target text. Constructing a strong WF URI for an RDF
+            statement can be enhanced by asking several questions:<orderedlist>
                 <listitem>
                     <para>Do I meant to claim something about a work-version as a whole (as opposed
                         to merely about a particular scriptum)?</para>
@@ -1669,9 +1735,9 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
             scriptum, serving as the base URI.</para>
         <para>If #1, #2, and #3 are all yes, there is a problem. WF URIs do not permit text-based
             assertions about works in general, because a work is an abstract entity encompassing all
-            versions, including versions in other languages, so there is no particular text
-            attached. The closest you can get is to build a constrained scriptum WF based upon the
-            scriptum that has the best or most popular version of the work in question.</para>
+            versions, including versions in other languages, so there is no single text to quote.
+            The closest you can get is to build a constrained scriptum WF based upon the scriptum
+            that has the best or most popular version of the work in question.</para>
         <para>If #1 and #2 are yes, and #3 is no, then you should build a work WF, with the base URI
             pointing to the work-version.</para>
         <para>If #4 is yes, then you are interested in a constrained scriptum WF, which begins with
@@ -1685,7 +1751,7 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
             itself. A constrained scriptum WF points exclusively to a single version of a single
             work in a single scriptum. Any inferences are the responsibility of the person or
             algorithm making the inference.</para>
-        <para>Once you have determined the type of WF you are applying, the construction of the
+        <para>Once you have determined the type of WF you are creating, the construction of the
             first part of the URI should be clear. The following table shows how the WF URI is
             started.</para>
         <table frame="all">
@@ -1715,22 +1781,22 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
                 </tbody>
             </tgroup>
         </table>
-        <para>The next questions pertain to reference systems. Eventually, the WF will declare some
-            numbers that are expected to be used to navigate a reference system. But what reference
-            system are you using?<orderedlist continuation="continues">
+        <para>The next questions pertain to reference systems. The WF will later use numbers that
+            will be used to navigate a reference system. But which reference system are you
+                using?<orderedlist continuation="continues">
                 <listitem>
                     <para>Is the reference system based on physical aspects of a book/article, e.g.,
                         pages and lines (as opposed to conceptual units)?</para>
                 </listitem>
                 <listitem>
-                    <para>Does the base URI point to the book/article that most clearly and
-                        unambiguously presents this reference system?</para>
+                    <para>Does the base URI point to a book/article that clearly and unambiguously
+                        marks the text with this reference system?</para>
                 </listitem>
                 <listitem>
                     <para>If not, what book/article unambiguously best states or supports it?</para>
                 </listitem>
-            </orderedlist>The answer to #1 determines which of the two types of reference systems is
-            being followed. </para>
+            </orderedlist>If the answer to #1 is yes, you are using a reference system based on
+            material units; otherwise you are using logical units. </para>
         <para>If the answer to #2 is yes, then the reference scriptum may be given the default value
                 (<code>r=.;</code>). If no, then #3 should be answered in light of editions of the
             work that clearly and unambiguously feature the reference system. Ideally, the reference
@@ -1739,7 +1805,7 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
             (or only one of each). If the URI you use for the reference scriptum has the
                 <code>#</code> in it, be sure to convert it to <code>%23</code>.</para>
         <table frame="all">
-            <title/>
+            <title>WF URIs, part 2</title>
             <tgroup cols="3">
                 <colspec colname="c1" colnum="1" colwidth="1*"/>
                 <colspec colname="newCol2" colnum="2" colwidth="1*"/>
@@ -1777,8 +1843,8 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
         </table>
         <para>In many cases the choice of the reference system should be relatively easy. In
             general, use the number-based reference system you would use if you were citing the item
-            any other place. Custom frequently rests upon the type of work or scriptum that is being
-            identified. Below are some common cases, along with ideal strategies. <warning>
+            in ordinary prose. Custom frequently rests upon the type of work or scriptum that is
+            being identified. Below are some common cases, along with ideal strategies. <warning>
                 <para>The advice below is starting to overlap with similar advice that appears in
                     the <link xlink:href="./wf-examples.xml">examples</link>, where most of my
                     energy is going now, in the hopes that they will become rich enough to supplant,
@@ -1844,8 +1910,8 @@ FilterExpRange ::= "[" INTEGER "-" INTEGER "]"</programlisting>
             <para>This section is descriptive.</para>
         </important>
         <para>See <link xlink:href="./wf-examples.xml">wf-examples.xml</link> for an XML file that
-            presents several examples of WF URIs, with commentary. At some point is the future,
-            those examples will  be better integrated with these specifications, and perhaps a
+            presents several examples of WF URIs, with commentary. At some point in the future,
+            those examples will be better integrated with these specifications, and perhaps a
             quick-start tutorial.</para>
     </section>
     <section>

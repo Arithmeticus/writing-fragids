@@ -24,9 +24,9 @@
         </legalnotice>
         <revhistory>
             <revision>
-                <date>2021-01-28</date>
+                <date>2021-06-27</date>
                 <revdescription>
-                    <para>Prepublication draft, version 0.01</para>
+                    <para>Prepublication draft, version 0.02</para>
                 </revdescription>
             </revision>
         </revhistory>
@@ -37,14 +37,15 @@
             the specifications for Writing Fragment Identifiers (Writing Fragids, or WFs). WFs are
             fragments added to URIs to point to specific parts of writings. By making a TEI file
             WF-conformant, you are opening it up to Semantic Web applications. Many WF URIs come in
-            the form of RDF triples that make assertions about texts. An application can take a WF
-            URI and a TEI Akita file, look for a match, and return any corresponding content.</para>
+            the context of RDF triples that make assertions about texts. An application can take a
+            WF URI and a TEI Akita file, look for a match, and return any corresponding
+            content.</para>
         <para>A great strength of TEI is that it is flexible, enabling scholars to encoding anything
             they like. That is also its great weakness. We structure our texts the way we see fit,
-            and seldom do two TEI files from different projects look much alike. Therefore
-            specifications such as these can regulate the process of making a TEI file
-            WF-conformant, but it cannot dictate how any extracted content should be interpreted or
-            handled.</para>
+            and seldom do two TEI files from different projects look much alike. Specifications such
+            as these can explain how to make a TEI file WF-conformant, but it cannot dictate how any
+            extracted content should be interpreted or handled by a WF-conformant processor or its
+            user.</para>
         <para>TEI Akita provides a Schematron epischema that can be added to any standard TEI file.
             That Schematron file checks to see if everything needed for WF-conformance is in place,
             and through Schematron Quick Fixes, offers suggestions on improvements.</para>
@@ -57,9 +58,11 @@
         <section>
             <title>Metadata</title>
             <para>The <code>teiHeader</code> is something of the wild west for metadata. It can be
-                used to describe just about anything. But most of the elements are designed for
-                humans writing metadata for humans, and most of it is optional. Because of that
-                relaxed attitude toward metadata, and because WF requires URIs, and only URIs, to </para>
+                used to describe just about anything. Most of the elements have been designed for
+                humans writing metadata for other humans, and most of it is optional. Because of
+                that relaxed attitude toward metadata, and because WF is built exclusively upon
+                URIs, the <code>teiHeader</code> cannot be relied upon as a mechanism for handling
+                some WF options (e.g., resolving URI synonymity).</para>
             <para>For a TEI file to be WF-conformant, some important metadata about the data needs
                 to be declared:<orderedlist>
                     <listitem>
@@ -79,8 +82,8 @@
                     </listitem>
                 </orderedlist>The types of TEI metadata models differ so greatly one from another,
                 that it cannot be predicted where one should find such metadata. Because TEI Akita
-                is designed for a variety of TEI files, including customized ones, special appartus
-                is needed to express such metadata (see below).</para>
+                is designed for a variety of TEI files, including customized ones, a special
+                apparatus is needed to express such metadata (see below).</para>
         </section>
         <section>
             <title>Text</title>
@@ -95,8 +98,7 @@
                 <title>Reference systems by wrapping element</title>
                 <para>The primary, default reference system in TEI is through a wrapping element.
                     Quite often that primary element is simply <code>&lt;text></code>, and the
-                    reference system consists of the tiers of <code>@n</code> in descendant
-                    elements.</para>
+                    reference system consists of the tiers of <code>@n</code> in the tree.</para>
                 <para>In this structure, the user is assumed to have been consistent in using
                         <code>@n</code> exclusively for references. Excluded are <code>@n</code>
                     values of any elements that do not enclose non-space text (e.g., anchor
@@ -133,14 +135,15 @@
                     reference system. But every <code>&lt;pb></code>, <code>&lt;cb></code>, and
                         <code>&lt;lb></code> represents a division within a material reference
                     system, not logical. It is an error for any reference system declared as being
-                    logical to has as a member any <code>&lt;pb></code>, <code>&lt;cb></code>, or
+                    logical to have as a member any <code>&lt;pb></code>, <code>&lt;cb></code>, or
                         <code>&lt;lb></code> .</para>
                 <para>Anchors need to be explicitly associated with other members of the same
                     division sequence. This must be done through <code>@type</code>. Doing so allows
                     for different explicit reference system layers in the same document (e.g., a
                     text keyed to the folio + line numbers of multiple manuscripts).</para>
-                <para>No provision is made for the termination of any anchor. Perhaps such support
-                    will be provided in the successor to TEI Akita.</para>
+                <para>An anchor specifies where a particular text begins, but no provision is made
+                    for where it should end. Perhaps such support will be provided in the successor
+                    to TEI Akita.</para>
             </section>
         </section>
     </section>
@@ -148,7 +151,7 @@
         <title>Akita Specifications</title>
         <para>TEI Akita files are defined as those TEI files that are valid against the official
             schema, <link xlink:href="../schemas/akita.sch">../schemas/akita.sch</link>. That
-            Schematron file checks to see if all the necessary Akita appartus are present, and if
+            Schematron file checks to see if all the necessary Akita apparatus are present, and if
             there are any obvious contradictions or errors.</para>
         <para>Akita files require two sets of apparatus: vocabulary and declarations. You may find
             it helpful to read this section in conjunction with an <link
@@ -158,7 +161,7 @@
             <para>Akita vocabulary is declared through three types of processing instructions, which
                 may be placed anywhere in the TEI document:<itemizedlist>
                     <listitem>
-                        <para><code>akita-work</code>: Lists possible vocabulary for a single work.
+                        <para><code>akita-work</code>: Lists possible IRI values for a single work.
                             This processing instruction starts with an identifier then a series of
                             IRIs, space separated (all space will be normalized). All the IRIs
                             included in this PI will be treated as synonymous, and associated with
@@ -173,17 +176,18 @@
                         <para><code>akita-include</code>: This takes only one value, a relative or
                             absolute href to a separate Akita vocabulary file. That Akita vocabulary
                             file is defined by <link xlink:href="../schemas/akita-vocab.rnc"
-                                >../schemas/akita-vocab.rnc</link>, which provides a simple
-                            structure for vocabularies of works and scripta. A recursive inclusion
-                            feature allows Akita vocabulary to be organized modularly. Those
-                            external files also support annotations, vi <code>&lt;desc></code>,
-                            which are not possible to express directly in an Akita PI.</para>
+                                >../schemas/akita-vocab.rnc</link>, which provides a simple file
+                            structure for organizing stand-off vocabularies of works and scripta. A
+                            recursive inclusion feature allows Akita vocabulary to be organized
+                            modularly. Those external files also support annotations, via
+                                <code>&lt;desc></code>. Annotations are not possible to express
+                            directly in an Akita PI.</para>
                     </listitem>
-                </itemizedlist>In evaluation of a TEI Akita file, the vocabulary is assembled from
-                the local processing instructions and any associated akita vocabulary files. The
-                process and results are defined by the function
-                    <code>akita:resolve-vocabulary()</code>, found in <link
-                    xlink:href="../functions/akita-core.xsl">../functions/akita-core.xsl</link>. </para>
+                </itemizedlist>In evaluating a TEI Akita file, the vocabulary is assembled from the
+                local processing instructions and any associated akita vocabulary files. The process
+                and results are defined by the function <code>akita:resolve-vocabulary()</code>,
+                found in <link xlink:href="../functions/akita-core.xsl"
+                    >../functions/akita-core.xsl</link>. </para>
             <para>The vocabulary is checked for errors, defined by the function
                     <code>akita:validate-vocabulary()</code> in the same XSLT function
                 library.</para>
@@ -203,7 +207,7 @@
                             separated by equals signs. The following are permitted:<itemizedlist>
                                 <listitem>
                                     <para><code>idrefs</code>: points by IDref to the TEI elements
-                                        that contain the relevant text.</para>
+                                        that are the topmost nodes in the target tree.</para>
                                 </listitem>
                                 <listitem>
                                     <para><code>work</code>: points by IDref to a set of akita work
@@ -233,8 +237,8 @@
                     <listitem>
                         <para><code>akita-mark-tree-by-anchors</code>: points to sets of anchors by
                                 <code>@type</code>, and orders them in the hierarchy. This
-                            declaration, like the previous one, takes what look like attribute-value
-                            pairs, and also permits <code>work</code>, <code>scriptum</code>,
+                            declaration, like the previous one, takes key-value pairs, and also
+                            permits <code>work</code>, <code>scriptum</code>,
                                 <code>reference-system-type</code>, and
                                 <code>reference-scriptum</code>. It does not include
                                 <code>idrefs</code>, replaced by the following:<itemizedlist>
@@ -244,7 +248,7 @@
                                         anchors that constitute the reference system's first,
                                         second, etc. level.</para>
                                 </listitem>
-                            </itemizedlist>In evaluation of a TEI Akita file, each declaration is
+                            </itemizedlist>In evaluating a TEI Akita file, each declaration is
                             parsed and assessed. Assessment requires analysis of the TEI file
                             itself, and the result is a series of versions of the TEI document, one
                             per declaration, along with associated errors. The process and results
@@ -253,10 +257,10 @@
                                 >../functions/akita-core.xsl</link>. </para>
                         <para>Handling milestones and anchors as a reference device requires turning
                             the TEI file inside out, so to speak. That is, each system of anchors is
-                            converted into a primary hierarchy, and wraps the TEI content. In
-                                <code>akita:build-tei-wf-map()</code> an anchor is assumed to wrap
-                            as content all nodes that follows until another anchor at the same level
-                            is found.</para>
+                            converted into a tree hierarchy, wrapping TEI content fragments. In
+                                <code>akita:build-tei-wf-map()</code> an anchor wraps as content all
+                            nodes that follows until another anchor at the same level is
+                            found.</para>
                         <para>A number of types of errors are checked, such as whether a material
                             reference system is being applied to a logical one or vice versa. See
                                 <code>$akita:error-map</code>, defined in the core XSLT file, for
