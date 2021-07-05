@@ -475,7 +475,7 @@
       <ref-system-type>material</ref-system-type>
       <desc>All four URIs are constrained scriptum URIs that point to the same word, ἐν. The first
          and third are about the edition published by Bodëús; the second and third, that published
-         by Minio-Paluello. The first and second point to the base URI scriptum itsewf as the basis
+         by Minio-Paluello. The first and second point to the base URI scriptum itself as the basis
          for the material reference system. Note, in the third and fourth examples, each URI indicates that the
          base URI is one scriptum but the reference scriptum is the other. The lineation must correspond to
          what is in the reference scriptum. In this case, the word ἐν appears on two different lines.</desc>
