@@ -169,8 +169,8 @@
       <xsl:variable name="wf-uri-fragment-count" as="xs:integer" select="count($wf-uri-fragments/wf:wf)"/>
       <xsl:variable name="wf-ref-scriptum-uri" as="xs:string" select="string($wf-fragment-parameters-parsed/wf:ref-scriptum-uri)"/>
       
-      <!-- Step 2: parse the references. Unlike the above, which relies upon string analysis, this
-         process uses templates. -->
+      <!-- Step 2: parse the references. Unlike the step above, which relies upon string analysis, this
+         one uses templates. -->
       <xsl:variable name="wf-fragment-references-parsed" as="map(*)">
          <xsl:map>
             <xsl:apply-templates select="$wf-fragment-parameters-parsed" mode="parse-wf-references"
@@ -210,6 +210,9 @@
                select="wf:report-error('wf006', 'Unparsed text exists: ' || string-join(array:flatten($unparsed-text), ' ') || ' ' || normalize-space(string-join($extra-help, ' ')))"
             />
          </xsl:if>
+         <xsl:if test="$wf-uri-type eq 'work' and (array:size(map:find($wf-fragment-references-parsed, 'token')) gt 0)">
+            <xsl:sequence select="wf:report-error('wf009', '')"/>
+         </xsl:if>
          <xsl:for-each select="map:keys($wf-fragment-references-parsed)[. instance of xs:integer]">
             <xsl:variable name="this-key" select="." as="xs:integer"/>
             <xsl:variable name="this-map" select="$wf-fragment-references-parsed($this-key)" as="map(*)?"/>
@@ -238,6 +241,7 @@
                         $this-map2('through-char')
                      else
                         ()" as="xs:integer?"/>
+               
                <xsl:if test="$this-from-char gt 0 and $this-through-char gt 0 and $this-through-char le $this-from-char">
                   <xsl:sequence
                      select="wf:report-error('wf007', string($this-through-char) || ' is not greater than ' || string($this-from-char))"
@@ -252,6 +256,20 @@
             </xsl:for-each>
          </xsl:for-each>
       </xsl:variable>
+      
+      <xsl:variable name="diagnostics-on" as="xs:boolean" select="false()"/>
+      <xsl:if test="$diagnostics-on">
+         <xsl:message select="'~ ~ ~ Diagnostics on, wf:parse-wf-uri()'"/>
+         <xsl:message select="'Input uri: ' || $wf-uri"/>
+         <xsl:message select="'Errors reported via message? ', $errors-via-message"/>
+         <xsl:message select="'WF uri parts: ' || string-join($wf-uri-parts, ' || ')"/>
+         <xsl:message select="'WF base uri: ' || $wf-base-uri"/>
+         <xsl:message select="'WF uri fragments: ', $wf-uri-fragments"/>
+         <xsl:message select="'WF uri type: ' || $wf-uri-type"/>
+         <xsl:message select="'WF fragment parameters parsed: ', $wf-fragment-parameters-parsed"/>
+         <xsl:message select="'WF fragment references parsed: ', $wf-fragment-references-parsed"/>
+         <xsl:message select="'Errors in input WF URI: ', $wf-uri-errors"/>
+      </xsl:if>
 
       <xsl:map>
          <!-- All URI components -->
@@ -310,6 +328,7 @@
                   </part>
                </xsl:matching-substring>
                <xsl:non-matching-substring>
+                  <!-- look for a hyphen, as long as it is not escaped -->
                   <xsl:analyze-string select="." regex="([^^])-|^-">
                      <xsl:matching-substring>
                         <a>
@@ -329,10 +348,19 @@
       <xsl:variable name="reference-is-range" as="xs:boolean"
          select="exists($reference-parts/wf:a)"/>
       <xsl:variable name="ref-parts" as="xs:string*">
-         <xsl:for-each-group select="$reference-parts" group-starting-with="wf:part">
-            <xsl:value-of select="string-join(current-group())"/>
+         <xsl:for-each-group select="$reference-parts/*" group-starting-with="wf:part">
+            <xsl:sequence select="string-join(current-group())"/>
          </xsl:for-each-group>
       </xsl:variable>
+      
+      <xsl:variable name="diagnostics-on" as="xs:boolean" select="false()"/>
+      <xsl:if test="$diagnostics-on">
+         <xsl:message select="'~ ~ ~ Diagnostics on, template mode parse-wf-references'"/>
+         <xsl:message select="'Reference parts pass 1: ', $reference-parts"/>
+         <xsl:message select="'Reference is range? ', $reference-is-range"/>
+         <xsl:message select="'Reference parts pass 2: ' || string-join($ref-parts, ' || ')"/>
+      </xsl:if>
+      
       <xsl:map-entry key="position()">
          <!-- No reference may have both an unescaped hyphen (a range) and an unescaped + (a fusion). In 
             such cases, the error will be registered because both <range> and <fusion> are present, but
@@ -433,6 +461,7 @@
          <xsl:map-entry key="'wf006'" select="'All text in a WF URI must be parsed.'"/>
          <xsl:map-entry key="'wf007'" select="'A character range must terminate in an integer larger than the first.'"/>
          <xsl:map-entry key="'wf008'" select="'A character range must not exceed the length of the token.'"/>
+         <xsl:map-entry key="'wf009'" select="'A work WF may not include text fragments.'"/>
          
       </xsl:map>
    </xsl:variable>
@@ -494,6 +523,13 @@
       <xsl:sequence select="string-join($output-parts)"/>
    </xsl:function>
    
-
+   <xsl:variable name="diagnostic-output-on" as="xs:boolean" static="yes" select="false()"/>
+   <xsl:output indent="yes" use-when="$diagnostic-output-on"/>
+   <xsl:template match="/" priority="1" use-when="$diagnostic-output-on">
+      <xsl:message select="'Diagnostic output on for ' || static-base-uri()"/>
+      <diagnostics>
+         <xsl:copy-of select="wf:parse-wf-uri('http://dbpedia.org/resource/Republic_(Plato)#$wf0:a=s;t=m;r=http://www.worldcat.org/oclc/1688842;328:5:5::ἐπὶ[1]-328:5:6::γήραος[1]$') => wf:map-to-string()"/>
+      </diagnostics>
+   </xsl:template>
 
 </xsl:stylesheet>

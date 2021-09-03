@@ -11,7 +11,7 @@
    <scriptum-types>
       <!-- Scriptum types below are diagnostic, not exhaustive categories. They are chosen based not
          upon a pure taxonomy of scripta but upon the types of reference systems traditions that have 
-         developed over time. Because these are scripta, the reference systems endemic to them are
+         developed over time. Because these are scripta, their standard reference systems are
          material. Items are ordered from most specific to least specific, with the understanding that
          when checking for the rules for a particular scriptum, the user should work with the first
          category that seems appropriate.
@@ -389,11 +389,11 @@
       <work-type>prose</work-type>
       <ref-system-type>material</ref-system-type>
       <desc>Points to line 1 of an inscription on a milestone of Diocletian and Maximian, found in Britain. Note that
-      the token assumes text from the object itsewf, not a modern publication.</desc>
+      the token assumes text from the object itself, not a modern publication.</desc>
    </wf-example>
    
    <wf-example xml:id="e004a">
-      <wf-uri>http://www.worldcat.org/oclc/860129739#$wf0:a=w;t=m;r=.;14.2$</wf-uri>
+      <wf-uri>http://www.worldcat.org/oclc/860129739#$wf0:a=w;t=m;r=.;14:2$</wf-uri>
       <optimal>true</optimal>
       <work-type>prose</work-type>
       <ref-system-type>material</ref-system-type>
@@ -401,12 +401,12 @@
       to any version of Burkert's work.</desc>
    </wf-example>
    <wf-example xml:id="e004b">
-      <wf-uri>http://www.worldcat.org/oclc/860129739#$wf0:a=s;t=m;r=.;14.2$</wf-uri>
+      <wf-uri>http://www.worldcat.org/oclc/860129739#$wf0:a=s;t=m;r=.;14:2$</wf-uri>
       <optimal>true</optimal>
       <work-type>prose</work-type>
       <ref-system-type>material</ref-system-type>
       <desc>Points to page 14, line 2 of Burkert's Lore qua scriptum. In other words, this URI points
-      only to this edition of Burkert's work, and is not concerned with the work as such.</desc>
+      only to this edition of Burkert's work, and is not concerned with the work per se.</desc>
    </wf-example>
    
    <wf-example xml:id="e005a">
@@ -492,11 +492,11 @@
       cannot point to a single object.</desc>
    </wf-example>
    <wf-example xml:id="e008b">
-      <wf-uri>http://www.worldcat.org/oclc/968653045#$wf0:a=w;w=http://dbpedia.org/resource/Iliad;t=l;r=.;1:1$</wf-uri>
+      <wf-uri>http://www.worldcat.org/oclc/968653045#$wf0:a=s;w=http://dbpedia.org/resource/Iliad;t=l;r=.;1:1$</wf-uri>
       <optimal>true</optimal>
       <work-type>poem</work-type>
       <scriptum-type>book</scriptum-type>
-      <ref-system-type>material</ref-system-type>
+      <ref-system-type>logical</ref-system-type>
       <desc>Points to West's edition, constrained to Iliad, (logical) line 1.1. One could point to the material
       reference system, but that seems unnecessarily obscure. Most target data will be built upon the logical
       reference system.</desc>
@@ -510,7 +510,7 @@
       <ref-system-type>logical</ref-system-type>
       <desc>The base URI points to Christine Barats, Valérie Schafer, Andreas Fickers, "Fading
          Away... The challenge of sustainability in digital studies," Digital Humanities Quarterly
-         14.3 (2020). In this case, the base URI (with fragment) is enough for most purposes. But an WF URI can
+         14.3 (2020). In this case, the base URI (with fragment) is enough for most purposes. But a WF URI can
       be employed to point to a specific text fragment, here rendered without any reference steps.</desc>
    </wf-example>
    
@@ -540,6 +540,25 @@
       <desc>Points to Psalm 30.1, Septuagint numeration system, via the Worldcat URI for Rahwfs's edition of the 
          Greek Septuagint. For alternative versification
          systems see #e010a and #e010b.</desc>
+   </wf-example>
+   
+   <wf-example xml:id="e011a">
+      <wf-uri>http://dbpedia.org/resource/Republic_(Plato)#$wf0:a=w;t=m;r=http://www.worldcat.org/oclc/1688842;328:5:5-328:5:6$</wf-uri>
+      <optimal>true</optimal>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Refers to Plato, Republic 328e6 qua work, using Stephanus's edition as the reference
+         scriptum.</desc>
+      <related>e007a</related>
+   </wf-example>
+   <wf-example xml:id="e011b">
+      <wf-uri>http://www.worldcat.org/oclc/1688842#$wf0:a=s;t=m;r=.;328:5:5::ἐπὶ[1]-328:5:6::γήραος[1]$</wf-uri>
+      <optimal>true</optimal>
+      <work-type>prose</work-type>
+      <ref-system-type>material</ref-system-type>
+      <desc>Refers to Plato, Republic 328e6 qua work, using Stephanus's edition as the reference
+         scriptum.</desc>
+      <related>e007a</related>
    </wf-example>
    
 </wf-examples>
