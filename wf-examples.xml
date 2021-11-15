@@ -515,30 +515,30 @@
    </wf-example>
    
    <wf-example xml:id="e010a">
-      <wf-uri>http://dbpedia.org/resource/Psalms#$wf0:a=w;t=l;r=http://id.lib.harvard.edu/aleph/012287584/catalog;$</wf-uri>
+      <wf-uri>http://dbpedia.org/resource/Psalms#$wf0:a=w;t=l;r=http://id.lib.harvard.edu/aleph/012287584/catalog;30:1$</wf-uri>
       <optimal>true</optimal>
       <work-type>poem</work-type>
       <ref-system-type>logical</ref-system-type>
-      <desc>Points to Psalm 30.1, English numeration system, via the Hollis URI for the Francis
-         Parris 1760 edition of the King James Version of the Bible. For alternative versification
-         systems see #e010b and #e010c.</desc>
+      <desc>Points to Psalm 30.1 (Eng)/30.2 (Heb)/29.2 (LXX), English numeration system, via the
+         Hollis URI for the Francis Parris 1760 edition of the King James Version of the Bible. For
+         alternative versification systems see #e010b and #e010c.</desc>
    </wf-example>
    <wf-example xml:id="e010b">
-      <wf-uri>http://dbpedia.org/resource/Psalms#$wf0:a=w;t=l;r=urn:isbn:3438052199;$</wf-uri>
+      <wf-uri>http://dbpedia.org/resource/Psalms#$wf0:a=w;t=l;r=urn:isbn:3438052199;30:2$</wf-uri>
       <optimal>true</optimal>
       <work-type>poem</work-type>
       <ref-system-type>logical</ref-system-type>
-      <desc>Points to Psalm 30.1, Hebrew numeration system, via the URN pointing to the Biblia
-         Hebraica Stuttgartensia. For alternative versification systems see #e010a and
-         #e010c.</desc>
+      <desc>Points to Psalm 30.1 (Eng)/30.2 (Heb)/29.2 (LXX), Hebrew numeration system, via the URN
+         pointing to the Biblia Hebraica Stuttgartensia. For alternative versification systems see
+         #e010a and #e010c.</desc>
    </wf-example>
    <wf-example xml:id="e010c">
-      <wf-uri>http://dbpedia.org/resource/Psalms#$wf0:a=w;t=l;r=http://www.worldcat.org/oclc/19565412;$</wf-uri>
+      <wf-uri>http://dbpedia.org/resource/Psalms#$wf0:a=w;t=l;r=http://www.worldcat.org/oclc/19565412;29:2$</wf-uri>
       <optimal>true</optimal>
       <work-type>poem</work-type>
       <ref-system-type>logical</ref-system-type>
-      <desc>Points to Psalm 30.1, Septuagint numeration system, via the Worldcat URI for Rahwfs's edition of the 
-         Greek Septuagint. For alternative versification
+      <desc>Points to Psalm 30.1 (Eng)/30.2 (Heb)/29.2 (LXX), Septuagint numeration system, via the
+         Worldcat URI for Rahwfs's edition of the Greek Septuagint. For alternative versification
          systems see #e010a and #e010b.</desc>
    </wf-example>
    
@@ -556,8 +556,8 @@
       <optimal>true</optimal>
       <work-type>prose</work-type>
       <ref-system-type>material</ref-system-type>
-      <desc>Refers to Plato, Republic 328e6 qua work, using Stephanus's edition as the reference
-         scriptum.</desc>
+      <desc>Refers to Plato, Republic 328e6 qua scriptum, using Stephanus's edition as the reference
+         scriptum, and specifying the phrase intended.</desc>
       <related>e007a</related>
    </wf-example>
    
