@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file provides an example of TEI Akita. -->
 
+<!-- There are three key parts to a TEI Akita file:
+   1. Prolog, pointing to the Akita epischema, for validation 
+   2. Vocabulary declaration: for each work or scriptum, list synonymous URIs
+   3. Subtree declaration: specify how the TEI file is to be carved up into subtrees, defined by a particular
+      conjunction of scriptum, work, and reference system.
+      
+   You can provide as many vocabulary items as you like, and they do not all need to be
+   used. You can declare as many subtrees as you like. 
+-->
+
 
    <!-- VALIDATION -->
    <!-- - - - - - - -->
@@ -10,7 +20,9 @@
 <?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
 	schematypens="http://purl.oclc.org/dsdl/schematron"?>
 
-<!-- Note the added epischema -->
+<!-- Note the added epischema, which declares the file to be Akita TEI. The Schematron file is a pass-through, 
+relying primarily upon an XSLT file to do the heavy lifting of evaluating the trees in the file. That XSLT file
+can then be used by applications to extract text. -->
 <?xml-model href="../schemas/akita.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 
 
@@ -30,6 +42,8 @@
    art-of-war 
    http://dbpedia.org/resource/The_Art_of_War 
    tag:example.com,2014:work:art-of-war ?>
+<!-- The following provides URI synonyms for the scriptum (text-bearing object), associating
+   it with the id "suntzu-2002". -->
 <?akita-scriptum 
    suntzu-2002 
    http://id.lib.harvard.edu/alma/990089875700203941/catalog
@@ -38,21 +52,21 @@
 
 
 
-   <!-- DEFINING WF-CONFORMANT TREES -->
+   <!-- DEFINING WF-CONFORMANT SUBTREES -->
    <!-- - - - - - - -->
 
-<!-- And then you identify the trees in the TEI file by connecting components with vocabulary. There are 
+<!-- And then you identify the subtrees in the TEI file by connecting components with vocabulary. There are 
    two ways to create such a structure. -->
 
 <!-- Method 1, by existing tree. This points to one or more elements by @xml:id that form the topmost
-   hierarchy of the given tree. If you're used to prefacing an idref with #, you may do so, but you don't 
+   hierarchy of the given subtree. If you're used to prefacing an idref with #, you may do so, but you don't 
    have to. The reference system that emerges is then based on @n values in descendants of the target 
-   element(s). Each idref value is treated as specifying parts of a single tree, not separate ones.
+   element(s). Each idref value is treated as specifying parts of a single subtree, not separate ones.
 -->
-<!-- In this example, the <div> with @id="d1" is picked as the top of the citable tree. That tree is
+<!-- In this example, the <div> with @id="d1" is picked as the top of the citable subtree. That subtree is
    defined as corresponding to the work the Art of War, and based on a 2002 edition. The reference system
    is the same as the 2002 edition, and it follows a logical reference scheme. -->
-<?akita-mark-tree-by-hierarchy
+<?akita-mark-subtree-by-hierarchy
    idrefs="#d1" 
    work="art-of-war" 
    scriptum="suntzu-2002"
@@ -72,7 +86,7 @@
    the top layer of the new tree, and those with @type="refschemeAlines" form the second layer. As in the
    previous example, this new tree is identified as belonging to the work the Art of War, and to the 2002
    scriptum. The key difference is that it declares the reference system to be material in nature. -->
-<?akita-mark-tree-by-anchors 
+<?akita-mark-subtree-by-anchors 
    level-1-type="refschemeApages"
    level-2-type="refschemeAlines"
    work="art-of-war" 

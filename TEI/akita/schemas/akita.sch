@@ -50,9 +50,9 @@
    </sch:pattern>
    
    <sch:pattern>
-      <sch:rule context="processing-instruction('akita-mark-tree-by-hierarchy')">
+      <sch:rule context="processing-instruction('akita-mark-subtree-by-hierarchy')">
          <sch:let name="this-count"
-            value="count(preceding::processing-instruction('akita-mark-tree-by-hierarchy')) + 1"/>
+            value="count(preceding::processing-instruction('akita-mark-subtree-by-hierarchy')) + 1"/>
          <sch:let name="this-key" value="'h' || string($this-count)"/>
          <sch:let name="this-map" value="$tei-file-mapped($this-key)"/>
          <sch:let name="these-errors" value="$this-map/*/akita:error"/>
@@ -67,9 +67,9 @@
                      ($i/akita:message || ' [' || $i/akita:code || ': ' || $i/akita:rule || ']&#xd;&#xa;')"
             /></sch:report>
       </sch:rule>
-      <sch:rule context="processing-instruction('akita-mark-tree-by-anchors')">
+      <sch:rule context="processing-instruction('akita-mark-subtree-by-anchors')">
          <sch:let name="this-count"
-            value="count(preceding::processing-instruction('akita-mark-tree-by-anchors')) + 1"/>
+            value="count(preceding::processing-instruction('akita-mark-subtree-by-anchors')) + 1"/>
          <sch:let name="this-key" value="'a' || string($this-count)"/>
          <sch:let name="this-map" value="$tei-file-mapped($this-key)"/>
          <sch:let name="these-errors" value="$this-map/*/akita:error"/>

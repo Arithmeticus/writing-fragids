@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagnostics xmlns:akita="tag:kalvesmaki.com,2020:ns"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             xmlns:tei="http://www.tei-c.org/ns/1.0">
+   <doc-1-vocab>
+      <vocab xmlns="tag:kalvesmaki.com,2020:ns"
+             src="file:/E:/Joel/Dropbox/Writing%20Fragids/TEI/akita/examples/tei%20akita%20example.xml">
+         <include nid="d3p13">
+            <vocab src="file:/E:/Joel/Dropbox/Writing%20Fragids/TEI/akita/examples/vocab1.xml">
+               <include nid="d5e5">
+                  <vocab src="file:/E:/Joel/Dropbox/Writing%20Fragids/TEI/akita/examples/vocab2.xml">
+                     <scriptum xml:id="s3" nid="d6e5">
+                        <iri nid="d6e7">http://www.worldcat.org/oclc/860129739</iri>
+                        <desc nid="d6e9">Burkert's Lore. This work has been through revisions and reprints, so anything 
+      pointing to a library catalog is referring to the scriptum, not the work. One might be
+      hard-pressed to come up with a clear work IRI.</desc>
+                     </scriptum>
+                     <scriptum xml:id="s4" nid="d6e12">
+                        <iri nid="d6e14">http://id.lib.harvard.edu/alma/ 990117628460203941/catalog</iri>
+                        <desc nid="d6e16">Luckey, Mary. Membrane Structural Biology : With Biochemical and Biophysical
+         Foundations. Cambridge ; New York: Cambridge University Press, 2008.</desc>
+                     </scriptum>
+                     <scriptum xml:id="s5" nid="d6e19">
+                        <iri nid="d6e21">http://lccn.loc.gov/87042504</iri>
+                        <desc nid="d6e23">Gloria T. Delamar, Mother Goose: From Nursery to Literature. Jefferson, NC: McFarland,
+         1987.</desc>
+                     </scriptum>
+                  </vocab>
+               </include>
+               <work xml:id="w1" nid="d5e7">
+                  <iri nid="d5e9">tag:john@example.com,2014:last-will-and-testament</iri>
+                  <desc nid="d5e11">My last will and testament, treated as a work.</desc>
+               </work>
+               <work xml:id="w2" nid="d5e14">
+                  <iri nid="d5e16">http://dbpedia.org/resource/Republic_(Plato)</iri>
+                  <iri nid="d5e18">tag:john@example.com,2014:work:plato:republic</iri>
+               </work>
+               <scriptum xml:id="s1" nid="d5e21">
+                  <iri nid="d5e23">tag:john@example.com,2014:last-will-and-testament</iri>
+                  <desc nid="d5e25">My last will and testament, treated as a material object. Only one copy exists or was
+         ever made, so it seems strange to differentiate between scriptum and work.</desc>
+               </scriptum>
+            </vocab>
+         </include>
+         <work xml:id="art-of-war" nid="d3p15">
+            <iri>http://dbpedia.org/resource/The_Art_of_War</iri>
+            <iri>tag:example.com,2014:work:art-of-war</iri>
+         </work>
+         <scriptum xml:id="suntzu-2002" nid="d3p17">
+            <iri>http://id.lib.harvard.edu/alma/990089875700203941/catalog</iri>
+            <iri>http://www.worldcat.org/oclc/51809453</iri>
+            <iri>urn:isbn:9780710307385</iri>
+         </scriptum>
+      </vocab>
+   </doc-1-vocab>
+   <doc-1-wf-map>
+      <map xmlns:map="http://www.w3.org/2005/xpath-functions/map">
+         <entry key="a1">
+            <TEI xmlns="http://www.tei-c.org/ns/1.0">
+               <subtree-specs xmlns="tag:kalvesmaki.com,2020:ns">
+                  <attribute name="level-1-type" n="1">refschemeApages</attribute>
+                  <attribute name="level-2-type" n="2">refschemeAlines</attribute>
+                  <attribute name="work">art-of-war</attribute>
+                  <attribute name="scriptum">suntzu-2002</attribute>
+                  <attribute name="reference-scriptum">suntzu-2002</attribute>
+                  <attribute name="reference-system-type">material</attribute>
+               </subtree-specs>
+               <subtree xmlns="tag:kalvesmaki.com,2020:ns">
+                  <pb xmlns="http://www.tei-c.org/ns/1.0"
+                      n="1"
+                      type="refschemeApages"
+                      akita:ref="1">
+                     <TEI>
+                        <text>
+                           <body>
+                              <div n="12" xml:id="d1">
+                                 <p n="1">Some </p>
+                              </div>
+                           </body>
+                        </text>
+                     </TEI>
+                     <lb n="1" type="refschemeAlines" akita:ref="1:1">
+                        <TEI>
+                           <text>
+                              <body>
+                                 <div n="12" xml:id="d1">
+                                    <p n="1">    text </p>
+                                 </div>
+                              </body>
+                           </text>
+                        </TEI>
+                     </lb>
+                     <milestone unit="line" n="2" type="refschemeAlines" akita:ref="1:2">
+                        <TEI>
+                           <text>
+                              <body>
+                                 <div n="12" xml:id="d1">
+                                    <p n="1"> here.
+            </p>
+                                    <p n="2">Some text here.
+            </p>
+                                    <p n="3">Some text here.
+            </p>
+                                    <p n="4 ht">Some text here.
+         
+      
+   
+   
+</p>
+                                 </div>
+                              </body>
+                           </text>
+                        </TEI>
+                     </milestone>
+                  </pb>
+               </subtree>
+            </TEI>
+         </entry>
+         <entry key="h1">
+            <TEI xmlns="http://www.tei-c.org/ns/1.0">
+               <subtree-specs xmlns="tag:kalvesmaki.com,2020:ns">
+                  <attribute name="idrefs">#d1</attribute>
+                  <attribute name="work">art-of-war</attribute>
+                  <attribute name="scriptum">suntzu-2002</attribute>
+                  <attribute name="reference-scriptum">suntzu-2002</attribute>
+                  <attribute name="reference-system-type">logical</attribute>
+               </subtree-specs>
+               <subtree xmlns="tag:kalvesmaki.com,2020:ns">
+                  <div xmlns="http://www.tei-c.org/ns/1.0"
+                       n="12"
+                       xml:id="d1"
+                       akita:ref="12">
+                     <pb n="1" type="refschemeApages"/>
+                     <p n="1" akita:ref="12:1">Some <lb n="1" type="refschemeAlines">   </lb> text <milestone unit="line" n="2" type="refschemeAlines"/> here.</p>
+                     <p n="2" akita:ref="12:2">Some text here.</p>
+                     <p n="3" akita:ref="12:3">Some text here.</p>
+                  </div>
+               </subtree>
+            </TEI>
+         </entry>
+      </map>
+   </doc-1-wf-map>
+</diagnostics>

@@ -28,8 +28,8 @@
    
    <xsl:template match="/">
       <diagnostics>
-         <!--<doc-1-vocab><xsl:copy-of select="$doc-1-vocab"/></doc-1-vocab>-->
-         <doc-1-vocab-validated><xsl:copy-of select="$doc-1-vocab-validated"/></doc-1-vocab-validated>
+         <doc-1-vocab><xsl:copy-of select="$doc-1-vocab"/></doc-1-vocab>
+         <!--<doc-1-vocab-validated><xsl:copy-of select="$doc-1-vocab-validated"/></doc-1-vocab-validated>-->
          <!--<attr-parsed><xsl:copy-of select="$attr-parsed"/></attr-parsed>-->
          <doc-1-wf-map><xsl:copy-of select="akita:map-to-xml($doc-1-wf-map)"/></doc-1-wf-map>
       </diagnostics>

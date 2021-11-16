@@ -22,7 +22,7 @@
          <xsl:map-entry key="'akita-include'" select="'\S+'"/>
          <xsl:map-entry key="'akita-work'" select="$akita:ncname-regex || '( \S+)+'"/>
          <xsl:map-entry key="'akita-scriptum'" select="$akita:ncname-regex || '( \S+)+'"/>
-         <xsl:map-entry key="'akita-mark-tree-by-hierarchy'">
+         <xsl:map-entry key="'akita-mark-subtree-by-hierarchy'">
             <xsl:map>
                <!-- TEI users are accustomed to a # as prefacing a target, so it is accommodated here. -->
                <xsl:map-entry key="'idrefs'"
@@ -33,7 +33,7 @@
                <xsl:map-entry key="'reference-system-type'" select="'(logical|material)'"/>
             </xsl:map>
          </xsl:map-entry>
-         <xsl:map-entry key="'akita-mark-tree-by-anchors'">
+         <xsl:map-entry key="'akita-mark-subtree-by-anchors'">
             <xsl:map>
                <xsl:map-entry key="'level-1-type'" select="$akita:ncname-regex"/>
                <xsl:map-entry key="'work'" select="$akita:ncname-regex"/>
@@ -46,11 +46,11 @@
    </xsl:variable>
    <xsl:variable name="akita:akita-processing-instruction-names" as="xs:string+"
       select="map:keys($akita:akita-pi-content-map)"/>
-   <xsl:variable name="akita:akita-pi-mark-tree-by-hierarchy-rules"
-      select="$akita:akita-pi-content-map('akita-mark-tree-by-hierarchy')"
+   <xsl:variable name="akita:akita-pi-mark-subtree-by-hierarchy-rules"
+      select="$akita:akita-pi-content-map('akita-mark-subtree-by-hierarchy')"
       as="map(*)"/>
-   <xsl:variable name="akita:akita-pi-mark-tree-by-anchors-rules"
-      select="$akita:akita-pi-content-map('akita-mark-tree-by-anchors')"
+   <xsl:variable name="akita:akita-pi-mark-subtree-by-anchors-rules"
+      select="$akita:akita-pi-content-map('akita-mark-subtree-by-anchors')"
       as="map(*)"/>
    
    <xsl:variable name="akita:error-map" as="map(*)">
@@ -73,18 +73,18 @@
          <xsl:map-entry key="'ak012'">No material reference system should be tethered to elements representing logical units.</xsl:map-entry>
          <xsl:map-entry key="'ak013'">No logical reference system should be tethered to elements representing material units.</xsl:map-entry>
          <xsl:map-entry key="'ak014'">
-            <xsl:value-of select="'Attribute names in an akita PI marking a tree by hierarchy must be one of the following: ' || string-join(map:keys($akita:akita-pi-mark-tree-by-hierarchy-rules), ', ')"/>
+            <xsl:value-of select="'Attribute names in an akita PI marking a subtree by hierarchy must be one of the following: ' || string-join(map:keys($akita:akita-pi-mark-subtree-by-hierarchy-rules), ', ')"/>
          </xsl:map-entry>
          <xsl:map-entry key="'ak015'">
-            <xsl:value-of select="'Attribute names in an akita PI marking a tree by anchors must be one of the following: ' || string-join(map:keys($akita:akita-pi-mark-tree-by-anchors-rules), ', ')"/>
+            <xsl:value-of select="'Attribute names in an akita PI marking a subtree by anchors must be one of the following: ' || string-join(map:keys($akita:akita-pi-mark-subtree-by-anchors-rules), ', ')"/>
          </xsl:map-entry>
          <xsl:map-entry key="'ak016'">Every akita PI value must match its defined pattern.</xsl:map-entry>
-         <xsl:map-entry key="'ak017'">In an akita PI marking a tree by anchors, @level-1-type must be succeeded by @level-2-type and so on, without duplication.</xsl:map-entry>
+         <xsl:map-entry key="'ak017'">In an akita PI marking a subtree by anchors, @level-1-type must be succeeded by @level-2-type and so on, without duplication.</xsl:map-entry>
          
       </xsl:map>
    </xsl:variable>
    
-   <xsl:function name="akita:resolve-vocabulary" as="document-node()">
+   <xsl:function name="akita:resolve-vocabulary" visibility="private" as="document-node()">
       <!-- Input: a TEI file or an akita file -->
       <!-- Output: the Akita vocabulary in a single document -->
       <xsl:param name="input" as="document-node()"/>
@@ -186,8 +186,8 @@
    </xsl:template>
    
    
-   <xsl:function name="akita:validate-vocabulary" as="document-node()">
-      <!-- Input: a resolved akita vocabulary -->
+   <xsl:function name="akita:validate-vocabulary" visibility="public" as="document-node()">
+      <!-- Input: a resolved akita vocabulary document, created by akita:resolve-vocabulary -->
       <!-- Output: the same, but with error messages reported -->
       <xsl:param name="resolved-vocabulary" as="document-node()"/>
       <xsl:apply-templates select="$resolved-vocabulary" mode="akita:validate-vocabulary"/>
@@ -342,15 +342,22 @@
    
    <xsl:function name="akita:build-tei-wf-map" as="map(*)?" visibility="public">
       <!-- Input: a TEI file with Akita markers -->
-      <!-- Output: a map, with one map entry per Akita marker, with value consisting
-      of the TEI file arranged exclusive to the particular reference system. Error messages
-      will be logged in the results when encountered. -->
+      <!-- Output: a map, with one map entry per Akita subtree marker. Each map entry has
+         a key that matches the regular expression [ah]\d+, with "a" representing subtrees
+         based on anchors and "h", those based on existing tree hierarchy. The corresponding
+         value is the appropriate TEI fragment corresponding to the Akita subtree marker defining
+         the scriptum, work, and reference system. Error messages will be copied to the results. -->
+      <!-- If the tree fragment is anchor-based, the hierarchy will be turned inside out. That is,
+         every anchor slices the TEI file into tree fragments. The anchors are converted into a primary
+         hierarchy, and the tree fragments are then inserted in the appropriate place into that new
+         hierarchy. -->
+      <!-- TODO: provide options for how to treat elements that are split by anchors. -->
       <xsl:param name="tei-akita-file" as="document-node()?"/>
 
       <xsl:variable name="akita-markers-by-hierarchy"
-         select="$tei-akita-file//processing-instruction('akita-mark-tree-by-hierarchy')"/>
+         select="$tei-akita-file//processing-instruction('akita-mark-subtree-by-hierarchy')"/>
       <xsl:variable name="akita-markers-by-anchors"
-         select="$tei-akita-file//processing-instruction('akita-mark-tree-by-anchors')"/>
+         select="$tei-akita-file//processing-instruction('akita-mark-subtree-by-anchors')"/>
       
       <xsl:variable name="akita-markers-by-hierarchy-parsed" as="element()*" select="
             for $i in $akita-markers-by-hierarchy
@@ -373,15 +380,15 @@
                <!-- First build by hierarchy -->
                <xsl:for-each select="$akita-markers-by-hierarchy-parsed">
                   <xsl:variable name="these-specs" select="." as="element()"/>
-                  <xsl:variable name="allowed-attribute-names" select="map:keys($akita:akita-pi-mark-tree-by-hierarchy-rules)"
+                  <xsl:variable name="allowed-attribute-names" select="map:keys($akita:akita-pi-mark-subtree-by-hierarchy-rules)"
                      as="xs:string+"/>
-                  <xsl:variable name="tree-errors" as="element()*">
+                  <xsl:variable name="subtree-errors" as="element()*">
                      <xsl:for-each select="$these-specs/akita:attribute">
                         <xsl:variable name="this-attr" select="@name"/>
                         <xsl:variable name="this-attr-adjusted" select="replace($this-attr, '\d+', '1')" as="xs:string"/>
                         <xsl:variable name="this-attr-is-expected" select="$this-attr-adjusted = $allowed-attribute-names" as="xs:boolean"/>
                         <xsl:variable name="this-attr-val" as="xs:string" select="string(.)"/>
-                        <xsl:variable name="this-expected-val-regex" as="xs:string?" select="$akita:akita-pi-mark-tree-by-hierarchy-rules($this-attr-adjusted)"/>
+                        <xsl:variable name="this-expected-val-regex" as="xs:string?" select="$akita:akita-pi-mark-subtree-by-hierarchy-rules($this-attr-adjusted)"/>
                         <xsl:choose>
                            <xsl:when test="not($this-attr-is-expected)">
                               <xsl:sequence
@@ -403,8 +410,8 @@
                   <xsl:map-entry key="'h' || string(position())">
                      <xsl:apply-templates select="$tei-akita-file"
                         mode="akita:build-tei-wf-map-by-hierarchy">
-                        <xsl:with-param name="tree-specs" as="element()" tunnel="yes" select="."/>
-                        <xsl:with-param name="errors" as="element()*" tunnel="yes" select="$tree-errors"/>
+                        <xsl:with-param name="subtree-specs" as="element()" tunnel="yes" select="."/>
+                        <xsl:with-param name="errors" as="element()*" tunnel="yes" select="$subtree-errors"/>
                      </xsl:apply-templates>
                   </xsl:map-entry>
                   
@@ -414,9 +421,9 @@
                <xsl:for-each select="$akita-markers-by-anchors-parsed">
                   <xsl:variable name="these-specs" select="." as="element()"/>
                   <xsl:variable name="allowed-attribute-names"
-                     select="map:keys($akita:akita-pi-mark-tree-by-anchors-rules)" as="xs:string+"/>
+                     select="map:keys($akita:akita-pi-mark-subtree-by-anchors-rules)" as="xs:string+"/>
                   
-                  <xsl:variable name="tree-errors" as="element()*">
+                  <xsl:variable name="subtree-errors" as="element()*">
                      <xsl:for-each select="$these-specs/akita:attribute">
                         <xsl:variable name="this-attr" select="@name"/>
                         <xsl:variable name="this-attr-adjusted" select="replace($this-attr, '\d+', '1')" as="xs:string"/>
@@ -424,7 +431,7 @@
                            select="$this-attr-adjusted = $allowed-attribute-names" as="xs:boolean"/>
                         <xsl:variable name="this-attr-val" as="xs:string" select="string(.)"/>
                         <xsl:variable name="this-expected-val-regex" as="xs:string?"
-                           select="$akita:akita-pi-mark-tree-by-anchors-rules($this-attr-adjusted)"/>
+                           select="$akita:akita-pi-mark-subtree-by-anchors-rules($this-attr-adjusted)"/>
                         <xsl:choose>
                            <xsl:when test="not($this-attr-is-expected)">
                               <xsl:sequence
@@ -465,9 +472,9 @@
                   <xsl:map-entry key="'a' || string(position())">
                      <xsl:apply-templates select="$tei-akita-file"
                         mode="akita:build-tei-wf-map-by-anchors">
-                        <xsl:with-param name="tree-specs" as="element()" tunnel="yes" select="."/>
+                        <xsl:with-param name="subtree-specs" as="element()" tunnel="yes" select="."/>
                         <xsl:with-param name="errors" as="element()*" tunnel="yes"
-                           select="$tree-errors"/>
+                           select="$subtree-errors"/>
                      </xsl:apply-templates>
                   </xsl:map-entry>
 
@@ -485,10 +492,10 @@
       mode="akita:build-tei-wf-map-by-hierarchy akita:build-tei-wf-map-by-anchors" priority="-1"/>
    
    <xsl:template match="/*" mode="akita:build-tei-wf-map-by-hierarchy">
-      <xsl:param name="tree-specs" as="element()" tunnel="yes"/>
+      <xsl:param name="subtree-specs" as="element()" tunnel="yes"/>
       <xsl:param name="errors" as="element()*" tunnel="yes"/>
       <xsl:variable name="idrefs" select="
-            distinct-values(for $i in tokenize(normalize-space($tree-specs/akita:attribute[@name = 'idrefs']), ' ')
+            distinct-values(for $i in tokenize(normalize-space($subtree-specs/akita:attribute[@name = 'idrefs']), ' ')
             return
                replace($i, '^#', ''))" as="xs:string*"/>
       <xsl:variable name="matching-targets" select=".//*[@xml:id = $idrefs]" as="element()*"/>
@@ -500,7 +507,7 @@
       
       <xsl:variable name="all-text-unit-elements" select="$target-revised/descendant-or-self::*[@akita:ref]" as="element()*"/>
       
-      <xsl:variable name="ref-sys-type" select="($tree-specs/*[@name = 'reference-system-type'])[1]" as="xs:string?"/>
+      <xsl:variable name="ref-sys-type" select="($subtree-specs/*[@name = 'reference-system-type'])[1]" as="xs:string?"/>
       <xsl:variable name="logical-text-unit-elements" select="$all-text-unit-elements/(self::tei:p | self::tei:w)" as="element()*"/>
       <xsl:variable name="material-text-unit-elements" select="$all-text-unit-elements/(self::tei:lb | self::tei:pb | self::tei:cb)" as="element()*"/>
       
@@ -524,10 +531,10 @@
                   return
                      name($i)), ', ') || ' are material units, not logical.')"/>
          </xsl:if>
-         <xsl:element name="tree-specs" namespace="{$akita:akita-namespace}">
-            <xsl:copy-of select="$tree-specs/*"/>
+         <xsl:element name="subtree-specs" namespace="{$akita:akita-namespace}">
+            <xsl:copy-of select="$subtree-specs/*"/>
          </xsl:element>
-         <xsl:element name="tree" namespace="{$akita:akita-namespace}">
+         <xsl:element name="subtree" namespace="{$akita:akita-namespace}">
             <xsl:copy-of select="$target-revised"/>
          </xsl:element>
       </xsl:copy>
@@ -558,10 +565,10 @@
    
    
    <xsl:template match="/*" mode="akita:build-tei-wf-map-by-anchors">
-      <xsl:param name="tree-specs" as="element()" tunnel="yes"/>
+      <xsl:param name="subtree-specs" as="element()" tunnel="yes"/>
       <xsl:param name="errors" as="element()*" tunnel="yes"/>
       
-      <xsl:variable name="level-attributes" select="$tree-specs/akita:attribute[starts-with(@name, 'level-')]" as="element()*"/>
+      <xsl:variable name="level-attributes" select="$subtree-specs/akita:attribute[starts-with(@name, 'level-')]" as="element()*"/>
       <xsl:variable name="unique-level-attributes" as="element()*">
          <xsl:for-each-group select="$level-attributes" group-by=".">
             <xsl:if test="count(current-group()) eq 1">
@@ -595,24 +602,24 @@
          as="element()*"/>
       <xsl:variable name="missing-anchors" select="$level-anchors[not(. = $matching-targets/@type)]"/>
       
-      <xsl:variable name="tei-tree-to-sequence" as="element()">
-         <!-- The strategy here is to flatten the entire tree into a sequence, paying special attention to the anchors, to make sure they
+      <xsl:variable name="tei-subtree-to-sequence" as="element()">
+         <!-- The strategy here is to flatten the entire subtree into a sequence, paying special attention to the anchors, to make sure they
          are followed by memo elements that can be used to rebuild the hierarchies. -->
          <sequence>
-            <xsl:apply-templates mode="akita:tei-tree-to-sequence">
+            <xsl:apply-templates mode="akita:tei-subtree-to-sequence">
                <xsl:with-param name="level-map" tunnel="yes" select="$level-map"/>
             </xsl:apply-templates>
          </sequence>
       </xsl:variable>
       
-      <xsl:variable name="tei-new-tree-1" as="element()?">
+      <xsl:variable name="tei-new-subtree-1" as="element()?">
          <xsl:iterate select="1 to count($level-attributes)">
-            <xsl:param name="results-so-far" select="$tei-tree-to-sequence" as="element()"/>
+            <xsl:param name="results-so-far" select="$tei-subtree-to-sequence" as="element()"/>
             <xsl:on-completion>
                <xsl:sequence select="$results-so-far"/>
             </xsl:on-completion>
             <xsl:variable name="new-results" as="element()">
-               <xsl:apply-templates select="$results-so-far" mode="akita:build-new-tree-1">
+               <xsl:apply-templates select="$results-so-far" mode="akita:build-new-subtree-1">
                   <xsl:with-param name="depth" select="string(.)" as="xs:string" tunnel="yes"/>
                </xsl:apply-templates>
             </xsl:variable>
@@ -622,14 +629,14 @@
          </xsl:iterate>
       </xsl:variable>
       
-      <xsl:variable name="tei-new-tree-2" as="element()?">
-         <xsl:apply-templates select="$tei-new-tree-1" mode="akita:build-new-tree-2"/>
+      <xsl:variable name="tei-new-subtree-2" as="element()?">
+         <xsl:apply-templates select="$tei-new-subtree-1" mode="akita:build-new-subtree-2"/>
       </xsl:variable>
       
       
-      <xsl:variable name="all-text-unit-elements" select="$tei-new-tree-2//*[@akita:ref]"/>
+      <xsl:variable name="all-text-unit-elements" select="$tei-new-subtree-2//*[@akita:ref]"/>
       
-      <xsl:variable name="ref-sys-type" select="($tree-specs/*[@name = 'reference-system-type'])[1]" as="xs:string?"/>
+      <xsl:variable name="ref-sys-type" select="($subtree-specs/*[@name = 'reference-system-type'])[1]" as="xs:string?"/>
       <xsl:variable name="material-text-unit-elements" select="$all-text-unit-elements/(self::tei:lb | self::tei:pb | self::tei:cb)"/>
       
       <xsl:copy>
@@ -644,31 +651,31 @@
                   return
                      name($i)), ', ') || ' are material units, not logical.')"/>
          </xsl:if>
-         <xsl:element name="tree-specs" namespace="{$akita:akita-namespace}">
-            <xsl:copy-of select="$tree-specs/*"/>
+         <xsl:element name="subtree-specs" namespace="{$akita:akita-namespace}">
+            <xsl:copy-of select="$subtree-specs/*"/>
          </xsl:element>
-         <xsl:element name="tree" namespace="{$akita:akita-namespace}">
-            <!--<sequence><xsl:copy-of select="$tei-tree-to-sequence"/></sequence>-->
-            <!--<tree-1><xsl:copy-of select="$tei-new-tree-1"/></tree-1>-->
-            <!--<tree-2><xsl:copy-of select="$tei-new-tree-2"/></tree-2>-->
-            <xsl:copy-of select="$tei-new-tree-2/*[@akita:ref]"/>
+         <xsl:element name="subtree" namespace="{$akita:akita-namespace}">
+            <!--<sequence><xsl:copy-of select="$tei-subtree-to-sequence"/></sequence>-->
+            <!--<subtree-1><xsl:copy-of select="$tei-new-subtree-1"/></subtree-1>-->
+            <!--<subtree-2><xsl:copy-of select="$tei-new-subtree-2"/></subtree-2>-->
+            <xsl:copy-of select="$tei-new-subtree-2/*[@akita:ref]"/>
          </xsl:element>
       </xsl:copy>
    </xsl:template>
    
    
    
-   <xsl:template match="text() | processing-instruction() | comment()" mode="akita:tei-tree-to-sequence">
+   <xsl:template match="text() | processing-instruction() | comment()" mode="akita:tei-subtree-to-sequence">
       <xsl:copy-of select="."/>
    </xsl:template>
-   <xsl:template match="*" mode="akita:tei-tree-to-sequence">
+   <xsl:template match="*" mode="akita:tei-subtree-to-sequence">
       <xsl:copy>
          <xsl:copy-of select="@*"/>
          <xsl:attribute name="_level" select="count(ancestor::*) + 1"/>
       </xsl:copy>
       <xsl:apply-templates mode="#current"/>
    </xsl:template>
-   <xsl:template match="*[@type][not(*)]" mode="akita:tei-tree-to-sequence" priority="1">
+   <xsl:template match="*[@type][not(*)]" mode="akita:tei-subtree-to-sequence" priority="1">
       <xsl:param name="level-map" tunnel="yes" as="map(*)"/>
       <xsl:variable name="this-type" select="@type"/>
       <xsl:variable name="this-depth" select="$level-map($this-type)" as="xs:integer?"/>
@@ -700,11 +707,11 @@
    
    
    
-   <xsl:mode name="akita:build-new-tree-1" on-no-match="shallow-copy"/>
-   <xsl:mode name="akita:build-new-tree-2" on-no-match="shallow-copy"/>
-   <xsl:mode name="akita:build-new-tree-2b" on-no-match="shallow-copy"/>
+   <xsl:mode name="akita:build-new-subtree-1" on-no-match="shallow-copy"/>
+   <xsl:mode name="akita:build-new-subtree-2" on-no-match="shallow-copy"/>
+   <xsl:mode name="akita:build-new-subtree-2b" on-no-match="shallow-copy"/>
    
-   <xsl:template match="*" mode="akita:build-new-tree-1">
+   <xsl:template match="*" mode="akita:build-new-subtree-1">
       <xsl:param name="depth" tunnel="yes" as="xs:string"/>
       <xsl:variable name="children-to-process" select="*[@_level_up eq $depth]" as="element()*"/>
       <xsl:choose>
@@ -735,7 +742,7 @@
       </xsl:choose>
    </xsl:template>
    
-   <xsl:template match="*[@_level_up]" mode="akita:build-new-tree-2">
+   <xsl:template match="*[@_level_up]" mode="akita:build-new-subtree-2">
       <xsl:param name="inherited-ref" tunnel="yes" as="xs:string?"/>
       <xsl:variable name="n-norm" select="normalize-space(@n)" as="xs:string"/>
       <xsl:variable name="is-unique-numbered-n" select="matches($n-norm, '^[1-9]\d*(\.\d+)?$')" as="xs:boolean"/>
@@ -780,7 +787,7 @@
                               <xsl:sequence select="$results-so-far/node()"/>
                            </xsl:on-completion>
                            <xsl:variable name="new-results" as="element()">
-                              <xsl:apply-templates select="$results-so-far" mode="akita:build-new-tree-2b">
+                              <xsl:apply-templates select="$results-so-far" mode="akita:build-new-subtree-2b">
                                  <xsl:with-param name="level" tunnel="yes" select="xs:string(.)"/>
                               </xsl:apply-templates>
                            </xsl:variable>
@@ -804,7 +811,7 @@
       </xsl:if>
    </xsl:template>
    
-   <xsl:template match="*[*[@_level]]" mode="akita:build-new-tree-2b">
+   <xsl:template match="*[*[@_level]]" mode="akita:build-new-subtree-2b">
       <xsl:param name="level" tunnel="yes" as="xs:string"/>
       <xsl:copy>
          <xsl:copy-of select="@*"/>
