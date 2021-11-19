@@ -1,0 +1,11 @@
+# The following files are suppressed
+testing*
+private*
+.DS_Store
+*- Copy*
+desktop.ini
+
+# Directories
+promo/
+archive/
+out/
