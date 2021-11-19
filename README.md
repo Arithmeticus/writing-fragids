@@ -26,6 +26,8 @@ Other subdirectories such as [TEI](TEI) and [TAN](TAN) are, or will be, populate
 
 Writing Fragids are an experimental technology. The specifications are currently being explored, developed, and tested. Discussions for WFs are being conducted by Joel Kalvesmaki as a part of W3C's [LD4LT community group](https://www.w3.org/community/ld4lt/) in a [subcommittee devoted to consolidating Linked Open Data vocabulary for linguistic annotations](https://github.com/ld4lt/linguistic-annotation).
 
+See `discussions` subdirectory for notes from meetings. 
+
 ## License
 
 All software, code, and dependencies are released under a GNU General Public License.
